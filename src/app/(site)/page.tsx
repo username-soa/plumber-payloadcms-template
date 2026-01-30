@@ -5,6 +5,7 @@ import { ReviewSection } from "@/components/sections/review";
 import { LocationSection } from "@/components/sections/location";
 import { HeroSection } from "@/components/sections/hero";
 import { JsonLd } from "@/components/json-ld";
+import { QuoteFormCTA } from "./services/_components/quote-form";
 import {
 	generateOrganizationSchema,
 	generateWebsiteSchema,
@@ -25,6 +26,7 @@ export default function Home() {
 			<ServicesSection />
 			<LocationSection />
 			<ReviewSection />
+			<QuoteFormCTA serviceName="General Plumbing" />
 			<FAQSection />
 		</>
 	);

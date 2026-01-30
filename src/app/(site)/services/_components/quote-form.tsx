@@ -1,32 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { Phone, Mail, MapPin, CheckCircle2, Loader2 } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/site-config";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { submitContactForm } from "@/app/(site)/actions/contact";
+import { toast } from "sonner";
 
 interface QuoteFormCTAProps {
 	serviceName: string;
 }
 
 export function QuoteFormCTA({ serviceName }: QuoteFormCTAProps) {
-	const [isSubmitting, setIsSubmitting] = useState(false);
-	const [isSubmitted, setIsSubmitted] = useState(false);
+	const [formId, setFormId] = useState(0);
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-		e.preventDefault();
-		setIsSubmitting(true);
+	return (
+		<QuoteFormContent
+			key={formId}
+			serviceName={serviceName}
+			onReset={() => setFormId((prev) => prev + 1)}
+		/>
+	);
+}
 
-		// Simulate form submission
-		await new Promise((resolve) => setTimeout(resolve, 1500));
+interface QuoteFormContentProps extends QuoteFormCTAProps {
+	onReset: () => void;
+}
 
-		setIsSubmitting(false);
-		setIsSubmitted(true);
-	};
+function QuoteFormContent({ serviceName, onReset }: QuoteFormContentProps) {
+	const formRef = useRef<HTMLFormElement>(null);
+
+	// Server Action State
+	const [state, action, isPending] = useActionState(submitContactForm, {
+		success: false,
+		message: "",
+	});
+
+	// Handle Server Action Success
+	useEffect(() => {
+		if (state.success) {
+			toast.success("Request Sent!", {
+				description:
+					"We've received your request and will contact you shortly with your free quote.",
+			});
+			// Reset form
+			formRef.current?.reset();
+		} else if (state.message) {
+			toast.error("Submission Failed", {
+				description: state.message,
+			});
+		}
+	}, [state.success, state.message]);
 
 	return (
 		<section className="py-16 md:py-24 bg-linear-to-br from-primary via-primary to-primary/90 text-primary-foreground relative overflow-hidden">
@@ -131,7 +166,7 @@ export function QuoteFormCTA({ serviceName }: QuoteFormCTAProps) {
 							"border border-border",
 						)}
 					>
-						{isSubmitted ? (
+						{state.success ? (
 							<div className="text-center py-12">
 								<div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center mx-auto mb-6">
 									<CheckCircle2 className="w-10 h-10 text-green-600" />
@@ -141,6 +176,9 @@ export function QuoteFormCTA({ serviceName }: QuoteFormCTAProps) {
 									We've received your request and will contact you shortly with
 									your free quote.
 								</p>
+								<Button variant="outline" className="mt-6" onClick={onReset}>
+									Send Another Request
+								</Button>
 							</div>
 						) : (
 							<>
@@ -151,7 +189,16 @@ export function QuoteFormCTA({ serviceName }: QuoteFormCTAProps) {
 									</p>
 								</div>
 
-								<form onSubmit={handleSubmit} className="space-y-5">
+								<form ref={formRef} action={action} className="space-y-5">
+									{/* Hidden Fields for Validation Schema */}
+									<input type="hidden" name="urgency" value="Standard" />
+									<input
+										type="hidden"
+										name="propertyType"
+										value="residential"
+									/>
+									<input type="hidden" name="contactTime" value="anytime" />
+
 									<div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
 										<div className="space-y-2">
 											<Label htmlFor="name">Full Name *</Label>
@@ -162,6 +209,11 @@ export function QuoteFormCTA({ serviceName }: QuoteFormCTAProps) {
 												required
 												className="h-12"
 											/>
+											{state.errors?.name && (
+												<p className="text-sm text-red-500 mt-1">
+													{state.errors.name[0]}
+												</p>
+											)}
 										</div>
 										<div className="space-y-2">
 											<Label htmlFor="phone">Phone Number *</Label>
@@ -173,6 +225,11 @@ export function QuoteFormCTA({ serviceName }: QuoteFormCTAProps) {
 												required
 												className="h-12"
 											/>
+											{state.errors?.phone && (
+												<p className="text-sm text-red-500 mt-1">
+													{state.errors.phone[0]}
+												</p>
+											)}
 										</div>
 									</div>
 
@@ -186,17 +243,35 @@ export function QuoteFormCTA({ serviceName }: QuoteFormCTAProps) {
 											required
 											className="h-12"
 										/>
+										{state.errors?.email && (
+											<p className="text-sm text-red-500 mt-1">
+												{state.errors.email[0]}
+											</p>
+										)}
 									</div>
 
 									<div className="space-y-2">
 										<Label htmlFor="service">Service Needed</Label>
-										<Input
-											id="service"
+										<Select
 											name="service"
-											defaultValue={serviceName}
-											readOnly
-											className="h-12 bg-muted/50"
-										/>
+											defaultValue={
+												SITE_CONFIG.services.find(
+													(s) => s.title === serviceName,
+												)?.slug || "other"
+											}
+										>
+											<SelectTrigger className="h-12 w-full bg-muted/50">
+												<SelectValue placeholder="Select a service..." />
+											</SelectTrigger>
+											<SelectContent>
+												{SITE_CONFIG.services.map((service) => (
+													<SelectItem key={service.slug} value={service.slug}>
+														{service.title}
+													</SelectItem>
+												))}
+												<SelectItem value="other">Other / Not Sure</SelectItem>
+											</SelectContent>
+										</Select>
 									</div>
 
 									<div className="space-y-2">
@@ -214,9 +289,9 @@ export function QuoteFormCTA({ serviceName }: QuoteFormCTAProps) {
 										type="submit"
 										size="lg"
 										className="w-full h-14 text-lg font-bold rounded-xl"
-										disabled={isSubmitting}
+										disabled={isPending}
 									>
-										{isSubmitting ? (
+										{isPending ? (
 											<>
 												<Loader2 className="w-5 h-5 mr-2 animate-spin" />
 												Sending...
@@ -225,6 +300,12 @@ export function QuoteFormCTA({ serviceName }: QuoteFormCTAProps) {
 											"Get My Free Quote"
 										)}
 									</Button>
+
+									{!state.success && state.message && (
+										<p className="text-sm text-red-500 text-center font-medium">
+											{state.message}
+										</p>
+									)}
 
 									<p className="text-xs text-muted-foreground text-center">
 										By submitting, you agree to our privacy policy. We'll never

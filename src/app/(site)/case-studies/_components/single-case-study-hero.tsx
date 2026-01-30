@@ -4,6 +4,7 @@ import { ArrowLeft, Calendar, MapPin, Tag } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TypographyH1, TypographyP } from "@/components/ui/typography";
 import type { CaseStudy, Media } from "@/payload-types";
+import { cn } from "@/lib/utils";
 
 interface SingleCaseStudyHeroProps {
 	study: CaseStudy;
@@ -15,7 +16,7 @@ export function SingleCaseStudyHero({ study }: SingleCaseStudyHeroProps) {
 
 	return (
 		<div className="relative h-[60vh] min-h-[500px] w-full flex items-end">
-			{imageUrl && (
+			{imageUrl ? (
 				<Image
 					src={imageUrl}
 					alt={study.title}
@@ -25,12 +26,28 @@ export function SingleCaseStudyHero({ study }: SingleCaseStudyHeroProps) {
 					loading="eager"
 					fetchPriority="high"
 				/>
+			) : (
+				<>
+					{/* Background gradient */}
+					<div className="absolute inset-0 bg-linear-to-br from-primary/5 via-background to-primary/10" />
+
+					{/* Floating shapes */}
+					<div className="absolute top-20 left-10 w-72 h-72 bg-primary/10 rounded-full blur-3xl animate-pulse" />
+					<div className="absolute bottom-10 right-10 w-96 h-96 bg-primary/5 rounded-full blur-3xl animate-pulse delay-1000" />
+				</>
 			)}
-			<div className="container px-6 mx-auto relative z-10 pb-16 md:pb-24 text-white">
+			<div
+				className={cn(
+					"container px-6 mx-auto relative z-10 pb-16 md:pb-24",
+					imageUrl ? "text-white" : "text-foreground",
+				)}
+			>
 				<div className="max-w-4xl space-y-6">
 					<Link
 						href="/case-studies"
-						className="inline-flex items-center text-sm font-medium text-white/80 hover:text-white transition-colors mb-6"
+						className={cn(
+							"inline-flex items-center text-sm font-medium hover:opacity-75 transition-opacity mb-6",
+						)}
 					>
 						<ArrowLeft className="mr-2 h-4 w-4" />
 						Back to Case Studies
@@ -40,7 +57,9 @@ export function SingleCaseStudyHero({ study }: SingleCaseStudyHeroProps) {
 						{study.category && (
 							<Badge
 								variant="outline"
-								className="text-white border-white/20 bg-white/10 backdrop-blur-sm capitalize"
+								className={cn(
+									" border-white/20 bg-white/10 backdrop-blur-sm capitalize text-inherit",
+								)}
 							>
 								<Tag className="w-3 h-3 mr-1" />
 								{study.category}
@@ -49,7 +68,9 @@ export function SingleCaseStudyHero({ study }: SingleCaseStudyHeroProps) {
 						{study.location && (
 							<Badge
 								variant="outline"
-								className="text-white border-white/20 bg-white/10 backdrop-blur-sm"
+								className={cn(
+									" border-white/20 bg-white/10 backdrop-blur-sm text-inherit",
+								)}
 							>
 								<MapPin className="w-3 h-3 mr-1" />
 								{study.location}
@@ -58,7 +79,9 @@ export function SingleCaseStudyHero({ study }: SingleCaseStudyHeroProps) {
 						{study.duration && (
 							<Badge
 								variant="outline"
-								className="text-white border-white/20 bg-white/10 backdrop-blur-sm"
+								className={cn(
+									" border-white/20 bg-white/10 backdrop-blur-sm text-inherit",
+								)}
 							>
 								<Calendar className="w-3 h-3 mr-1" />
 								{study.duration}
@@ -66,11 +89,11 @@ export function SingleCaseStudyHero({ study }: SingleCaseStudyHeroProps) {
 						)}
 					</div>
 
-					<TypographyH1 className="text-4xl md:text-6xl font-bold tracking-tight text-white">
+					<TypographyH1 className="text-4xl md:text-6xl font-bold tracking-tight ">
 						{study.title}
 					</TypographyH1>
 					{study.summary && (
-						<TypographyP className="text-xl md:text-2xl text-white/80 max-w-2xl font-light mt-0">
+						<TypographyP className="text-xl md:text-2xl max-w-2xl font-light mt-0">
 							{study.summary}
 						</TypographyP>
 					)}

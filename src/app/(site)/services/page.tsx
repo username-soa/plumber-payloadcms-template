@@ -5,6 +5,7 @@ import { ReviewSection } from "@/components/sections/review";
 import { FAQSection } from "@/components/sections/faq";
 import { ServicesHeroMain } from "./_components/services-hero-main";
 import { ServicesGrid } from "./_components/services-grid";
+import { QuoteFormCTA } from "./_components/quote-form";
 import { JsonLd } from "@/components/json-ld";
 import {
 	generateServicesListingSchema,
@@ -44,6 +45,7 @@ export default function ServicesPage() {
 			<ServicesHeroMain />
 			<ServicesGrid />
 			<ProcessSteps />
+			<QuoteFormCTA serviceName="General Plumbing" />
 			<ReviewSection />
 			<FAQSection />
 		</>

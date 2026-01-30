@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { TableOfContents } from "../../blog/_components/table-of-contents";
 import { Button } from "@/components/ui/button";
 import type { CaseStudy } from "@/payload-types";
 import { SITE_CONFIG } from "@/lib/site-config";
@@ -12,7 +13,7 @@ interface CaseStudySidebarProps {
 export function CaseStudySidebar({ study }: CaseStudySidebarProps) {
 	return (
 		<aside className="space-y-8">
-			<div className="sticky top-24 space-y-8">
+			<div className="sticky top-8 space-y-8">
 				<div className="bg-muted/30 rounded-xl p-6 border border-border">
 					<h3 className="font-semibold text-lg mb-4">Project Details</h3>
 					<dl className="space-y-4 text-sm">
@@ -97,6 +98,10 @@ export function CaseStudySidebar({ study }: CaseStudySidebarProps) {
 							</>
 						)}
 					</dl>
+				</div>
+
+				<div className="bg-muted/30 rounded-xl p-6 border border-border hidden lg:block">
+					<TableOfContents />
 				</div>
 
 				<div className="bg-primary text-primary-foreground rounded-xl p-6 shadow-lg">

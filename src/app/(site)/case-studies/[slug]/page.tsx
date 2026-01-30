@@ -7,10 +7,11 @@ import {
 	generateArticleSchema,
 	generateCaseStudyBreadcrumbs,
 } from "@/lib/json-ld";
-import type { CaseStudy, Media } from "@/payload-types";
+import type { CaseStudy } from "@/payload-types";
 import { SingleCaseStudyHero } from "../_components/single-case-study-hero";
 import { CaseStudyContent } from "../_components/case-study-content";
 import { CaseStudySidebar } from "../_components/case-study-sidebar";
+import { getMediaUrl } from "@/lib/payload-utils";
 
 const { seo } = SITE_CONFIG;
 
@@ -59,9 +60,27 @@ export async function generateMetadata({ params }: PageProps) {
 		};
 	}
 
+	const metaTitle =
+		study.meta?.title || `${study.title} | Case Studies - ${seo.location.city}`;
+	const metaDescription = study.meta?.description || study.summary;
+	const ogImage =
+		getMediaUrl(study.meta?.image) || getMediaUrl(study.featuredImage);
+
 	return {
-		title: `${study.title} | Case Studies - ${seo.location.city}`,
-		description: study.summary,
+		title: metaTitle,
+		description: metaDescription,
+		openGraph: {
+			title: metaTitle,
+			description: metaDescription,
+			url: `/case-studies/${study.slug}`,
+			images: ogImage
+				? [
+						{
+							url: ogImage,
+						},
+					]
+				: undefined,
+		},
 	};
 }
 
@@ -73,8 +92,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
 		notFound();
 	}
 
-	const featuredImage = study.featuredImage as Media | null;
-	const imageUrl = featuredImage?.url;
+	const imageUrl = getMediaUrl(study.featuredImage);
 
 	// JSON-LD Schema for case study
 	const jsonLd = {
@@ -84,12 +102,12 @@ export default async function CaseStudyPage({ params }: PageProps) {
 			generateCaseStudyBreadcrumbs(study.title),
 			// Article schema for case study
 			generateArticleSchema({
-				title: study.title,
-				description: study.summary || "",
+				title: study.meta?.title || study.title,
+				description: study.meta?.description || study.summary || "",
 				slug: study.slug || "",
 				datePublished:
 					study.completedAt || new Date().toISOString().split("T")[0],
-				image: imageUrl || undefined,
+				image: getMediaUrl(study.meta?.image) || imageUrl || undefined,
 				category: study.category || undefined,
 				type: "Article",
 				basePath: "case-studies",

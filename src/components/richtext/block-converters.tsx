@@ -46,6 +46,7 @@ interface TimelineItem {
 	date: string;
 	title: string;
 	description?: string;
+	id?: string;
 }
 
 interface TimelineBlock {
@@ -232,6 +233,7 @@ function TimelineRenderer({
 		title: item.title,
 		description: item.description || "",
 		date: item.date,
+		id: item.id,
 	}));
 
 	return (

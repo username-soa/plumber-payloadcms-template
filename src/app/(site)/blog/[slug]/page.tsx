@@ -90,9 +90,27 @@ export async function generateMetadata({ params }: PageProps) {
 		};
 	}
 
+	const metaTitle =
+		post.meta?.title || `${post.title} | Blog - ${SITE_CONFIG.brand.name}`;
+	const metaDescription = post.meta?.description || post.summary;
+	const ogImage =
+		getMediaUrl(post.meta?.image) || getMediaUrl(post.featuredImage);
+
 	return {
-		title: `${post.title} | Blog - ${SITE_CONFIG.brand.name}`,
-		description: post.summary,
+		title: metaTitle,
+		description: metaDescription,
+		openGraph: {
+			title: metaTitle,
+			description: metaDescription,
+			url: `/blog/${post.slug}`,
+			images: ogImage
+				? [
+						{
+							url: ogImage,
+						},
+					]
+				: undefined,
+		},
 	};
 }
 
@@ -124,12 +142,12 @@ export default async function BlogPostPage({ params }: PageProps) {
 			generateBlogBreadcrumbs(post.title),
 			// Article schema (NewsArticle or BlogPosting)
 			generateArticleSchema({
-				title: post.title,
-				description: post.summary || "",
+				title: post.meta?.title || post.title,
+				description: post.meta?.description || post.summary || "",
 				slug: post.slug || "",
 				datePublished: post.publishedAt || post.createdAt,
 				dateModified: post.updatedAt,
-				image: imageUrl || undefined,
+				image: getMediaUrl(post.meta?.image) || imageUrl || undefined,
 				category: post.category || undefined,
 				author: author?.name || SITE_CONFIG.brand.name,
 				type: "BlogPosting",

@@ -7,6 +7,7 @@ interface TimelineProps {
 		title: string;
 		description: string;
 		date?: string;
+		id?: string;
 	}[];
 	className?: string;
 }
@@ -20,7 +21,7 @@ export function Timeline({ steps, className }: TimelineProps) {
 			)}
 		>
 			{steps.map((step, index) => (
-				<div key={step.title} className="relative">
+				<div key={step.id || index} className="relative">
 					{/* Dot */}
 					<div className="absolute -left-[43px] top-1 h-5 w-5 rounded-full border-4 border-background bg-muted-foreground/30" />
 

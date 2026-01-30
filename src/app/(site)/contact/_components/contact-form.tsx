@@ -2,7 +2,7 @@
 
 import { useState, useActionState, useEffect, startTransition } from "react";
 import { Phone, CheckCircle2, Loader2, Mail, ArrowRight } from "lucide-react";
-import { submitContactForm } from "@/app/actions/contact";
+import { submitContactForm } from "@/app/(site)/actions/contact";
 import { SITE_CONFIG } from "@/lib/site-config";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";

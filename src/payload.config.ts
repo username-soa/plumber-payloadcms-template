@@ -5,6 +5,8 @@ import { lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
+import { s3Storage } from "@payloadcms/storage-s3";
+import { seoPlugin } from "@payloadcms/plugin-seo";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Authors } from "./collections/Authors";
@@ -12,6 +14,7 @@ import { Testimonials } from "./collections/Testimonials";
 import { BlogPosts } from "./collections/BlogPosts";
 import { CaseStudies } from "./collections/CaseStudies";
 import { Tags } from "./collections/Tags";
+import { Services } from "./collections/Services";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -30,6 +33,7 @@ export default buildConfig({
 		BlogPosts,
 		CaseStudies,
 		Tags,
+		Services,
 	],
 
 	// Admin panel configuration
@@ -46,18 +50,17 @@ export default buildConfig({
 	editor: lexicalEditor({}),
 
 	// Database adapter - SQLite for development, PostgreSQL for production
-	db:
-		process.env.NODE_ENV === "production"
-			? postgresAdapter({
-					pool: {
-						connectionString: process.env.DATABASE_URL,
-					},
-				})
-			: sqliteAdapter({
-					client: {
-						url: "file:" + path.resolve(dirname, "../payload.db"),
-					},
-				}),
+	db: process.env.DATABASE_URL
+		? postgresAdapter({
+				pool: {
+					connectionString: process.env.DATABASE_URL,
+				},
+			})
+		: sqliteAdapter({
+				client: {
+					url: "file:" + path.resolve(dirname, "../payload.db"),
+				},
+			}),
 
 	// TypeScript type generation
 	typescript: {
@@ -66,4 +69,28 @@ export default buildConfig({
 
 	// Sharp for image processing
 	sharp,
+
+	plugins: [
+		s3Storage({
+			collections: {
+				media: true,
+			},
+			bucket: process.env.S3_BUCKET || "",
+			config: {
+				endpoint: process.env.S3_ENDPOINT,
+				region: process.env.S3_REGION,
+				forcePathStyle: true,
+				credentials: {
+					accessKeyId: process.env.S3_ACCESS_KEY_ID || "",
+					secretAccessKey: process.env.S3_SECRET_ACCESS_KEY || "",
+				},
+			},
+		}),
+		seoPlugin({
+			collections: ["blog-posts", "case-studies"],
+			uploadsCollection: "media",
+			generateTitle: ({ doc }) => `FlowMasters | ${doc.title}`,
+			generateDescription: ({ doc }) => doc.description || doc.excerpt,
+		}),
+	],
 });

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
+import { cn } from "@/lib/utils";
 import { ArrowLeft, Calendar, Clock, Tag as TagIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { TypographyH1 } from "@/components/ui/typography";
@@ -30,14 +31,22 @@ export function PostHero({ post, readTime }: PostHeroProps) {
 					fetchPriority="high"
 				/>
 			) : (
-				<div className="absolute inset-0 bg-primary/90" />
+				<div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+					<div className="absolute -top-1/2 -left-1/4 w-[1000px] h-[1000px] bg-primary/5 rounded-full blur-3xl opacity-50" />
+					<div className="absolute -bottom-1/2 -right-1/4 w-[1000px] h-[1000px] bg-blue-500/5 rounded-full blur-3xl opacity-50" />
+				</div>
 			)}
 
-			<div className="container px-6 mx-auto relative z-10 pb-16 md:pb-24 text-white">
+			<div
+				className={cn(
+					"container px-6 mx-auto relative z-10 pb-16 md:pb-24",
+					imageUrl && "text-white",
+				)}
+			>
 				<div className="max-w-4xl space-y-6">
 					<Link
 						href="/blog"
-						className="inline-flex items-center text-sm font-medium text-white/80 hover:text-white transition-colors mb-6"
+						className="inline-flex items-center text-sm font-medium hover:opacity-75 transition-opacity mb-6"
 					>
 						<ArrowLeft className="mr-2 h-4 w-4" />
 						Back to Blog
@@ -47,7 +56,7 @@ export function PostHero({ post, readTime }: PostHeroProps) {
 						{post.category && (
 							<Badge
 								variant="outline"
-								className="text-white border-white/20 bg-white/10 backdrop-blur-sm capitalize"
+								className="text-inherit border-inherit/20 bg-white/10 backdrop-blur-sm capitalize"
 							>
 								<TagIcon className="w-3 h-3 mr-1" />
 								{post.category}
@@ -55,18 +64,18 @@ export function PostHero({ post, readTime }: PostHeroProps) {
 						)}
 						<Badge
 							variant="outline"
-							className="text-white border-white/20 bg-white/10 backdrop-blur-sm"
+							className="text-inherit border-inherit/20 bg-white/10 backdrop-blur-sm"
 						>
 							<Clock className="w-3 h-3 mr-1" />
 							{readTime} min read
 						</Badge>
 					</div>
 
-					<TypographyH1 className="text-4xl md:text-6xl font-bold tracking-tight text-white mb-6">
+					<TypographyH1 className="text-4xl md:text-6xl font-bold tracking-tight mb-6">
 						{post.title}
 					</TypographyH1>
 
-					<div className="flex items-center gap-6 text-white/90">
+					<div className="flex items-center gap-6 opacity-90">
 						{author && (
 							<div className="flex items-center gap-3">
 								{authorImageUrl && (

@@ -5,7 +5,7 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
 	pageExtensions: ["js", "jsx", "ts", "tsx"],
 	experimental: {
-		inlineCss: true,
+		// inlineCss: true,
 		serverActions: {
 			bodySizeLimit: "10mb",
 		},
