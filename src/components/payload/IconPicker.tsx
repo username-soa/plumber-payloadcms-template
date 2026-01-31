@@ -7,8 +7,12 @@ import { Search, X, ChevronDown } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 
 // Helper to convert PascalCase to kebab-case
-// const pascalToKebab = (str: string) =>
-// 	str.replace(/([a-z0-9])([A-Z])/g, "$1-$2").toLowerCase();
+// Helper to convert PascalCase to kebab-case
+const pascalToKebab = (str: string) =>
+	str
+		.replace(/([a-z0-9])([A-Z])/g, "$1-$2")
+		.replace(/([a-z])([0-9])/g, "$1-$2")
+		.toLowerCase();
 
 // Helper to convert kebab-case to PascalCase
 const kebabToPascal = (str: string) =>
@@ -19,17 +23,25 @@ const kebabToPascal = (str: string) =>
 
 const getLucideIcon = (name: string) => {
 	if (!name) return null;
-	const Icon = (LucideIcons as any)[name];
+	// Check if name is kebab-case (contains hyphens or is lowercase), if so convert to Pascal.
+	// Actually Lucide keys are always PascalCase.
+	// If we store kebab-case in 'value', we must convert to Pascal to find the component.
+	const pascalName = kebabToPascal(name);
+	const Icon = (LucideIcons as any)[pascalName];
 	return Icon || null;
 };
 
-// Filter out non-icon exports if necessary, though Lucide mostly exports icons
+// Filter out non-icon exports and legacy alias "Icon" suffixes
 const iconList = Object.keys(LucideIcons).filter(
-	(key) => key !== "createLucideIcon" && key !== "icons" && isNaN(Number(key)),
+	(key) =>
+		key !== "createLucideIcon" &&
+		key !== "icons" &&
+		isNaN(Number(key)) &&
+		!key.endsWith("Icon"),
 );
 
 export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
-	const { value, setValue } = useField<string>({ path });
+	const { value, setValue } = useField<string>({ path }); // value should be kebab-case now
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
 	const [limit, setLimit] = useState(100);
@@ -308,9 +320,10 @@ export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
 							}}
 						>
 							{filteredIcons.map((iconName) => {
-								const pascalName = kebabToPascal(iconName);
+								const pascalName = iconName; // List already has PascalCase
+								const kebabName = pascalToKebab(pascalName);
 								const Icon = getLucideIcon(pascalName);
-								const isSelected = value === pascalName;
+								const isSelected = value === kebabName; // Compare against kebab value
 
 								if (!Icon) return null;
 
@@ -319,7 +332,7 @@ export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
 										key={iconName}
 										type="button"
 										onClick={() => {
-											setValue(pascalName);
+											setValue(kebabName); // Set value to kebab
 											setIsOpen(false);
 										}}
 										title={pascalName}

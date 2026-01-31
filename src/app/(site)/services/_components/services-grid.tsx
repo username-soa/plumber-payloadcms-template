@@ -1,10 +1,13 @@
-import Link from "next/link";
-import { type LucideIcon } from "lucide-react";
-import * as Icons from "lucide-react";
 import { TypographyH2, TypographyMuted } from "@/components/ui/typography";
-import { SITE_CONFIG } from "@/lib/site-config";
+import type { Service } from "@/payload-types";
+import DynamicIcon from "@/components/ui/dynamic-icon";
+import Link from "next/link";
 
-export function ServicesGrid() {
+interface ServicesGridProps {
+	services: Service[];
+}
+
+export function ServicesGrid({ services }: ServicesGridProps) {
 	return (
 		<section className="py-24 w-full">
 			<div className="container mx-auto px-6">
@@ -17,14 +20,9 @@ export function ServicesGrid() {
 						commitment to quality and customer satisfaction.
 					</TypographyMuted>
 				</div>
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-border/50">
-					{SITE_CONFIG.services.map((service) => {
+				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 [&>a]:border-b md:[&>a]:border-r md:[&>a:nth-child(2n)]:border-r-0 lg:[&>a:nth-child(2n)]:border-r lg:[&>a:nth-child(3n)]:border-r-0!">
+					{services.map((service) => {
 						// Dynamic Icon Component
-						// @ts-ignore - We know the icon name exists in lucide-react from our config
-						const IconComponent =
-							(Icons[service.icon as keyof typeof Icons] as LucideIcon) ||
-							Icons.Wrench;
-
 						return (
 							<Link
 								key={service.slug}
@@ -33,7 +31,10 @@ export function ServicesGrid() {
 							>
 								<div className="mb-3">
 									<div className="md:size-10 size-8 rounded-full border border-primary/10 flex items-center justify-center text-primary group-hover:scale-110 group-hover:border-primary/50 transition-all duration-300 bg-background">
-										<IconComponent className="md:size-5 size-4" />
+										<DynamicIcon
+											name={service.icon as string}
+											className="md:size-5 size-4"
+										/>
 									</div>
 								</div>
 

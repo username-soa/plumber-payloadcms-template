@@ -307,13 +307,9 @@ export interface CaseStudy {
   location?: string | null;
   category?: ('residential' | 'commercial' | 'emergency') | null;
   /**
-   * e.g. 'Emergency Pipe Repair'
+   * Select the primary service related to this case study
    */
-  serviceType?: string | null;
-  /**
-   * e.g. 'emergency-service'
-   */
-  relatedService?: string | null;
+  relatedService?: (number | null) | Service;
   /**
    * e.g. '$950'
    */
@@ -382,11 +378,15 @@ export interface Service {
   image: number | Media;
   isEmergency?: boolean | null;
   availability?: string | null;
-  subServices?:
+  /**
+   * Select services that belong to this category. The selected services will automatically have their 'Parent Service' field updated to point to this service.
+   */
+  subServices?: (number | Service)[] | null;
+  parentService?: (number | null) | Service;
+  process?:
     | {
         title: string;
         description?: string | null;
-        icon?: string | null;
         id?: string | null;
       }[]
     | null;
@@ -645,7 +645,6 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   client?: T;
   location?: T;
   category?: T;
-  serviceType?: T;
   relatedService?: T;
   budget?: T;
   duration?: T;
@@ -688,12 +687,13 @@ export interface ServicesSelect<T extends boolean = true> {
   image?: T;
   isEmergency?: T;
   availability?: T;
-  subServices?:
+  subServices?: T;
+  parentService?: T;
+  process?:
     | T
     | {
         title?: T;
         description?: T;
-        icon?: T;
         id?: T;
       };
   faqs?:

@@ -47,12 +47,28 @@ export function generateBreadcrumbSchema(items: BreadcrumbInput[]) {
 /**
  * Generate breadcrumbs for a service page
  */
-export function generateServiceBreadcrumbs(serviceTitle: string) {
-	return generateBreadcrumbSchema([
+/**
+ * Generate breadcrumbs for a service page
+ */
+export function generateServiceBreadcrumbs(
+	serviceTitle: string,
+	parentService?: { title: string; slug: string },
+) {
+	const items: BreadcrumbInput[] = [
 		{ name: "Home", href: "/" },
 		{ name: "Services", href: "/services" },
-		{ name: serviceTitle },
-	]);
+	];
+
+	if (parentService) {
+		items.push({
+			name: parentService.title,
+			href: `/services/${parentService.slug}`,
+		});
+	}
+
+	items.push({ name: serviceTitle });
+
+	return generateBreadcrumbSchema(items);
 }
 
 /**

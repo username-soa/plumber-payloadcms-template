@@ -61,7 +61,7 @@ export function WhyChooseUs({ stats }: WhyChooseUsProps) {
 	return (
 		<section className="py-16 md:py-24 bg-muted/30 relative overflow-hidden">
 			{/* Background decoration */}
-			<div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-primary/5" />
+			<div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-primary/5" />
 			<div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
 			<div className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
@@ -126,18 +126,6 @@ export function WhyChooseUs({ stats }: WhyChooseUsProps) {
 						);
 					})}
 				</div>
-
-				{/* Stats Bar */}
-				{/* <div className="relative"> */}
-				{/* <div
-					// className={cn(
-					// 	"rounded-3xl bg-background border border-border p-8 md:p-12",
-					// 	"shadow-lg shadow-primary/5",
-					// )}
-				> */}
-
-				{/* </div> */}
-				{/* </div> */}
 			</div>
 		</section>
 	);

@@ -15,7 +15,7 @@ export function ServiceLink({ slug, label, className }: ServiceLinkProps) {
 		<Link
 			href={`/services/${slug}`}
 			className={cn(
-				"inline-flex items-center gap-2 text-primary font-medium hover:underline group not-prose",
+				"inline-flex items-center gap-2 text-primary font-medium hover:underline group not-prose my-8",
 				className,
 			)}
 		>

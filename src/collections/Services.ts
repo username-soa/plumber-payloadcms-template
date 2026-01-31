@@ -6,12 +6,20 @@ import {
 	OverviewField,
 	PreviewField,
 } from "@payloadcms/plugin-seo/fields";
+import {
+	cleanupServiceRelations,
+	syncServiceRelations,
+} from "./hooks/sync-service-relations";
 
 export const Services: CollectionConfig = {
 	slug: "services",
 	admin: {
 		useAsTitle: "title",
 		defaultColumns: ["title", "slug", "updatedAt"],
+	},
+	hooks: {
+		afterChange: [syncServiceRelations],
+		afterDelete: [cleanupServiceRelations],
 	},
 	fields: [
 		{
@@ -83,8 +91,43 @@ export const Services: CollectionConfig = {
 						},
 						{
 							name: "subServices",
-							type: "array",
+							type: "relationship",
+							relationTo: "services",
+							hasMany: true,
 							label: "Sub Services",
+							filterOptions: ({ id }) => {
+								return {
+									id: {
+										not_equals: id,
+									},
+								};
+							},
+							admin: {
+								description:
+									"Select services that belong to this category. The selected services will automatically have their 'Parent Service' field updated to point to this service.",
+							},
+						},
+						{
+							name: "parentService",
+							type: "relationship",
+							relationTo: "services",
+							hasMany: false,
+							label: "Parent Service",
+							filterOptions: ({ id }) => {
+								return {
+									id: {
+										not_equals: id,
+									},
+								};
+							},
+							admin: {
+								position: "sidebar",
+							},
+						},
+						{
+							name: "process",
+							type: "array",
+							label: "Workflow",
 							fields: [
 								{
 									name: "title",
@@ -94,15 +137,6 @@ export const Services: CollectionConfig = {
 								{
 									name: "description",
 									type: "textarea",
-								},
-								{
-									name: "icon",
-									type: "text",
-									admin: {
-										components: {
-											Field: "@/components/payload/IconPicker#IconPicker",
-										},
-									},
 								},
 							],
 						},

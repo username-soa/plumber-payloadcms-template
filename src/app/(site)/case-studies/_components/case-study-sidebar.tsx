@@ -17,23 +17,20 @@ export function CaseStudySidebar({ study }: CaseStudySidebarProps) {
 				<div className="bg-muted/30 rounded-xl p-6 border border-border">
 					<h3 className="font-semibold text-lg mb-4">Project Details</h3>
 					<dl className="space-y-4 text-sm">
-						{study.serviceType && (
-							<div>
-								<dt className="text-muted-foreground mb-1">Service Type</dt>
-								<dd className="font-medium text-foreground text-base">
-									{study.relatedService ? (
+						{typeof study.relatedService === "object" &&
+							study.relatedService && (
+								<div>
+									<dt className="text-muted-foreground mb-1">Service Type</dt>
+									<dd className="font-medium text-foreground text-base">
 										<Link
-											href={`/services/${study.relatedService}`}
+											href={`/services/${study.relatedService.slug}`}
 											className="text-primary hover:underline"
 										>
-											{study.serviceType}
+											{study.relatedService.title}
 										</Link>
-									) : (
-										<span>{study.serviceType}</span>
-									)}
-								</dd>
-							</div>
-						)}
+									</dd>
+								</div>
+							)}
 
 						{study.category && (
 							<>

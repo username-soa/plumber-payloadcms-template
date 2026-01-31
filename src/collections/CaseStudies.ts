@@ -76,19 +76,15 @@ export const CaseStudies: CollectionConfig = {
 									},
 								},
 								{
-									name: "serviceType",
-									type: "text",
-									admin: {
-										width: "34%",
-										description: "e.g. 'Emergency Pipe Repair'",
-									},
-								},
-								{
 									name: "relatedService",
-									type: "text",
+									type: "relationship",
+									relationTo: "services",
+									hasMany: false,
+									label: "Related Service",
 									admin: {
-										width: "33%",
-										description: "e.g. 'emergency-service'",
+										width: "67%",
+										description:
+											"Select the primary service related to this case study",
 									},
 								},
 							],

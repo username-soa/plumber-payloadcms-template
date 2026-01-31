@@ -24,7 +24,7 @@ export function CTA({
 	return (
 		<div
 			className={cn(
-				"my-12 p-8 rounded-2xl bg-primary text-primary-foreground flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg not-prose",
+				"my-8 p-8 rounded-2xl bg-primary text-primary-foreground flex flex-col md:flex-row items-center justify-between gap-6 shadow-lg not-prose",
 				className,
 			)}
 		>

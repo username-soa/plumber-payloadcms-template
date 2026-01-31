@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useActionState, useEffect, startTransition } from "react";
-import { Phone, CheckCircle2, Loader2, Mail, ArrowRight } from "lucide-react";
+import { Phone, CheckCircle2, Loader, Mail, ArrowRight } from "lucide-react";
 import { submitContactForm } from "@/app/(site)/actions/contact";
 import { SITE_CONFIG } from "@/lib/site-config";
 import { Button } from "@/components/ui/button";
@@ -394,7 +394,7 @@ ${previewData.message}
 						>
 							{isPending ? (
 								<>
-									<Loader2 className="mr-2 h-5 w-5 animate-spin" />
+									<Loader className="mr-2 h-5 w-5 animate-spin" />
 									Sending...
 								</>
 							) : (

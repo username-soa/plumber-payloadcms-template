@@ -1,6 +1,5 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
-import * as Icons from "lucide-react";
 
 import { SITE_CONFIG } from "@/lib/site-config";
 import { ServiceHero } from "../_components/service-hero";
@@ -12,11 +11,14 @@ import { ServiceFAQ } from "../_components/service-faq";
 import { RelatedServices } from "../_components/related-services";
 import { ReviewSection } from "@/components/sections/review";
 import { JsonLd } from "@/components/json-ld";
+import type { Service } from "@/payload-types";
 import {
 	generateServiceSchema,
 	generateServiceBreadcrumbs,
 	generateServiceFAQSchema,
 } from "@/lib/json-ld";
+import { getServiceBySlug, getServices } from "@/app/(site)/actions/services";
+import { getMediaUrl } from "@/lib/payload-utils";
 
 const { brand, seo } = SITE_CONFIG;
 
@@ -26,27 +28,33 @@ interface ServicePageProps {
 	}>;
 }
 
-// Extended service type for TypeScript
+// Extended service type for TypeScript to handle hybrid data
 interface ExtendedService {
 	title: string;
 	slug: string;
 	description: string;
-	longDescription?: string;
+	longDescription?: any;
 	icon: string;
 	metaTitle?: string;
 	metaDescription?: string;
 	benefits?: string[];
 	faqs?: { question: string; answer: string }[];
-	subServices?: { title: string; description: string; icon: string }[];
+	subServices?: {
+		title: string;
+		description: string;
+		icon: string;
+		slug: string;
+	}[];
 	stats?: { value: string; label: string }[];
 	process?: { title: string; description: string; icon: string }[];
 	isEmergency?: boolean;
 	availability?: string;
 }
 
-// 1. Generate Static Params for all services
+// 1. Generate Static Params from Payload
 export async function generateStaticParams() {
-	return SITE_CONFIG.services.map((service) => ({
+	const services = await getServices();
+	return services.map((service) => ({
 		slug: service.slug,
 	}));
 }
@@ -56,7 +64,7 @@ export async function generateMetadata({
 	params,
 }: ServicePageProps): Promise<Metadata> {
 	const { slug } = await params;
-	const service = SITE_CONFIG.services.find((s) => s.slug === slug);
+	const service = await getServiceBySlug(slug);
 
 	if (!service) {
 		return {
@@ -64,47 +72,125 @@ export async function generateMetadata({
 		};
 	}
 
-	// Inject location into meta title/description
+	// Use Payload meta if available, otherwise fall back to generated defaults
+	const metaTitle = service.meta?.title;
+	const metaDescription = service.meta?.description;
+
+	// Inject location into meta title/description if not explicit in Payload
+	// (Or append to it if desiring consistency, but usually CMS overrides)
 	const locationTitle = `${service.title} in ${seo.location.city}`;
 
+	const title =
+		metaTitle ||
+		(service.title
+			? `${locationTitle} | ${brand.name}`
+			: `Service | ${brand.name}`);
+
+	const description =
+		metaDescription ||
+		`Professional ${service.title.toLowerCase()} services in ${seo.location.city}, ${seo.location.state}. ${service.description}`;
+
 	return {
-		title:
-			service.metaTitle?.replace(
-				brand.name,
-				`${brand.name} ${seo.location.city}`,
-			) || `${locationTitle} | ${brand.name}`,
-		description:
-			service.metaDescription ||
-			`Professional ${service.title.toLowerCase()} services in ${seo.location.city}, ${seo.location.state}. ${service.description}`,
+		title,
+		description,
 	};
 }
 
 // 3. Main Page Component
 export default async function ServicePage({ params }: ServicePageProps) {
 	const { slug } = await params;
-	const service = SITE_CONFIG.services.find((s) => s.slug === slug) as
-		| ExtendedService
-		| undefined;
 
-	if (!service) {
+	// Fetch from Payload
+	const payloadService = await getServiceBySlug(slug);
+	const allServices = await getServices();
+
+	if (!payloadService) {
 		notFound();
 	}
 
-	// Dynamic Icon
-	const Icon =
-		(Icons as unknown as Record<string, typeof Icons.Wrench>)[service.icon] ||
-		Icons.Wrench;
+	// Fetch static config fallback for missing fields (stats, process)
+	const staticService = SITE_CONFIG.services.find((s) => s.slug === slug);
+
+	// Map Payload data + Static fallbacks to component Props
+	// Ensure types match what components expect
+	let subServices: ExtendedService["subServices"] = [];
+	if (payloadService.subServices && Array.isArray(payloadService.subServices)) {
+		subServices = payloadService.subServices
+			.map((sub) => {
+				if (typeof sub === "object" && sub !== null) {
+					// It's a populated Service object
+					const subService = sub as Service;
+					return {
+						title: subService.title,
+						description: subService.description || "",
+						icon: subService.icon || "Wrench",
+						slug: subService.slug,
+					};
+				}
+				return null;
+			})
+			.filter((s) => s !== null);
+	}
+
+	const faqs =
+		payloadService.faqs?.map((faq) => ({
+			question: faq.question,
+			answer: faq.answer,
+		})) || [];
+
+	// Use the explicit short description for now as longDescription is RichText
+	// and components expect string.
+	// TODO: Implement Rich Text renderer for longDescription if needed.
+	const description = payloadService.description;
+
+	// Hybrid Service Object
+	const service: ExtendedService = {
+		title: payloadService.title,
+		slug: payloadService.slug,
+		description: description,
+		longDescription: payloadService.longDescription || description, // Pass rich text or fallback to short description
+		icon: payloadService.icon,
+		// Static fallbacks
+		stats: staticService?.stats,
+		benefits: staticService?.benefits,
+		// Dynamic arrays
+		subServices: subServices,
+		faqs: faqs,
+		// Prefer Payload process data, fallback to static if empty
+		process:
+			payloadService.process && payloadService.process.length > 0
+				? payloadService.process.map((step) => ({
+						title: step.title,
+						description: step.description || "",
+						icon: "CheckCircle",
+					}))
+				: staticService?.process,
+		isEmergency: payloadService.isEmergency || false,
+		availability: payloadService.availability || undefined,
+	};
+
+	// Extract parent service if available (for breadcrumbs)
+	let parentServiceInfo = undefined;
+	if (
+		payloadService.parentService &&
+		typeof payloadService.parentService === "object"
+	) {
+		const parent = payloadService.parentService as Service;
+		parentServiceInfo = {
+			title: parent.title,
+			slug: parent.slug,
+		};
+	}
 
 	// JSON-LD Schema using centralized generators
-	const serviceSchema = generateServiceSchema(
-		service as Parameters<typeof generateServiceSchema>[0],
-	);
+	// Pass the payload service directly, types are now handled in the utility
+	const serviceSchema = generateServiceSchema(payloadService);
 
 	const jsonLd = {
 		"@context": "https://schema.org",
 		"@graph": [
 			// Breadcrumb schema
-			generateServiceBreadcrumbs(service.title),
+			generateServiceBreadcrumbs(service.title, parentServiceInfo),
 			// Service schema
 			serviceSchema,
 			// FAQ schema (if service has FAQs)
@@ -114,18 +200,31 @@ export default async function ServicePage({ params }: ServicePageProps) {
 		],
 	};
 
+	// Prepare breadcrumb items for ServiceHero
+	const breadcrumbItems: { label: string; href?: string }[] = [
+		{ label: "Services", href: "/services" },
+	];
+
+	if (parentServiceInfo) {
+		breadcrumbItems.push({
+			label: parentServiceInfo.title,
+			href: `/services/${parentServiceInfo.slug}`,
+		});
+	}
+
+	breadcrumbItems.push({ label: service.title });
+
 	return (
 		<>
 			<JsonLd data={jsonLd} />
 
 			<ServiceHero
+				icon={service.icon}
 				title={service.title}
-				description={service.longDescription || service.description}
-				icon={Icon}
-				breadcrumbItems={[
-					{ label: "Services", href: "/services" },
-					{ label: service.title },
-				]}
+				description={service.description}
+				isEmergency={service.isEmergency}
+				availability={service.availability}
+				breadcrumbItems={breadcrumbItems}
 			/>
 
 			{/* Service Details with Sub-services (SEO-rich content) */}
@@ -133,8 +232,11 @@ export default async function ServicePage({ params }: ServicePageProps) {
 				title={service.title}
 				longDescription={service.longDescription || service.description}
 				subServices={service.subServices}
-				process={service.process}
-				image="/images/service/service-details-plumber.png"
+				process={service.process} // Static process steps
+				image={
+					getMediaUrl(payloadService.image) ||
+					"/images/service/service-details-plumber.png"
+				}
 			/>
 
 			{/* Why Choose Us + Stats */}
@@ -153,7 +255,11 @@ export default async function ServicePage({ params }: ServicePageProps) {
 			<ServiceFAQ faqs={service.faqs || []} />
 
 			{/* Related Services */}
-			<RelatedServices currentSlug={service.slug || ""} />
+			<RelatedServices
+				services={allServices
+					.filter((s) => s.slug !== service.slug)
+					.slice(0, 3)}
+			/>
 		</>
 	);
 }

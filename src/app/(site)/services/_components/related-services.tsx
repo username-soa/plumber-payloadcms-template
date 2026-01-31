@@ -1,22 +1,16 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
-import * as Icons from "lucide-react";
-import { SITE_CONFIG } from "@/lib/site-config";
+import type { Service } from "@/payload-types";
 import { TypographyH3, TypographyMuted } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
+import DynamicIcon from "@/components/ui/dynamic-icon";
 
 interface RelatedServicesProps {
-	currentSlug: string;
+	services: Service[];
 }
 
-export function RelatedServices({ currentSlug }: RelatedServicesProps) {
-	// filter out current service and take up to 3 others
-	const otherServices = SITE_CONFIG.services
-		.filter((s) => s.slug !== currentSlug)
-		.slice(0, 3);
-
-	if (otherServices.length === 0) return null;
+export function RelatedServices({ services }: RelatedServicesProps) {
+	if (services.length === 0) return null;
 
 	return (
 		<section className="py-16 md:py-24 bg-muted/20">
@@ -43,12 +37,7 @@ export function RelatedServices({ currentSlug }: RelatedServicesProps) {
 				</div>
 
 				<div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-					{otherServices.map((service) => {
-						// @ts-ignore - We know the icon name exists in lucide-react from our config
-						const Icon =
-							(Icons[service.icon as keyof typeof Icons] as LucideIcon) ||
-							Icons.Wrench;
-
+					{services.map((service) => {
 						return (
 							<Link
 								key={service.slug}
@@ -56,7 +45,7 @@ export function RelatedServices({ currentSlug }: RelatedServicesProps) {
 								className="group p-6 rounded-2xl bg-background border border-border/50 shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300 flex flex-col items-start"
 							>
 								<div className="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary mb-4 group-hover:scale-110 transition-transform">
-									<Icon className="w-5 h-5" />
+									<DynamicIcon name={service.icon} className="w-5 h-5" />
 								</div>
 
 								<h4 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">

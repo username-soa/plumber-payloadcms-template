@@ -159,7 +159,7 @@ export const SITE_CONFIG = {
 				"Advanced technology to pinpoint and repair hidden leaks before they cause damage.",
 			longDescription:
 				"Our state-of-the-art leak detection services use acoustic listening devices, thermal imaging, and video inspection to locate hidden leaks behind walls, under floors, and in your main water line. Early detection saves you thousands in potential water damage and mold remediation costs.",
-			icon: "Search",
+			icon: "search",
 			metaTitle: "Professional Leak Detection Services | FlowMasters",
 			metaDescription:
 				"Expert electronic leak detection services. We find hidden water leaks without destruction. Fast, accurate, and affordable leak detection.",
@@ -174,25 +174,25 @@ export const SITE_CONFIG = {
 					title: "Acoustic Leak Detection",
 					description:
 						"Using advanced sound equipment to locate leaks by detecting the noise of escaping water.",
-					icon: "Ear",
+					icon: "ear",
 				},
 				{
 					title: "Thermal Imaging",
 					description:
 						"Infrared cameras reveal temperature differences caused by hidden moisture.",
-					icon: "Thermometer",
+					icon: "thermometer",
 				},
 				{
 					title: "Video Pipe Inspection",
 					description:
 						"Fiber-optic cameras inspect inside pipes to find cracks and damage.",
-					icon: "Video",
+					icon: "video",
 				},
 				{
 					title: "Slab Leak Detection",
 					description:
 						"Specialized equipment to find leaks under concrete foundations.",
-					icon: "Layers",
+					icon: "layers",
 				},
 			],
 			stats: [
@@ -206,19 +206,19 @@ export const SITE_CONFIG = {
 					title: "Initial Assessment",
 					description:
 						"We discuss your concerns and review your water bills for anomalies.",
-					icon: "ClipboardList",
+					icon: "clipboard-list",
 				},
 				{
 					title: "Technology Scan",
 					description:
 						"Using acoustic and thermal tools, we scan your property for hidden leaks.",
-					icon: "Scan",
+					icon: "scan",
 				},
 				{
 					title: "Pinpoint & Report",
 					description:
 						"We mark the exact leak location and provide a detailed repair plan.",
-					icon: "MapPin",
+					icon: "map-pin",
 				},
 			],
 			faqs: [
@@ -241,7 +241,7 @@ export const SITE_CONFIG = {
 				"Installation and repair of tankless and traditional water heating systems.",
 			longDescription:
 				"Whether you need a new high-efficiency tankless system or a repair for your traditional tank water heater, our experts ensure you have reliable hot water. We service all major brands and provide same-day replacement options.",
-			icon: "Flame",
+			icon: "flame",
 			metaTitle: "Water Heater Repair & Installation | FlowMasters",
 			metaDescription:
 				"Expert water heater installation and repair services. Tankless and traditional systems. Same-day service available for hot water emergencies.",
@@ -256,19 +256,19 @@ export const SITE_CONFIG = {
 					title: "Consultation",
 					description:
 						"We verify your needs and help you choose the right unit.",
-					icon: "ClipboardList",
+					icon: "clipboard-list",
 				},
 				{
 					title: "Installation",
 					description:
 						"Professional removal of old unit and safe installation of the new one.",
-					icon: "Wrench",
+					icon: "wrench",
 				},
 				{
 					title: "Testing",
 					description:
 						"We verify hot water flow and safety controls before leaving.",
-					icon: "CheckCircle",
+					icon: "check-circle",
 				},
 			],
 			faqs: [
@@ -291,7 +291,7 @@ export const SITE_CONFIG = {
 				"Professional unclogging services to restore proper flow to your plumbing.",
 			longDescription:
 				"Stop struggling with slow drains and recurring clogs. Our hydro-jetting and professional snaking services clear even the toughest blockages, including tree roots and grease buildup, restoring your pipes to like-new flow capacity.",
-			icon: "Droplets",
+			icon: "droplets",
 			metaTitle: "Professional Drain Cleaning & Hydro Jetting | FlowMasters",
 			metaDescription:
 				"Fast and effective drain cleaning services. Hydro-jetting and rooter service to clear clogged drains, main lines, and sewer backups.",
@@ -306,18 +306,18 @@ export const SITE_CONFIG = {
 					title: "Inspection",
 					description:
 						"Camera inspection to locate the blockage and check pipe condition.",
-					icon: "Scan",
+					icon: "scan",
 				},
 				{
 					title: "Hydro-Jetting",
 					description:
 						"High-pressure water streams clear roots and grease buildup.",
-					icon: "Droplets",
+					icon: "droplets",
 				},
 				{
 					title: "Verification",
 					description: "Final camera pass to ensure the line is 100% clear.",
-					icon: "CheckCircle",
+					icon: "check-circle",
 				},
 			],
 			faqs: [
@@ -340,7 +340,7 @@ export const SITE_CONFIG = {
 				"Complete pipe repair and replacement services for all pipe materials.",
 			longDescription:
 				"From fixing pinhole leaks in copper pipes to whole-house PEX repiping, our licensed plumbers handle all piping materials. We ensure durable, code-compliant repairs that stand the test of time.",
-			icon: "Wrench",
+			icon: "wrench",
 			metaTitle: "Pipe Repair & Repiping Services | FlowMasters",
 			metaDescription:
 				"Expert pipe repair and whole-house repiping. We fix copper, PEX, galvanized, and PVC pipes. Licensed and insured plumbing professionals.",
@@ -355,18 +355,18 @@ export const SITE_CONFIG = {
 					title: "Assessment",
 					description:
 						"We identify leak sources and evaluate pipe material condition.",
-					icon: "Search",
+					icon: "search",
 				},
 				{
 					title: "Repair/Replace",
 					description:
 						"Precision repair or complete section replacement as needed.",
-					icon: "Wrench",
+					icon: "wrench",
 				},
 				{
 					title: "Pressure Test",
 					description: "System testing to guarantee leak-free performance.",
-					icon: "Gauge",
+					icon: "gauge",
 				},
 			],
 			faqs: [
@@ -389,7 +389,7 @@ export const SITE_CONFIG = {
 				"24/7 rapid response for critical plumbing issues that can't wait.",
 			longDescription:
 				"Plumbing disasters don't wait for business hours. Our emergency response team visits your property 24/7 to handle burst pipes, overflowing toilets, and major leaks. We arrive fully stocked to stop the damage immediately.",
-			icon: "Siren",
+			icon: "siren",
 			// SEO: Emergency service flags for special schema markup
 			isEmergency: true,
 			availability: "24/7",
@@ -407,19 +407,19 @@ export const SITE_CONFIG = {
 					title: "Rapid Dispatch",
 					description:
 						"Our nearest available unit is routed to you immediately.",
-					icon: "Siren",
+					icon: "siren",
 				},
 				{
 					title: "Immediate Action",
 					description:
 						"We quickly isolate the issue to stop damage and restore safety.",
-					icon: "Zap",
+					icon: "zap",
 				},
 				{
 					title: "Follow-Up",
 					description:
 						"Permanent repair options provided once the emergency is stabilized.",
-					icon: "ClipboardCheck",
+					icon: "clipboard-check",
 				},
 			],
 			faqs: [
@@ -442,7 +442,7 @@ export const SITE_CONFIG = {
 				"Full-service plumbing updates for your modern bathroom renovation.",
 			longDescription:
 				"Transform your bathroom into a spa-like retreat. We handle all plumbing aspects of your remodel, including moving drain lines, installing luxury showers, soaking tubs, and modern efficient fixtures.",
-			icon: "Bath",
+			icon: "bath",
 			metaTitle: "Bathroom Plumbing Remodel & Renovation | FlowMasters",
 			metaDescription:
 				"Expert bathroom plumbing remodeling. Showers, tubs, sinks, and toilet installation. We work with your contractor to create your dream bathroom.",
@@ -457,19 +457,19 @@ export const SITE_CONFIG = {
 					title: "Design Consult",
 					description:
 						"We work with you to plan the perfect layout and fixture selection.",
-					icon: "PencilRuler",
+					icon: "pencil-ruler",
 				},
 				{
 					title: "Rough-In",
 					description:
 						"Routing all new water and drain lines to the correct locations.",
-					icon: "Hammer",
+					icon: "hammer",
 				},
 				{
 					title: "Finish",
 					description:
 						"Installing fixtures and testing for a perfect, polised look.",
-					icon: "Sparkles",
+					icon: "sparkles",
 				},
 			],
 			faqs: [
@@ -492,7 +492,7 @@ export const SITE_CONFIG = {
 				"Trenchless repair, replacement, and cleaning for your main sewer line.",
 			longDescription:
 				"Sewer line issues can be messy and disruptive. We use advanced camera inspection and trenchless technology to repair or replace your sewer lines with minimal excavation, preserving your landscaping and driveway.",
-			icon: "Route",
+			icon: "route",
 			metaTitle: "Sewer Line Repair & Replacement | FlowMasters",
 			metaDescription:
 				"Expert sewer line repair and replacement services. Trenchless technology, camera inspections, and rooter service for main sewer lines.",
@@ -512,13 +512,13 @@ export const SITE_CONFIG = {
 				{
 					title: "Trenchless Fix",
 					description: "Relining or bursting pipe with minimal to no digging.",
-					icon: "ArrowRightLeft",
+					icon: "arrow-right-left",
 				},
 				{
 					title: "Final Check",
 					description:
 						"Ensuring proper flow and grade with a post-work inspection.",
-					icon: "CheckCircle",
+					icon: "check-circle",
 				},
 			],
 			faqs: [
@@ -541,7 +541,7 @@ export const SITE_CONFIG = {
 				"Whole-home filtration and water softeners for pure, healthy water.",
 			longDescription:
 				"Enjoy bottled-quality water from every tap. We install and service reverse osmosis systems, water softeners, and whole-house carbon filters to remove hardness, chlorine, and contaminants from your water supply.",
-			icon: "Droplets",
+			icon: "droplets",
 			metaTitle: "Water Softener & Filtration Installation | FlowMasters",
 			metaDescription:
 				"Professional water filtration system installation. Water softeners, reverse osmosis, and whole-house filters for clean, strictly healthy water.",
@@ -556,18 +556,18 @@ export const SITE_CONFIG = {
 					title: "Water Testing",
 					description:
 						"We analyze your water's hardness and contaminant levels.",
-					icon: "Beaker",
+					icon: "beaker",
 				},
 				{
 					title: "System Select",
 					description:
 						"Recommending the best filter or softener for your specific water.",
-					icon: "Filter",
+					icon: "filter",
 				},
 				{
 					title: "Installation",
 					description: "Clean integration with your main water line.",
-					icon: "Wrench",
+					icon: "wrench",
 				},
 			],
 			faqs: [
@@ -590,7 +590,7 @@ export const SITE_CONFIG = {
 				"Safe, licensed gas line installation and repair for appliances.",
 			longDescription:
 				"Gas work requires certified professionals. We safely install gas lines for new appliances, fire pits, and grills, and provide rapid leak detection and repair services to keep your home safe.",
-			icon: "Flame",
+			icon: "flame",
 			metaTitle: "Gas Line Installation & Repair | FlowMasters",
 			metaDescription:
 				"Licensed gas plumbers for line installation and repair. Safety inspections, leak detection, and hookups for stoves, dryers, and outdoor grills.",
@@ -605,18 +605,18 @@ export const SITE_CONFIG = {
 					title: "Safety Check",
 					description:
 						"Shutting off gas and verifying the system before starting.",
-					icon: "ShieldCheck",
+					icon: "shield-check",
 				},
 				{
 					title: "Installation",
 					description:
 						"Running new lines using appropriately integrated materials.",
-					icon: "Construction",
+					icon: "construction",
 				},
 				{
 					title: "Leak Testing",
 					description: "Rigorous pressure testing to ensure 100% safety.",
-					icon: "Gauge",
+					icon: "gauge",
 				},
 			],
 			faqs: [
@@ -639,7 +639,7 @@ export const SITE_CONFIG = {
 				"Reliable plumbing solutions for businesses, restaurants, and offices.",
 			longDescription:
 				"From grease trap maintenance for restaurants to backflow testing for office buildings, our commercial division handles the unique needs of business properties. We offer priority scheduling to minimize operational downtime.",
-			icon: "Building2",
+			icon: "building-2",
 			metaTitle: "Commercial Plumbing Services | FlowMasters",
 			metaDescription:
 				"Expert commercial plumbing for businesses. Grease traps, backflow testing, industrial water heaters, and priority emergency service.",
@@ -654,19 +654,19 @@ export const SITE_CONFIG = {
 					title: "Site Survey",
 					description:
 						"Understanding your facility's layout and specific requirements.",
-					icon: "Map",
+					icon: "map",
 				},
 				{
 					title: "Scheduled Work",
 					description:
 						"Executing repairs during off-hours to minimize disruption.",
-					icon: "Clock",
+					icon: "clock",
 				},
 				{
 					title: "Compliance",
 					description:
 						"Providing all necessary documentation and certifications.",
-					icon: "FileCheck",
+					icon: "file-check",
 				},
 			],
 			faqs: [
@@ -688,7 +688,7 @@ export const SITE_CONFIG = {
 			description: "Fast fix for running, leaking, or clogged toilets.",
 			longDescription:
 				"A running or clogged toilet is a nuisance and a waste of water. We repair all toilet makes and models, fix flange leaks, and install water-saving modern toilets to upgrade your bathroom.",
-			icon: "Wrench",
+			icon: "wrench",
 			metaTitle: "Toilet Repair & Installation Services | FlowMasters",
 			metaDescription:
 				"Professional toilet repair and installation. We fix running, leaking, and clogged toilets. High-efficiency toilet upgrades available.",
@@ -703,17 +703,17 @@ export const SITE_CONFIG = {
 					title: "Diagnosis",
 					description:
 						"Identifying if it's a fill valve, flapper, or clog issue.",
-					icon: "Stethoscope",
+					icon: "stethoscope",
 				},
 				{
 					title: "Repair/Replace",
 					description: "Fixing the specific part or installing a new unit.",
-					icon: "Wrench",
+					icon: "wrench",
 				},
 				{
 					title: "Flow Test",
 					description: "Verifying powerful flush and proper tank refill.",
-					icon: "Droplet",
+					icon: "droplet",
 				},
 			],
 			faqs: [
@@ -735,7 +735,7 @@ export const SITE_CONFIG = {
 			description: "Faucets, sinks, garbage disposals, and dishwasher lines.",
 			longDescription:
 				"The kitchen is the heart of the home. We handle all kitchen plumbing needs including faucet upgrades, garbage disposal repair, ice maker lines, and sink installations.",
-			icon: "Utensils",
+			icon: "utensils",
 			metaTitle: "Kitchen Plumbing Services | FlowMasters",
 			metaDescription:
 				"Expert kitchen plumbing repairs. Garbage disposal installation, faucet repair, sink installation, and dishwasher hookups.",
@@ -750,17 +750,17 @@ export const SITE_CONFIG = {
 					title: "Assessment",
 					description:
 						"Checking under-sink connection points and supply lines.",
-					icon: "Eye",
+					icon: "eye",
 				},
 				{
 					title: "Installation",
 					description: "Connecting your new fixture or appliance securely.",
-					icon: "Wrench",
+					icon: "wrench",
 				},
 				{
 					title: "Quality Check",
 					description: "Ensuring zero leaks and smooth operation.",
-					icon: "ThumbsUp",
+					icon: "thumbs-up",
 				},
 			],
 			faqs: [
@@ -806,7 +806,7 @@ export const SITE_CONFIG = {
 			title: "Diagnosis",
 			description:
 				"Our expert arrives, inspects the issue, and gives a clear quote.",
-			icon: "Search",
+			icon: "search",
 			image: "/images/about/about-trust.png",
 			label: "INSPECTION + QUOTE",
 		},

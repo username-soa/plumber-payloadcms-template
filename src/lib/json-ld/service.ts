@@ -7,6 +7,10 @@
 
 import { SITE_CONFIG } from "../site-config";
 import type { ServiceConfig } from "./types";
+import type { Service } from "@/payload-types";
+
+// Combined type for input (Payload Service or Config Service)
+type ServiceInput = ServiceConfig | Service;
 
 /**
  * Generate the areaServed for a service
@@ -32,42 +36,58 @@ function generateServiceAreaServed() {
 /**
  * Generate sub-services offer catalog if available
  */
-function generateSubServicesOfferCatalog(service: ServiceConfig) {
+function generateSubServicesOfferCatalog(service: ServiceInput) {
 	if (!("subServices" in service) || !service.subServices) {
 		return undefined;
 	}
 
+	// Normalize subServices to a common shape
+	const subServices = service.subServices
+		.map((sub) => {
+			// Payload type might be partial or contain IDs
+			if (typeof sub !== "object" || !sub) return null;
+			return {
+				title: sub.title,
+				description: sub.description || "",
+			};
+		})
+		.filter((sub): sub is { title: string; description: string } => !!sub);
+
+	if (subServices.length === 0) return undefined;
+
 	return {
 		"@type": "OfferCatalog",
 		name: `${service.title} Methods`,
-		itemListElement: service.subServices.map(
-			(sub: { title: string; description: string }) => ({
-				"@type": "Offer",
-				itemOffered: {
-					"@type": "Service",
-					name: sub.title,
-					description: sub.description,
-				},
-			}),
-		),
+		itemListElement: subServices.map((sub) => ({
+			"@type": "Offer",
+			itemOffered: {
+				"@type": "Service",
+				name: sub.title,
+				description: sub.description,
+			},
+		})),
 	};
 }
 
 /**
  * Generate Service schema for a service page
  */
-export function generateServiceSchema(service: ServiceConfig) {
+export function generateServiceSchema(service: ServiceInput) {
 	const { siteUrl, schemaIds, location } = SITE_CONFIG.seo;
 	const serviceUrl = `${siteUrl}/services/${service.slug}`;
 
-	const isEmergency = "isEmergency" in service && service.isEmergency;
+	const isEmergency = "isEmergency" in service && !!service.isEmergency;
+
+	// Handle description - prefer simpler description for schema
+	// Payload has explicit description field (textarea) which works well
+	const description = service.description;
 
 	const schema: Record<string, unknown> = {
 		"@type": "Service",
 		"@id": `${serviceUrl}/#service`,
 		serviceType: service.title,
 		name: `${service.title} in ${location.city}`,
-		description: service.longDescription || service.description,
+		description: description,
 		url: serviceUrl,
 		provider: { "@id": `${siteUrl}/${schemaIds.organization}` },
 		areaServed: generateServiceAreaServed(),
@@ -122,8 +142,10 @@ export function generateServiceSchema(service: ServiceConfig) {
 /**
  * Generate the services listing page schema
  */
-export function generateServicesListingSchema() {
-	const { brand, services } = SITE_CONFIG;
+export function generateServicesListingSchema(
+	services: (Service | ServiceConfig)[] = SITE_CONFIG.services,
+) {
+	const { brand } = SITE_CONFIG;
 	const { siteUrl, schemaIds, location } = SITE_CONFIG.seo;
 
 	return {
