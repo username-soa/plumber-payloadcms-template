@@ -24,7 +24,12 @@ const MobileNav = dynamic(
 const HEADER_Z_INDEX = 60;
 const TRANSITION_DURATION = 300;
 
-export function Header() {
+interface HeaderProps {
+	navItems: { label: string; href: string }[];
+	phone: string;
+}
+
+export function Header({ navItems, phone }: HeaderProps) {
 	const isVisible = useScrollVisibility({ threshold: 50 });
 
 	return (
@@ -41,10 +46,10 @@ export function Header() {
 			}}
 		>
 			<Logo />
-			<DesktopNav />
+			<DesktopNav navItems={navItems} />
 			<div className="ml-auto flex items-center gap-4">
-				<CallButton />
-				<MobileNav />
+				<CallButton phone={phone} />
+				<MobileNav navItems={navItems} phone={phone} />
 			</div>
 		</header>
 	);

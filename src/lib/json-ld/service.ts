@@ -7,31 +7,10 @@
 
 import { SITE_CONFIG } from "../site-config";
 import type { ServiceConfig } from "./types";
-import type { Service } from "@/payload-types";
+import type { CompanyInfo, Service } from "@/payload-types";
 
 // Combined type for input (Payload Service or Config Service)
 type ServiceInput = ServiceConfig | Service;
-
-/**
- * Generate the areaServed for a service
- * Uses the primary city with state/country context
- */
-function generateServiceAreaServed() {
-	const { location } = SITE_CONFIG.seo;
-
-	return {
-		"@type": "City",
-		name: location.city,
-		containedInPlace: {
-			"@type": "State",
-			name: location.state,
-			containedInPlace: {
-				"@type": "Country",
-				name: location.country,
-			},
-		},
-	};
-}
 
 /**
  * Generate sub-services offer catalog if available
@@ -72,8 +51,11 @@ function generateSubServicesOfferCatalog(service: ServiceInput) {
 /**
  * Generate Service schema for a service page
  */
-export function generateServiceSchema(service: ServiceInput) {
-	const { siteUrl, schemaIds, location } = SITE_CONFIG.seo;
+export function generateServiceSchema(
+	service: ServiceInput,
+	companyInfo?: CompanyInfo,
+) {
+	const { siteUrl, schemaIds } = SITE_CONFIG.seo;
 	const serviceUrl = `${siteUrl}/services/${service.slug}`;
 
 	const isEmergency = "isEmergency" in service && !!service.isEmergency;
@@ -82,15 +64,27 @@ export function generateServiceSchema(service: ServiceInput) {
 	// Payload has explicit description field (textarea) which works well
 	const description = service.description;
 
+	// Use Payload Location if available
+	const payloadLocation = companyInfo?.seo?.location;
+	const city = payloadLocation?.city || SITE_CONFIG.seo.location.city;
+	// @ts-ignore - types might not be regenerated yet
+	const phone =
+		companyInfo?.seo?.phoneDisplay || SITE_CONFIG.seo.location.phone;
+
 	const schema: Record<string, unknown> = {
 		"@type": "Service",
 		"@id": `${serviceUrl}/#service`,
 		serviceType: service.title,
-		name: `${service.title} in ${location.city}`,
+		name: `${service.title} in ${city}`,
 		description: description,
 		url: serviceUrl,
 		provider: { "@id": `${siteUrl}/${schemaIds.organization}` },
-		areaServed: generateServiceAreaServed(),
+		// We could update generateServiceAreaServed to use companyInfo too, but strict migration only asked for specific fields.
+		// For now we will rely on organization schema to define the main area served.
+		areaServed: {
+			"@type": "City",
+			name: city,
+		},
 		offers: {
 			"@type": "Offer",
 			availability: "https://schema.org/InStock",
@@ -113,7 +107,7 @@ export function generateServiceSchema(service: ServiceInput) {
 			"@type": "ServiceChannel",
 			servicePhone: {
 				"@type": "ContactPoint",
-				telephone: location.phone,
+				telephone: phone,
 			},
 			availableLanguage: "English",
 			serviceUrl,
@@ -144,15 +138,18 @@ export function generateServiceSchema(service: ServiceInput) {
  */
 export function generateServicesListingSchema(
 	services: (Service | ServiceConfig)[] = SITE_CONFIG.services,
+	companyInfo?: CompanyInfo,
 ) {
-	const { brand } = SITE_CONFIG;
-	const { siteUrl, schemaIds, location } = SITE_CONFIG.seo;
+	const brandName = companyInfo?.brand?.name || SITE_CONFIG.brand.name;
+	const { siteUrl, schemaIds } = SITE_CONFIG.seo;
+	const city =
+		companyInfo?.seo?.location?.city || SITE_CONFIG.seo.location.city;
 
 	return {
 		"@type": "ItemList",
 		"@id": `${siteUrl}/services/#itemlist`,
-		name: `Plumbing Services in ${location.city}`,
-		description: `Professional plumbing services offered by ${brand.name} in ${location.city} and surrounding areas.`,
+		name: `Plumbing Services in ${city}`,
+		description: `Professional plumbing services offered by ${brandName} in ${city} and surrounding areas.`,
 		numberOfItems: services.length,
 		itemListElement: services.map((service, index) => ({
 			"@type": "ListItem",

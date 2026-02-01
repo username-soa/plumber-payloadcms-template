@@ -18,7 +18,10 @@ export const metadata: Metadata = {
 	description: `Get in touch with ${brand.name} for all your plumbing needs in ${seo.location.city}. 24/7 emergency service available. Call us or fill out our contact form for a free quote.`,
 };
 
-export default function ContactPage() {
+import { getCompanyInfo } from "@/lib/payload/getGlobals";
+
+export default async function ContactPage() {
+	const companyInfo = await getCompanyInfo();
 	const { siteUrl } = seo;
 
 	// JSON-LD Schema using centralized generators
@@ -34,20 +37,24 @@ export default function ContactPage() {
 			}),
 			// Organization schema with contact points
 			{
-				...generateOrganizationSchema(),
+				...generateOrganizationSchema(companyInfo),
 				contactPoint: [
 					{
 						"@type": "ContactPoint",
-						telephone: seo.location.phone,
+						telephone: companyInfo.phone || seo.location.phone,
 						contactType: "customer service",
-						areaServed: seo.location.countryCode,
+						areaServed:
+							companyInfo.seo?.location?.countryCode ||
+							seo.location.countryCode,
 						availableLanguage: ["English"],
 					},
 					{
 						"@type": "ContactPoint",
-						telephone: seo.location.phone,
+						telephone: companyInfo.phone || seo.location.phone,
 						contactType: "emergency",
-						areaServed: seo.location.countryCode,
+						areaServed:
+							companyInfo.seo?.location?.countryCode ||
+							seo.location.countryCode,
 						availableLanguage: ["English"],
 						hoursAvailable: {
 							"@type": "OpeningHoursSpecification",

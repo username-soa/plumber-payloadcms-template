@@ -7,6 +7,8 @@
 
 import { SITE_CONFIG } from "../site-config";
 
+import type { CompanyInfo } from "@/payload-types";
+
 export interface ArticleSchemaOptions {
 	title: string;
 	description: string;
@@ -24,8 +26,11 @@ export interface ArticleSchemaOptions {
 /**
  * Generate BlogPosting or Article schema
  */
-export function generateArticleSchema(options: ArticleSchemaOptions) {
-	const { siteUrl, schemaIds, location } = SITE_CONFIG.seo;
+export function generateArticleSchema(
+	options: ArticleSchemaOptions,
+	companyInfo?: CompanyInfo,
+) {
+	const { siteUrl, schemaIds } = SITE_CONFIG.seo;
 	const articleUrl = `${siteUrl}/${options.basePath}/${options.slug}`;
 
 	const schema: Record<string, unknown> = {
@@ -73,17 +78,31 @@ export function generateArticleSchema(options: ArticleSchemaOptions) {
 		schema.wordCount = options.wordCount;
 	}
 
-	// For case studies, add location context
+	// For case studies, add location context from Payload or Config
 	if (options.basePath === "case-studies") {
-		schema.locationCreated = {
-			"@type": "Place",
-			address: {
-				"@type": "PostalAddress",
-				addressLocality: location.city,
-				addressRegion: location.stateCode,
-				addressCountry: location.countryCode,
-			},
-		};
+		const payloadLocation = companyInfo?.seo?.location;
+		if (payloadLocation) {
+			schema.locationCreated = {
+				"@type": "Place",
+				address: {
+					"@type": "PostalAddress",
+					addressLocality: payloadLocation.city,
+					addressRegion: payloadLocation.stateCode,
+					addressCountry: payloadLocation.countryCode,
+				},
+			};
+		} else {
+			const { location } = SITE_CONFIG.seo;
+			schema.locationCreated = {
+				"@type": "Place",
+				address: {
+					"@type": "PostalAddress",
+					addressLocality: location.city,
+					addressRegion: location.stateCode,
+					addressCountry: location.countryCode,
+				},
+			};
+		}
 	}
 
 	return schema;

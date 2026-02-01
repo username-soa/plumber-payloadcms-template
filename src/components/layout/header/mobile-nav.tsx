@@ -3,7 +3,6 @@
 import * as React from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { SITE_CONFIG } from "@/lib/site-config";
 import { Menu, X } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import {
@@ -14,7 +13,13 @@ import {
 } from "@/components/ui/sheet";
 import { CallButton } from "./call-button";
 
-export function MobileNav() {
+export function MobileNav({
+	navItems,
+	phone,
+}: {
+	navItems: { label: string; href: string }[];
+	phone: string;
+}) {
 	const [isOpen, setIsOpen] = React.useState(false);
 
 	return (
@@ -60,7 +65,7 @@ export function MobileNav() {
 					<SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
 					<div className="flex flex-col h-full px-6 pb-6 pt-24">
 						<nav className="flex flex-col gap-4 text-left mt-24 items-start">
-							{SITE_CONFIG.navLinks.map((link) => (
+							{navItems.map((link) => (
 								<Link
 									key={link.href + link.label}
 									href={link.href}
@@ -73,7 +78,7 @@ export function MobileNav() {
 						</nav>
 
 						<div className="mt-auto sm:hidden flex flex-col gap-4">
-							<CallButton fullWidth />
+							<CallButton fullWidth phone={phone} />
 						</div>
 					</div>
 				</SheetContent>

@@ -15,6 +15,11 @@ import { BlogPosts } from "./collections/BlogPosts";
 import { CaseStudies } from "./collections/CaseStudies";
 import { Tags } from "./collections/Tags";
 import { Services } from "./collections/Services";
+import { Reviews } from "./collections/Reviews";
+
+import { Header } from "./globals/Header";
+import { Footer } from "./globals/Footer";
+import { CompanyInfo } from "./globals/CompanyInfo";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -34,7 +39,10 @@ export default buildConfig({
 		CaseStudies,
 		Tags,
 		Services,
+		Reviews,
 	],
+
+	globals: [Header, Footer, CompanyInfo],
 
 	// Admin panel configuration
 	admin: {

@@ -7,6 +7,7 @@ import {
 	Phone,
 	MapPin,
 	Mail,
+	Youtube,
 } from "lucide-react";
 import Link from "next/link";
 
@@ -18,51 +19,65 @@ import {
 	TypographySmall,
 	TypographyH2,
 } from "@/components/ui/typography";
-import { SITE_CONFIG } from "@/lib/site-config";
+import type {
+	Footer as FooterType,
+	CompanyInfo as CompanyInfoType,
+} from "@/payload-types";
 
 const SOCIAL_ICONS: Record<string, LucideIcon> = {
 	facebook: Facebook,
 	instagram: Instagram,
 	linkedin: Linkedin,
 	twitter: Twitter,
+	youtube: Youtube,
 };
 
-export function Footer() {
+interface FooterProps {
+	footerData: FooterType;
+	companyInfo: CompanyInfoType;
+}
+
+export function Footer({ footerData, companyInfo }: FooterProps) {
+	const { cta, navLinks, copyrightText, bottomLinks } = footerData;
+	const { brand, socials, workingHours, phone, email, address } = companyInfo;
+	const contact = { phone, email, address };
+
 	return (
 		<footer className="w-full bg-muted/30 pt-16 pb-8 border-t border-border relative overflow-hidden">
 			<div className="container mx-auto px-6 md:px-12 relative z-10">
 				{/* Integrated CTA Section */}
-				<div className="flex flex-col items-center justify-between gap-8 text-center md:text-left mb-16">
-					<TypographyH2 className="text-4xl md:text-5xl font-bold border-none tracking-tight text-center">
-						{SITE_CONFIG.footer.cta.headline}
-					</TypographyH2>
-					<p className="text-muted-foreground text-lg md:text-xl font-light text-center">
-						{SITE_CONFIG.footer.cta.subheadline}
-					</p>
+				{cta && (
+					<div className="flex flex-col items-center justify-between gap-8 text-center md:text-left mb-16">
+						<TypographyH2 className="text-4xl md:text-5xl font-bold border-none tracking-tight text-center">
+							{cta.headline}
+						</TypographyH2>
+						<p className="text-muted-foreground text-lg md:text-xl font-light text-center">
+							{cta.subheadline}
+						</p>
 
-					<div className="shrink-0 flex flex-col sm:flex-row gap-4">
-						<Button
-							size="lg"
-							className="font-bold text-lg px-6 h-12 hover:shadow-md transition-all hover:scale-105 rounded-full"
-							asChild
-						>
-							<Link href="/contact">
-								{SITE_CONFIG.footer.cta.primaryButtonText}
-							</Link>
-						</Button>
-						<Button
-							size="lg"
-							variant="outline"
-							className="font-bold text-lg px-6 h-12 hover:shadow-md transition-all hover:scale-105 rounded-full bg-transparent"
-							asChild
-						>
-							<a href={`tel:${SITE_CONFIG.contact.phone}`}>
-								{SITE_CONFIG.footer.cta.secondaryButtonText}{" "}
-								{SITE_CONFIG.contact.phone}
-							</a>
-						</Button>
+						<div className="shrink-0 flex flex-col sm:flex-row gap-4">
+							<Button
+								size="lg"
+								className="font-bold text-lg px-6 h-12 hover:shadow-md transition-all hover:scale-105 rounded-full"
+								asChild
+							>
+								<Link href={cta.primaryButtonLink || "/contact"}>
+									{cta.primaryButtonText}
+								</Link>
+							</Button>
+							<Button
+								size="lg"
+								variant="outline"
+								className="font-bold text-lg px-6 h-12 hover:shadow-md transition-all hover:scale-105 rounded-full bg-transparent"
+								asChild
+							>
+								<a href={`tel:${contact.phone}`}>
+									{cta.secondaryButtonText} {contact.phone}
+								</a>
+							</Button>
+						</div>
 					</div>
-				</div>
+				)}
 
 				<Separator className="mb-10" />
 
@@ -71,23 +86,16 @@ export function Footer() {
 					<div className="flex flex-col gap-4">
 						<Link href="/" className="flex items-center gap-2 w-fit">
 							<span className="text-xl font-bold tracking-tight text-primary">
-								{SITE_CONFIG.brand.name}
+								{brand.name}
 							</span>
 						</Link>
 						<TypographyMuted className="text-base">
-							{SITE_CONFIG.brand.description}
+							{brand.description}
 						</TypographyMuted>
 						<div className="flex gap-2">
-							{SITE_CONFIG.socials.map((social) => {
+							{socials?.map((social) => {
 								const Icon = SOCIAL_ICONS[social.platform];
-								if (!Icon) {
-									if (process.env.NODE_ENV === "development") {
-										console.warn(
-											`[Footer] Unknown social platform: "${social.platform}". Add it to SOCIAL_ICONS.`,
-										);
-									}
-									return null;
-								}
+								if (!Icon) return null;
 								return (
 									<SocialButton
 										key={social.platform}
@@ -106,7 +114,7 @@ export function Footer() {
 							Top Links
 						</TypographyH3>
 						<div className="flex flex-col items-start gap-1.5">
-							{SITE_CONFIG.navLinks.map((link) => (
+							{navLinks?.map((link) => (
 								<FooterLink key={link.label} href={link.href}>
 									{link.label}
 								</FooterLink>
@@ -122,15 +130,15 @@ export function Footer() {
 						<ul className="space-y-3 mb-3">
 							<ContactItem
 								icon={Phone}
-								text={SITE_CONFIG.contact.phone}
-								href={`tel:${SITE_CONFIG.contact.phone}`}
+								text={contact.phone}
+								href={`tel:${contact.phone}`}
 							/>
 							<ContactItem
 								icon={Mail}
-								text={SITE_CONFIG.contact.email}
-								href={`mailto:${SITE_CONFIG.contact.email}`}
+								text={contact.email}
+								href={`mailto:${contact.email}`}
 							/>
-							<ContactItem icon={MapPin} text={SITE_CONFIG.contact.address} />
+							<ContactItem icon={MapPin} text={contact.address} />
 						</ul>
 					</div>
 
@@ -140,7 +148,7 @@ export function Footer() {
 							Working Hours
 						</TypographyH3>
 						<div className="space-y-3">
-							{SITE_CONFIG.workingHours.map((schedule) => (
+							{workingHours?.map((schedule) => (
 								<ScheduleRow
 									key={schedule.day}
 									day={schedule.day}
@@ -151,29 +159,56 @@ export function Footer() {
 					</div>
 				</div>
 
+				{companyInfo.seo?.serviceAreas &&
+					companyInfo.seo.serviceAreas.length > 0 && (
+						<div className="mb-10">
+							<div className="flex items-center gap-4 mb-4">
+								<Separator className="flex-1" />
+								<TypographyH3 className="text-foreground font-semibold shrink-0">
+									Proudly Serving
+								</TypographyH3>
+								<Separator className="flex-1" />
+							</div>
+							<p className="text-center text-muted-foreground text-sm max-w-4xl mx-auto leading-relaxed">
+								{companyInfo.seo.serviceAreas.map((area, index) => (
+									<span key={area.name || index}>
+										{area.name}
+										{index <
+											(companyInfo.seo?.serviceAreas?.length || 0) - 1 && (
+											<span className="mx-2 opacity-30">•</span>
+										)}
+									</span>
+								))}
+							</p>
+						</div>
+					)}
 				<Separator className="mb-3" />
 
 				{/* Bottom Section: Copyright */}
 				<div className="flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
 					<TypographyMuted>
-						© Copyright {new Date().getFullYear()} {SITE_CONFIG.brand.name}. All
-						Rights Reserved.
+						{copyrightText
+							?.replace("{year}", new Date().getFullYear().toString())
+							.replace("{brand}", brand.name) ||
+							`© Copyright ${new Date().getFullYear()} ${brand.name}. All Rights Reserved.`}
 					</TypographyMuted>
 					<div className="flex gap-4 mt-4 md:mt-0">
-						<Button
-							variant="link"
-							className="text-muted-foreground hover:text-primary h-auto p-0 font-normal"
-							asChild
-						>
-							<Link href="/privacy-policy">Privacy Policy</Link>
-						</Button>
-						<Button
-							variant="link"
-							className="text-muted-foreground hover:text-primary h-auto p-0 font-normal"
-							asChild
-						>
-							<Link href="/terms-conditions">Terms & Conditions</Link>
-						</Button>
+						{bottomLinks?.map((link) => (
+							<Button
+								key={link.id}
+								variant="link"
+								className="text-muted-foreground hover:text-primary h-auto p-0 font-normal"
+								asChild
+							>
+								<Link
+									href={link.href}
+									target={link.newTab ? "_blank" : undefined}
+									rel={link.newTab ? "noopener noreferrer" : undefined}
+								>
+									{link.label}
+								</Link>
+							</Button>
+						))}
 					</div>
 				</div>
 			</div>

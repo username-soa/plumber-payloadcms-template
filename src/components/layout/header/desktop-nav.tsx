@@ -2,10 +2,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 import { LiquidGlass } from "@/components/ui/liquid-glass";
-import { SITE_CONFIG } from "@/lib/site-config";
 import { cn } from "@/lib/utils";
 
-export function DesktopNav() {
+export function DesktopNav({
+	navItems,
+}: {
+	navItems: { label: string; href: string }[];
+}) {
 	const pathname = usePathname();
 
 	return (
@@ -16,7 +19,7 @@ export function DesktopNav() {
 			softness={10}
 		>
 			<nav className="flex items-center gap-2 text-white font-medium px-1 py-[5px]">
-				{SITE_CONFIG.navLinks.map((link) => {
+				{navItems.map((link) => {
 					const isActive = pathname === link.href;
 
 					return (

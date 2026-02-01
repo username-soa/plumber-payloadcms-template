@@ -1,9 +1,17 @@
 import { MapPin } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/site-config";
 import { TypographyH2, TypographyMuted } from "@/components/ui/typography";
+import type { CompanyInfo } from "@/payload-types";
 
-export function ServiceAreas() {
-	const { serviceAreas } = SITE_CONFIG.aboutUs;
+interface ServiceAreasProps {
+	companyInfo?: CompanyInfo;
+}
+
+export function ServiceAreas({ companyInfo }: ServiceAreasProps) {
+	const serviceAreas =
+		companyInfo?.seo?.serviceAreas && companyInfo.seo.serviceAreas.length > 0
+			? companyInfo.seo.serviceAreas.map((area) => area.name)
+			: SITE_CONFIG.aboutUs.serviceAreas;
 
 	return (
 		<section className="py-20 bg-muted/30">

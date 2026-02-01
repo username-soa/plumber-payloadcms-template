@@ -11,8 +11,27 @@ import {
 	TypographySmall,
 } from "@/components/ui/typography";
 import { SITE_CONFIG } from "@/lib/site-config";
+import type { CompanyInfo } from "@/payload-types";
 
-export function LocationSection() {
+interface LocationSectionProps {
+	companyInfo?: CompanyInfo;
+}
+
+export function LocationSection({ companyInfo }: LocationSectionProps) {
+	// CMS Data or Config Data
+	const contact = companyInfo
+		? {
+				phone: companyInfo.phone,
+				email: companyInfo.email,
+				address: companyInfo.address,
+			}
+		: SITE_CONFIG.contact;
+	const workingHours = companyInfo?.workingHours || SITE_CONFIG.workingHours;
+	const googleProfile =
+		companyInfo?.seo?.reviews || SITE_CONFIG.seo.googleBusinessProfile;
+
+	const mapsUrl = googleProfile?.mapsUrl || "https://www.google.com/maps";
+
 	return (
 		<section className="w-full py-24 bg-muted/20">
 			<div className="container mx-auto px-6 md:px-12">
@@ -43,7 +62,7 @@ export function LocationSection() {
 								</TypographyH3>
 								<div className="flex items-center gap-3 text-muted-foreground">
 									<MapPin className="w-5 h-5 text-primary" />
-									<span>{SITE_CONFIG.contact.address}</span>
+									<span>{contact.address}</span>
 								</div>
 								<Separator className="mt-6" />
 							</div>
@@ -55,7 +74,7 @@ export function LocationSection() {
 								<div className="flex items-start gap-3 text-muted-foreground">
 									<Clock className="w-5 h-5 text-primary shrink-0 mt-0.5" />
 									<div className="grid gap-1.5">
-										{SITE_CONFIG.workingHours.map((item) => (
+										{workingHours?.map((item) => (
 											<div
 												key={item.day}
 												className="flex items-center justify-between gap-8 text-sm"
@@ -82,10 +101,10 @@ export function LocationSection() {
 									24/7 Emergency Services
 								</TypographySmall>
 								<a
-									href={`tel:${SITE_CONFIG.contact.phone}`}
+									href={`tel:${contact.phone}`}
 									className="text-xl font-bold text-foreground hover:text-primary transition-colors flex items-center gap-2"
 								>
-									{SITE_CONFIG.contact.phone}
+									{contact.phone}
 								</a>
 							</div>
 						</div>
@@ -94,7 +113,7 @@ export function LocationSection() {
 					{/* Right Map Image */}
 					<div className="relative w-full h-full max-md:aspect-2/3 rounded-3xl overflow-hidden shadow-2xl group cursor-pointer hover:shadow-3xl transition-all duration-500">
 						<a
-							href="https://www.google.com/maps"
+							href={mapsUrl}
 							target="_blank"
 							rel="noopener noreferrer"
 							className="block w-full h-full"

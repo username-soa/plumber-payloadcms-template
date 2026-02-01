@@ -75,6 +75,7 @@ export interface Config {
     'case-studies': CaseStudy;
     tags: Tag;
     services: Service;
+    reviews: Review;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -90,6 +91,7 @@ export interface Config {
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -99,8 +101,16 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    header: Header;
+    footer: Footer;
+    'company-info': CompanyInfo;
+  };
+  globalsSelect: {
+    header: HeaderSelect<false> | HeaderSelect<true>;
+    footer: FooterSelect<false> | FooterSelect<true>;
+    'company-info': CompanyInfoSelect<false> | CompanyInfoSelect<true>;
+  };
   locale: null;
   user: User & {
     collection: 'users';
@@ -410,6 +420,21 @@ export interface Service {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: number;
+  author: string;
+  rating: number;
+  content: string;
+  date: string;
+  platform: 'google' | 'facebook' | 'yelp' | 'website' | 'other';
+  avatar?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -463,6 +488,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'services';
         value: number | Service;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: number | Review;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -715,6 +744,20 @@ export interface ServicesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  author?: T;
+  rating?: T;
+  content?: T;
+  date?: T;
+  platform?: T;
+  avatar?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv_select".
  */
 export interface PayloadKvSelect<T extends boolean = true> {
@@ -752,6 +795,276 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header".
+ */
+export interface Header {
+  id: number;
+  navItems: {
+    label: string;
+    href: string;
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer".
+ */
+export interface Footer {
+  id: number;
+  cta: {
+    headline: string;
+    subheadline: string;
+    primaryButtonText: string;
+    primaryButtonLink: string;
+    secondaryButtonText: string;
+  };
+  navLinks?:
+    | {
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Use {year} to insert current year and {brand} for brand name
+   */
+  copyrightText?: string | null;
+  bottomLinks?:
+    | {
+        label: string;
+        href: string;
+        newTab?: boolean | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "company-info".
+ */
+export interface CompanyInfo {
+  id: number;
+  brand: {
+    name: string;
+    description: string;
+    logo: number | Media;
+  };
+  phone: string;
+  email: string;
+  address: string;
+  /**
+   * Links to your social media profiles
+   */
+  socials?:
+    | {
+        platform: 'facebook' | 'instagram' | 'linkedin' | 'twitter' | 'youtube';
+        label: string;
+        href: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Your weekly business operating hours
+   */
+  workingHours?:
+    | {
+        day: string;
+        time: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * Manage overarching business details, location settings, service priorities, and review aggregations for optimizing search engine visibility.
+   */
+  seo: {
+    businessType: 'Plumber' | 'LocalBusiness' | 'HomeAndConstructionBusiness';
+    foundingDate?: string | null;
+    /**
+     * The primary phone number displayed for SEO and services.
+     */
+    phoneDisplay: string;
+    location: {
+      streetAddress: string;
+      city: string;
+      state: string;
+      stateCode: string;
+      postalCode: string;
+      country: string;
+      countryCode: string;
+      latitude: string;
+      longitude: string;
+    };
+    /**
+     * Services to highlight in Schema.org markup
+     */
+    priorityServices?: (number | Service)[] | null;
+    /**
+     * Service designated as the 24/7 emergency offering
+     */
+    emergencyService?: (number | null) | Service;
+    serviceAreas?:
+      | {
+          name: string;
+          type: 'Suburb' | 'City' | 'Region';
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Choose how reviews are sourced and displayed on the website. Select 'Google Places API' to automatically fetch reviews or 'Manual Input' to manually enter rating data and select highlighted reviews.
+     */
+    reviews: {
+      source: 'hardcoded' | 'google-api';
+      ratingValue: number;
+      reviewCount: number;
+      bestRating?: number | null;
+      worstRating?: number | null;
+      /**
+       * Select reviews from the Reviews collection to highlight on the website.
+       */
+      highlightedReviews?:
+        | {
+            relationTo: 'reviews';
+            value: number | Review;
+          }[]
+        | null;
+      mapsUrl?: string | null;
+      placeId?: string | null;
+    };
+  };
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "header_select".
+ */
+export interface HeaderSelect<T extends boolean = true> {
+  navItems?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "footer_select".
+ */
+export interface FooterSelect<T extends boolean = true> {
+  cta?:
+    | T
+    | {
+        headline?: T;
+        subheadline?: T;
+        primaryButtonText?: T;
+        primaryButtonLink?: T;
+        secondaryButtonText?: T;
+      };
+  navLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  copyrightText?: T;
+  bottomLinks?:
+    | T
+    | {
+        label?: T;
+        href?: T;
+        newTab?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "company-info_select".
+ */
+export interface CompanyInfoSelect<T extends boolean = true> {
+  brand?:
+    | T
+    | {
+        name?: T;
+        description?: T;
+        logo?: T;
+      };
+  phone?: T;
+  email?: T;
+  address?: T;
+  socials?:
+    | T
+    | {
+        platform?: T;
+        label?: T;
+        href?: T;
+        id?: T;
+      };
+  workingHours?:
+    | T
+    | {
+        day?: T;
+        time?: T;
+        id?: T;
+      };
+  seo?:
+    | T
+    | {
+        businessType?: T;
+        foundingDate?: T;
+        phoneDisplay?: T;
+        location?:
+          | T
+          | {
+              streetAddress?: T;
+              city?: T;
+              state?: T;
+              stateCode?: T;
+              postalCode?: T;
+              country?: T;
+              countryCode?: T;
+              latitude?: T;
+              longitude?: T;
+            };
+        priorityServices?: T;
+        emergencyService?: T;
+        serviceAreas?:
+          | T
+          | {
+              name?: T;
+              type?: T;
+              id?: T;
+            };
+        reviews?:
+          | T
+          | {
+              source?: T;
+              ratingValue?: T;
+              reviewCount?: T;
+              bestRating?: T;
+              worstRating?: T;
+              highlightedReviews?: T;
+              mapsUrl?: T;
+              placeId?: T;
+            };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

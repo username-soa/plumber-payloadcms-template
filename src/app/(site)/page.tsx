@@ -10,12 +10,18 @@ import {
 	generateOrganizationSchema,
 	generateWebsiteSchema,
 } from "@/lib/json-ld";
+import { getCompanyInfo } from "@/lib/payload/getGlobals";
 
-export default function Home() {
+export default async function Home() {
+	const companyInfo = await getCompanyInfo();
+
 	// Generate comprehensive homepage JSON-LD schema
 	const jsonLd = {
 		"@context": "https://schema.org",
-		"@graph": [generateWebsiteSchema(), generateOrganizationSchema()],
+		"@graph": [
+			generateWebsiteSchema(companyInfo),
+			generateOrganizationSchema(companyInfo),
+		],
 	};
 
 	return (
@@ -24,8 +30,8 @@ export default function Home() {
 			<HeroSection />
 			<AboutSection />
 			<ServicesSection />
-			<LocationSection />
-			<ReviewSection />
+			<LocationSection companyInfo={companyInfo} />
+			<ReviewSection companyInfo={companyInfo} />
 			<QuoteFormCTA serviceName="General Plumbing" />
 			<FAQSection />
 		</>

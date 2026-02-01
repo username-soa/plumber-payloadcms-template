@@ -31,17 +31,27 @@ export const metadata: Metadata = {
 	description: "Professional Plumbing Template",
 };
 
-export default function RootLayout({
+import { getCommonGlobals } from "@/lib/payload/getGlobals";
+
+export default async function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const [headerData, footerData, companyInfo] = await getCommonGlobals();
+
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${bebas.variable} antialiased min-h-screen flex flex-col`}
 			>
-				<LayoutBody>{children}</LayoutBody>
+				<LayoutBody
+					headerData={headerData}
+					footerData={footerData}
+					companyInfo={companyInfo}
+				>
+					{children}
+				</LayoutBody>
 				<Toaster />
 			</body>
 		</html>

@@ -9,13 +9,86 @@ import {
 	TOTAL_REVIEWS,
 } from "@/lib/google-reviews";
 import { ReviewCard } from "@/components/review-card";
+import type { CompanyInfo } from "@/payload-types";
+import { SITE_CONFIG } from "@/lib/site-config";
 
-export async function ReviewSection() {
-	const reviews = await fetchGoogleReviews();
+interface ReviewSectionProps {
+	companyInfo?: CompanyInfo;
+}
+
+export async function ReviewSection({ companyInfo }: ReviewSectionProps) {
+	// Determine review source
+	const reviewConfig = companyInfo?.seo?.reviews;
+	const sourceType = reviewConfig?.source || "google-api"; // Default to API if not set
+
+	let reviews: any[] = [];
+	let rating = GOOGLE_RATING;
+	let totalReviews = TOTAL_REVIEWS;
+
+	if (sourceType === "hardcoded") {
+		// Use manual featured reviews from Payload
+		// Use highlighted reviews from Reviews collection
+		if (
+			reviewConfig?.highlightedReviews &&
+			reviewConfig.highlightedReviews.length > 0
+		) {
+			reviews = reviewConfig.highlightedReviews
+				.map((r: any) => {
+					// Handle both populated object and ID-only cases (though should be populated)
+					if (typeof r === "string") return null;
+
+					return {
+						id: r.id,
+						authorName: r.author,
+						authorImage: r.avatar?.url || "", // Access media URL if populated
+						rating: r.rating,
+						title: "5 Star Review",
+						text: r.content, // 'content' field in Reviews collection
+						role: "Customer",
+						relativeTime: r.date
+							? new Date(r.date).toLocaleDateString()
+							: "Recent",
+					};
+				})
+				.filter(Boolean);
+		} else {
+			// Fallback to static config featured if available
+			reviews = SITE_CONFIG.seo.reviews.featured.map((r) => ({
+				id: Math.random().toString(),
+				authorName: r.author,
+				authorImage: "",
+				rating: r.rating,
+				title: "5 Star Review",
+				role: "Customer",
+				relativeTime: "Recent",
+				text: r.text,
+			}));
+		}
+
+		// Use aggregate data from Payload if available (flattened)
+		if (reviewConfig?.ratingValue) {
+			rating = reviewConfig.ratingValue;
+			totalReviews = reviewConfig.reviewCount || 0;
+		}
+	} else {
+		// Verify if we have a custom place ID in payload
+		// For now we continue to use fetchGoogleReviews which presumably uses env var or hardcoded ID.
+		// If we wanted to use payload Place ID, we'd need to update fetchGoogleReviews to accept it.
+		// For this task, we will just use the existing fetch function but use payload as toggle.
+		reviews = await fetchGoogleReviews();
+	}
 
 	// Split reviews into two rows or just use the same reviews for both
+	// Ensure we have reviews to display
+	if (!reviews || reviews.length === 0) {
+		return null; // Or return empty section
+	}
+
 	const firstRow = reviews.slice(0, Math.ceil(reviews.length / 2));
 	const secondRow = reviews.slice(Math.ceil(reviews.length / 2));
+
+	// Handle case where we have very few reviews (duplicate them for marquee effect if needed?)
+	// For now assume enough reviews exist or marquee handles it.
 
 	return (
 		<section className="w-full py-24 bg-background overflow-hidden relative">
@@ -58,7 +131,7 @@ export async function ReviewSection() {
 						<div className="flex flex-col justify-center gap-0.5">
 							<div className="flex items-center gap-1.5">
 								<span className="font-bold text-lg leading-none text-foreground">
-									{GOOGLE_RATING}
+									{rating}
 								</span>
 								<div className="flex lg:hidden gap-0.5 text-yellow-400">
 									<Star className="w-3.5 h-3.5 fill-current" />
@@ -70,7 +143,7 @@ export async function ReviewSection() {
 								</div>
 							</div>
 							<div className="text-[10px] uppercase font-bold tracking-widest text-muted-foreground lg:flex hidden">
-								Based on {TOTAL_REVIEWS} reviews
+								Based on {totalReviews} reviews
 							</div>
 						</div>
 					</div>

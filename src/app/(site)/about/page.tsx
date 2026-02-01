@@ -29,7 +29,10 @@ export const metadata: Metadata = {
 	],
 };
 
-export default function AboutPage() {
+import { getCompanyInfo } from "@/lib/payload/getGlobals";
+
+export default async function AboutPage() {
+	const companyInfo = await getCompanyInfo();
 	const { aboutUs } = SITE_CONFIG;
 	const { siteUrl, schemaIds } = seo;
 
@@ -45,7 +48,7 @@ export default function AboutPage() {
 				type: "AboutPage",
 			}),
 			// Organization schema
-			generateOrganizationSchema(),
+			generateOrganizationSchema(companyInfo),
 			// Team members as Person schema
 			...aboutUs.team.map((member) => ({
 				"@type": "Person",
@@ -73,7 +76,7 @@ export default function AboutPage() {
 			<AboutHero />
 			<CompanyStory />
 			<OurValues />
-			<ServiceAreas />
+			<ServiceAreas companyInfo={companyInfo} />
 			<TrustStats />
 			<MeetTheTeam />
 			<Certifications />

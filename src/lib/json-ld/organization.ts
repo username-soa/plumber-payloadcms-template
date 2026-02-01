@@ -6,6 +6,7 @@
  */
 
 import { SITE_CONFIG } from "../site-config";
+import type { CompanyInfo, Service } from "@/payload-types";
 import type {
 	PostalAddress,
 	GeoCoordinates,
@@ -15,9 +16,22 @@ import type {
 } from "./types";
 
 /**
- * Generate the PostalAddress schema from config
+ * Generate the PostalAddress schema
  */
-export function generateAddress(): PostalAddress {
+export function generateAddress(companyInfo?: CompanyInfo): PostalAddress {
+	const payloadLocation = companyInfo?.seo?.location;
+
+	if (payloadLocation) {
+		return {
+			"@type": "PostalAddress",
+			streetAddress: payloadLocation.streetAddress,
+			addressLocality: payloadLocation.city,
+			addressRegion: payloadLocation.stateCode,
+			postalCode: payloadLocation.postalCode,
+			addressCountry: payloadLocation.countryCode,
+		};
+	}
+
 	const { location } = SITE_CONFIG.seo;
 	return {
 		"@type": "PostalAddress",
@@ -30,9 +44,21 @@ export function generateAddress(): PostalAddress {
 }
 
 /**
- * Generate GeoCoordinates schema from config
+ * Generate GeoCoordinates schema
  */
-export function generateGeoCoordinates(): GeoCoordinates {
+export function generateGeoCoordinates(
+	companyInfo?: CompanyInfo,
+): GeoCoordinates {
+	const payloadLocation = companyInfo?.seo?.location;
+
+	if (payloadLocation?.latitude && payloadLocation?.longitude) {
+		return {
+			"@type": "GeoCoordinates",
+			latitude: payloadLocation.latitude,
+			longitude: payloadLocation.longitude,
+		};
+	}
+
 	const { coordinates } = SITE_CONFIG.seo;
 	return {
 		"@type": "GeoCoordinates",
@@ -42,9 +68,28 @@ export function generateGeoCoordinates(): GeoCoordinates {
 }
 
 /**
- * Generate service areas schema from config
+ * Generate service areas schema
  */
-export function generateAreaServed(): AreaServed[] {
+export function generateAreaServed(companyInfo?: CompanyInfo): AreaServed[] {
+	const payloadAreas = companyInfo?.seo?.serviceAreas;
+	const payloadLocation = companyInfo?.seo?.location;
+
+	if (payloadAreas?.length && payloadLocation) {
+		return payloadAreas.map((area) => ({
+			"@type": "City" as const,
+			name: area.name || "",
+			containedInPlace: {
+				"@type": "State" as const,
+				name: payloadLocation.state,
+				containedInPlace: {
+					"@type": "Country" as const,
+					name: payloadLocation.country,
+				},
+			},
+		}));
+	}
+
+	// Fallback to static config (deprecated)
 	const { serviceAreas, location } = SITE_CONFIG.seo;
 
 	return serviceAreas.map((area) => ({
@@ -65,12 +110,14 @@ export function generateAreaServed(): AreaServed[] {
  * Generate opening hours specification
  * Includes both regular hours and 24/7 emergency
  */
-export function generateOpeningHours(): OpeningHoursSpecification[] {
-	const { workingHours } = SITE_CONFIG;
+export function generateOpeningHours(
+	companyInfo?: CompanyInfo,
+): OpeningHoursSpecification[] {
 	const specs: OpeningHoursSpecification[] = [];
+	const workingHours = companyInfo?.workingHours || SITE_CONFIG.workingHours;
 
-	// Parse working hours from config
-	workingHours.forEach((wh) => {
+	// Parse working hours
+	workingHours?.forEach((wh) => {
 		if (wh.time === "Closed") return;
 
 		const [opens, closes] = wh.time.split(" - ").map((t) => {
@@ -105,11 +152,13 @@ export function generateOpeningHours(): OpeningHoursSpecification[] {
 		});
 	});
 
-	// Add 24/7 emergency hours
-	const emergencyService = SITE_CONFIG.services.find(
-		(s) => s.slug === SITE_CONFIG.seo.emergencyServiceSlug,
-	);
-	if (emergencyService && "isEmergency" in emergencyService) {
+	// Add 24/7 emergency hours from Payload
+	// Check if an emergency service is linked
+	const emergencyService = companyInfo?.seo?.emergencyService as
+		| Service
+		| undefined;
+
+	if (emergencyService?.isEmergency) {
 		specs.push({
 			"@type": "OpeningHoursSpecification",
 			dayOfWeek: [
@@ -125,15 +174,56 @@ export function generateOpeningHours(): OpeningHoursSpecification[] {
 			closes: "23:59",
 			description: "24/7 Emergency Service",
 		});
+	} else if (SITE_CONFIG.seo.emergencyServiceSlug) {
+		// Fallback to static config
+		const staticEmergencyService = SITE_CONFIG.services.find(
+			(s) => s.slug === SITE_CONFIG.seo.emergencyServiceSlug,
+		);
+		if (staticEmergencyService && "isEmergency" in staticEmergencyService) {
+			specs.push({
+				"@type": "OpeningHoursSpecification",
+				dayOfWeek: [
+					"Monday",
+					"Tuesday",
+					"Wednesday",
+					"Thursday",
+					"Friday",
+					"Saturday",
+					"Sunday",
+				],
+				opens: "00:00",
+				closes: "23:59",
+				description: "24/7 Emergency Service",
+			});
+		}
 	}
 
 	return specs;
 }
 
 /**
- * Generate aggregate rating schema from config
+ * Generate aggregate rating schema
  */
-export function generateAggregateRating(): AggregateRating {
+export function generateAggregateRating(
+	companyInfo?: CompanyInfo,
+): AggregateRating {
+	// Payload Data
+	if (
+		companyInfo?.seo?.reviews?.ratingValue &&
+		companyInfo.seo.reviews.source === "hardcoded"
+	) {
+		const { ratingValue, reviewCount, bestRating, worstRating } =
+			companyInfo.seo.reviews;
+		return {
+			"@type": "AggregateRating",
+			ratingValue: ratingValue.toString(),
+			reviewCount: reviewCount.toString(),
+			bestRating: (bestRating || 5).toString(),
+			worstRating: (worstRating || 1).toString(),
+		};
+	}
+
+	// Fallback
 	const { aggregate } = SITE_CONFIG.seo.reviews;
 	return {
 		"@type": "AggregateRating",
@@ -147,8 +237,32 @@ export function generateAggregateRating(): AggregateRating {
 /**
  * Generate the offer catalog from priority services
  */
-export function generateOfferCatalog() {
-	const { priorityServices, siteUrl } = SITE_CONFIG.seo;
+export function generateOfferCatalog(companyInfo?: CompanyInfo) {
+	const { siteUrl } = SITE_CONFIG.seo;
+
+	// Payload Data
+	if (
+		companyInfo?.seo?.priorityServices &&
+		companyInfo.seo.priorityServices.length > 0
+	) {
+		const services = companyInfo.seo.priorityServices as Service[];
+
+		return {
+			"@type": "OfferCatalog",
+			name: "Plumbing Services",
+			itemListElement: services.map((service) => ({
+				"@type": "Offer",
+				itemOffered: {
+					"@type": "Service",
+					name: service.title,
+					url: `${siteUrl}/services/${service.slug}`,
+				},
+			})),
+		};
+	}
+
+	// Fallback
+	const { priorityServices } = SITE_CONFIG.seo;
 	const services = SITE_CONFIG.services.filter((s) =>
 		priorityServices.includes(s.slug),
 	);
@@ -183,34 +297,60 @@ export function generateCredentials() {
  * Generate the complete LocalBusiness + Plumber schema
  * This is the main organization schema used across the site
  */
-export function generateOrganizationSchema() {
-	const { brand, contact, socials } = SITE_CONFIG;
-	const { siteUrl, schemaIds, priceRange, foundingDate, location } =
-		SITE_CONFIG.seo;
+export function generateOrganizationSchema(companyInfo?: CompanyInfo) {
+	// CMS Data or Config Data
+	const name = companyInfo?.brand?.name || SITE_CONFIG.brand.name;
+	const description =
+		companyInfo?.brand?.description || SITE_CONFIG.brand.description;
+	const phone = companyInfo?.phone || SITE_CONFIG.contact.phone;
+	const email = companyInfo?.email || SITE_CONFIG.contact.email;
+
+	// SEO Specifics from CMS
+	const foundingDate =
+		companyInfo?.seo?.foundingDate || SITE_CONFIG.seo.foundingDate;
+	const priceRange =
+		companyInfo?.seo?.businessType === "Plumber" // Assuming default
+			? SITE_CONFIG.seo.priceRange
+			: SITE_CONFIG.seo.priceRange;
+
+	const { siteUrl, schemaIds } = SITE_CONFIG.seo;
+
+	// Socials (CMS or Config)
+	const socials = companyInfo?.socials || SITE_CONFIG.socials;
+
+	// Logo handling
+	let logoUrl = `${siteUrl}/logo.png`;
+	if (
+		companyInfo?.brand?.logo &&
+		typeof companyInfo.brand.logo === "object" &&
+		"url" in companyInfo.brand.logo
+	) {
+		logoUrl = companyInfo.brand.logo.url || logoUrl;
+	}
 
 	return {
 		"@type": ["LocalBusiness", "Plumber"],
 		"@id": `${siteUrl}/${schemaIds.organization}`,
-		name: brand.name,
-		description: brand.description,
+		name,
+		description,
 		url: siteUrl,
-		telephone: location.phone,
-		email: contact.email,
-		foundingDate: foundingDate.split("-")[0], // Just the year
+		telephone: phone,
+		email,
+		foundingDate: foundingDate ? foundingDate.split("-")[0] : "2005",
 		priceRange,
 		logo: {
 			"@type": "ImageObject",
-			url: `${siteUrl}/logo.png`,
+			url: logoUrl,
 			width: 512,
 			height: 512,
 		},
 		image: `${siteUrl}/images/about/about-team.png`,
-		address: generateAddress(),
-		geo: generateGeoCoordinates(),
-		areaServed: generateAreaServed(),
-		openingHoursSpecification: generateOpeningHours(),
-		aggregateRating: generateAggregateRating(),
-		hasOfferCatalog: generateOfferCatalog(),
+		address: generateAddress(companyInfo),
+		geo: generateGeoCoordinates(companyInfo),
+		areaServed: generateAreaServed(companyInfo),
+		openingHoursSpecification: generateOpeningHours(companyInfo),
+		aggregateRating: generateAggregateRating(companyInfo),
+		hasOfferCatalog: generateOfferCatalog(companyInfo),
 		hasCredential: generateCredentials(),
 		sameAs: socials.map((s) => s.href).filter((h) => h !== "#"),
 		paymentAccepted: ["Cash", "Credit Card", "EFTPOS", "Bank Transfer"],
