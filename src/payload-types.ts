@@ -76,6 +76,7 @@ export interface Config {
     tags: Tag;
     services: Service;
     reviews: Review;
+    pages: Page;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -92,6 +93,7 @@ export interface Config {
     tags: TagsSelect<false> | TagsSelect<true>;
     services: ServicesSelect<false> | ServicesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
+    pages: PagesSelect<false> | PagesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -435,6 +437,93 @@ export interface Review {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages".
+ */
+export interface Page {
+  id: number;
+  title: string;
+  slug: string;
+  /**
+   * The 'Last updated' date shown on the page
+   */
+  lastUpdated?: string | null;
+  status: 'draft' | 'published';
+  layout: (
+    | {
+        badge?: string | null;
+        /**
+         * Defaults to page title if empty
+         */
+        title?: string | null;
+        subtitle?: string | null;
+        icon?: ('shield' | 'file') | null;
+        showLastUpdated?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'legalHero';
+      }
+    | {
+        content: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'legalContent';
+      }
+    | {
+        title?: string | null;
+        description?: string | null;
+        /**
+         * Leave blank to use email from Company Info global
+         */
+        email?: string | null;
+        /**
+         * Leave blank to use phone from Company Info global
+         */
+        phone?: string | null;
+        /**
+         * Leave blank to use address from Company Info global
+         */
+        address?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'legalContact';
+      }
+    | {
+        label?: string | null;
+        href?: string | null;
+        centered?: boolean | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'backLink';
+      }
+  )[];
+  meta?: {
+    title?: string | null;
+    description?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+  };
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -492,6 +581,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'reviews';
         value: number | Review;
+      } | null)
+    | ({
+        relationTo: 'pages';
+        value: number | Page;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -755,6 +848,68 @@ export interface ReviewsSelect<T extends boolean = true> {
   avatar?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "pages_select".
+ */
+export interface PagesSelect<T extends boolean = true> {
+  title?: T;
+  slug?: T;
+  lastUpdated?: T;
+  status?: T;
+  layout?:
+    | T
+    | {
+        legalHero?:
+          | T
+          | {
+              badge?: T;
+              title?: T;
+              subtitle?: T;
+              icon?: T;
+              showLastUpdated?: T;
+              id?: T;
+              blockName?: T;
+            };
+        legalContent?:
+          | T
+          | {
+              content?: T;
+              id?: T;
+              blockName?: T;
+            };
+        legalContact?:
+          | T
+          | {
+              title?: T;
+              description?: T;
+              email?: T;
+              phone?: T;
+              address?: T;
+              id?: T;
+              blockName?: T;
+            };
+        backLink?:
+          | T
+          | {
+              label?: T;
+              href?: T;
+              centered?: T;
+              id?: T;
+              blockName?: T;
+            };
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        image?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

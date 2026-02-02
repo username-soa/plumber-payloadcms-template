@@ -80,7 +80,7 @@ export default async function AboutPage() {
 			<TrustStats />
 			<MeetTheTeam />
 			<Certifications />
-			<ReviewSection />
+			{/* <ReviewSection /> */}
 			<FAQSection />
 		</>
 	);

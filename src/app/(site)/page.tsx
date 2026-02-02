@@ -31,7 +31,7 @@ export default async function Home() {
 			<AboutSection />
 			<ServicesSection />
 			<LocationSection companyInfo={companyInfo} />
-			<ReviewSection companyInfo={companyInfo} />
+			{/* <ReviewSection companyInfo={companyInfo} /> */}
 			<QuoteFormCTA serviceName="General Plumbing" />
 			<FAQSection />
 		</>

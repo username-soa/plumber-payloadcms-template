@@ -16,6 +16,7 @@ import { CaseStudies } from "./collections/CaseStudies";
 import { Tags } from "./collections/Tags";
 import { Services } from "./collections/Services";
 import { Reviews } from "./collections/Reviews";
+import { Pages } from "./collections/Pages";
 
 import { Header } from "./globals/Header";
 import { Footer } from "./globals/Footer";
@@ -40,6 +41,7 @@ export default buildConfig({
 		Tags,
 		Services,
 		Reviews,
+		Pages,
 	],
 
 	globals: [Header, Footer, CompanyInfo],
@@ -95,7 +97,7 @@ export default buildConfig({
 			},
 		}),
 		seoPlugin({
-			collections: ["blog-posts", "case-studies"],
+			collections: ["blog-posts", "case-studies", "pages"],
 			uploadsCollection: "media",
 			generateTitle: ({ doc }) => `FlowMasters | ${doc.title}`,
 			generateDescription: ({ doc }) => doc.description || doc.excerpt,
