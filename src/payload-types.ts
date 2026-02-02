@@ -441,6 +441,48 @@ export interface Review {
  */
 export interface Page {
   id: number;
+  hero: {
+    type: 'default' | 'highImpact' | 'service' | 'minimal' | 'none';
+    title?: string | null;
+    /**
+     * Text to highlight in primary color (case-insensitive)
+     */
+    titleHighlight?: string | null;
+    description?: string | null;
+    floatingText?: string | null;
+    badge?: string | null;
+    badgeVariant?: ('default' | 'secondary' | 'destructive' | 'outline') | null;
+    badgeSize?: ('sm' | 'default' | 'lg') | null;
+    bgImage?: (number | null) | Media;
+    fgImage?: (number | null) | Media;
+    icon?: string | null;
+    heroTheme?: ('muted' | 'primary-gradient') | null;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+            label: string;
+            url?: string | null;
+            newTab?: boolean | null;
+            email?: string | null;
+            phoneNumber?: string | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'services';
+                  value: number | Service;
+                } | null);
+            style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    showDate?: boolean | null;
+    breadcrumbs?: boolean | null;
+  };
   title: string;
   slug: string;
   /**
@@ -854,6 +896,41 @@ export interface ReviewsSelect<T extends boolean = true> {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        type?: T;
+        title?: T;
+        titleHighlight?: T;
+        description?: T;
+        floatingText?: T;
+        badge?: T;
+        badgeVariant?: T;
+        badgeSize?: T;
+        bgImage?: T;
+        fgImage?: T;
+        icon?: T;
+        heroTheme?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    label?: T;
+                    url?: T;
+                    newTab?: T;
+                    email?: T;
+                    phoneNumber?: T;
+                    reference?: T;
+                    style?: T;
+                  };
+              id?: T;
+            };
+        showDate?: T;
+        breadcrumbs?: T;
+      };
   title?: T;
   slug?: T;
   lastUpdated?: T;

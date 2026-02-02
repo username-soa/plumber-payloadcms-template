@@ -20,17 +20,22 @@ async function getPageData(slug: string) {
 	return result.docs[0] || null;
 }
 
-export async function generateMetadata() {
-	const page = await getPageData("privacy-policy");
+export async function generateMetadata({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) {
+	const { slug } = await params;
+	const page = await getPageData(slug);
 
 	if (!page) {
 		return {
-			title: "Privacy Policy",
+			title: "Page Not Found",
 		};
 	}
 
 	const metaTitle =
-		page.meta?.title || `Privacy Policy | ${SITE_CONFIG.brand.name}`;
+		page.meta?.title || `${page.title} | ${SITE_CONFIG.brand.name}`;
 	const metaDescription = page.meta?.description;
 
 	return {
@@ -46,8 +51,13 @@ export async function generateMetadata() {
 	};
 }
 
-export default async function PrivacyPolicyPage() {
-	const page = (await getPageData("privacy-policy")) as PayloadPage | null;
+export default async function DynamicPage({
+	params,
+}: {
+	params: Promise<{ slug: string }>;
+}) {
+	const { slug } = await params;
+	const page = (await getPageData(slug)) as PayloadPage | null;
 
 	if (!page) {
 		notFound();

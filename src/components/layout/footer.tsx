@@ -68,7 +68,7 @@ export function Footer({ footerData, companyInfo }: FooterProps) {
 							<Button
 								size="lg"
 								variant="outline"
-								className="font-bold text-lg px-6 h-12 hover:shadow-md transition-all hover:scale-105 rounded-full bg-transparent"
+								className="font-bold text-inherit text-lg px-6 h-12 hover:shadow-md transition-all hover:scale-105 rounded-full bg-transparent"
 								asChild
 							>
 								<a href={`tel:${contact.phone}`}>
