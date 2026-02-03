@@ -2,7 +2,8 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 
 import { SITE_CONFIG } from "@/lib/site-config";
-import { ServiceHero } from "../_components/service-hero";
+import { Hero } from "@/components/heroes";
+
 import { ServiceDetails } from "../_components/service-details";
 import { WhyChooseUs } from "../_components/why-choose-us";
 import { ProcessSteps } from "../_components/process-steps";
@@ -200,32 +201,11 @@ export default async function ServicePage({ params }: ServicePageProps) {
 		],
 	};
 
-	// Prepare breadcrumb items for ServiceHero
-	const breadcrumbItems: { label: string; href?: string }[] = [
-		{ label: "Services", href: "/services" },
-	];
-
-	if (parentServiceInfo) {
-		breadcrumbItems.push({
-			label: parentServiceInfo.title,
-			href: `/services/${parentServiceInfo.slug}`,
-		});
-	}
-
-	breadcrumbItems.push({ label: service.title });
-
 	return (
 		<>
 			<JsonLd data={jsonLd} />
 
-			<ServiceHero
-				icon={service.icon}
-				title={service.title}
-				description={service.description}
-				isEmergency={service.isEmergency}
-				availability={service.availability}
-				breadcrumbItems={breadcrumbItems}
-			/>
+			<Hero hero={payloadService.hero} title={payloadService.title} />
 
 			{/* Service Details with Sub-services (SEO-rich content) */}
 			<ServiceDetails

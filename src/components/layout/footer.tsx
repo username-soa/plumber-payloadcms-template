@@ -23,6 +23,28 @@ import type {
 	Footer as FooterType,
 	CompanyInfo as CompanyInfoType,
 } from "@/payload-types";
+import { getCMSLinkHref, type CMSLinkType } from "@/lib/cms-link";
+import { CMSLinkItem } from "@/components/heroes/components/cms-link-item";
+import { cn } from "@/lib/utils";
+
+// Define overrides for the new link structure if generated types are stale
+type FooterLinkItem = {
+	id?: string | null;
+	link: CMSLinkType;
+};
+
+type ModifiedFooterType = Omit<
+	FooterType,
+	"navLinks" | "bottomLinks" | "cta"
+> & {
+	navLinks?: FooterLinkItem[] | null;
+	bottomLinks?: FooterLinkItem[] | null;
+	cta?: {
+		headline: string;
+		subheadline: string;
+		links?: { link: CMSLinkType }[] | null;
+	};
+};
 
 const SOCIAL_ICONS: Record<string, LucideIcon> = {
 	facebook: Facebook,
@@ -33,7 +55,7 @@ const SOCIAL_ICONS: Record<string, LucideIcon> = {
 };
 
 interface FooterProps {
-	footerData: FooterType;
+	footerData: ModifiedFooterType;
 	companyInfo: CompanyInfoType;
 }
 
@@ -51,30 +73,21 @@ export function Footer({ footerData, companyInfo }: FooterProps) {
 						<TypographyH2 className="text-4xl md:text-5xl font-bold border-none tracking-tight text-center">
 							{cta.headline}
 						</TypographyH2>
-						<p className="text-muted-foreground text-lg md:text-xl font-light text-center">
+						<TypographyMuted className="text-muted-foreground text-lg md:text-xl font-light text-center">
 							{cta.subheadline}
-						</p>
+						</TypographyMuted>
 
 						<div className="shrink-0 flex flex-col sm:flex-row gap-4">
-							<Button
-								size="lg"
-								className="font-bold text-lg px-6 h-12 hover:shadow-md transition-all hover:scale-105 rounded-full"
-								asChild
-							>
-								<Link href={cta.primaryButtonLink || "/contact"}>
-									{cta.primaryButtonText}
-								</Link>
-							</Button>
-							<Button
-								size="lg"
-								variant="outline"
-								className="font-bold text-inherit text-lg px-6 h-12 hover:shadow-md transition-all hover:scale-105 rounded-full bg-transparent"
-								asChild
-							>
-								<a href={`tel:${contact.phone}`}>
-									{cta.secondaryButtonText} {contact.phone}
-								</a>
-							</Button>
+							{cta.links?.map((item, i) => (
+								<CMSLinkItem
+									key={i.toString()}
+									link={item.link}
+									className={cn(
+										"px-8 py-6 text-lg rounded-full",
+										item.link.style === "outline" ? "text-inherit" : "",
+									)}
+								/>
+							))}
 						</div>
 					</div>
 				)}
@@ -114,11 +127,20 @@ export function Footer({ footerData, companyInfo }: FooterProps) {
 							Top Links
 						</TypographyH3>
 						<div className="flex flex-col items-start gap-1.5">
-							{navLinks?.map((link) => (
-								<FooterLink key={link.label} href={link.href}>
-									{link.label}
-								</FooterLink>
-							))}
+							{navLinks?.map((item, i) => {
+								const href = getCMSLinkHref(item.link);
+								const key =
+									item.link?.url ||
+									(typeof item.link?.reference?.value === "object"
+										? item.link.reference.value.slug
+										: item.link?.reference?.value) ||
+									i;
+								return (
+									<FooterLink key={key.toString()} href={href}>
+										{item.link?.label || "Link"}
+									</FooterLink>
+								);
+							})}
 						</div>
 					</div>
 
@@ -162,14 +184,14 @@ export function Footer({ footerData, companyInfo }: FooterProps) {
 				{companyInfo.seo?.serviceAreas &&
 					companyInfo.seo.serviceAreas.length > 0 && (
 						<div className="mb-10">
-							<div className="flex items-center gap-4 mb-4">
+							<div className="flex items-center md:gap-6 gap-4 mb-4">
 								<Separator className="flex-1" />
 								<TypographyH3 className="text-foreground font-semibold shrink-0">
 									Proudly Serving
 								</TypographyH3>
 								<Separator className="flex-1" />
 							</div>
-							<p className="text-center text-muted-foreground text-sm max-w-4xl mx-auto leading-relaxed">
+							<div className="flex items-center justify-center flex-wrap text-center text-muted-foreground text-sm max-w-4xl mx-auto leading-relaxed">
 								{companyInfo.seo.serviceAreas.map((area, index) => (
 									<span key={area.name || index}>
 										{area.name}
@@ -179,7 +201,7 @@ export function Footer({ footerData, companyInfo }: FooterProps) {
 										)}
 									</span>
 								))}
-							</p>
+							</div>
 						</div>
 					)}
 				<Separator className="mb-3" />
@@ -193,22 +215,31 @@ export function Footer({ footerData, companyInfo }: FooterProps) {
 							`© Copyright ${new Date().getFullYear()} ${brand.name}. All Rights Reserved.`}
 					</TypographyMuted>
 					<div className="flex gap-4 mt-4 md:mt-0">
-						{bottomLinks?.map((link) => (
-							<Button
-								key={link.id}
-								variant="link"
-								className="text-muted-foreground hover:text-primary h-auto p-0 font-normal"
-								asChild
-							>
-								<Link
-									href={link.href}
-									target={link.newTab ? "_blank" : undefined}
-									rel={link.newTab ? "noopener noreferrer" : undefined}
+						{bottomLinks?.map((item, i) => {
+							const href = getCMSLinkHref(item.link);
+							const key =
+								item.link?.url ||
+								(typeof item.link?.reference?.value === "object"
+									? item.link.reference.value.slug
+									: item.link?.reference?.value) ||
+								i;
+							return (
+								<Button
+									key={key.toString()}
+									variant="link"
+									className="text-muted-foreground hover:text-primary h-auto p-0 font-normal"
+									asChild
 								>
-									{link.label}
-								</Link>
-							</Button>
-						))}
+									<Link
+										href={href}
+										target={item.link?.newTab ? "_blank" : undefined}
+										rel={item.link?.newTab ? "noopener noreferrer" : undefined}
+									>
+										{item.link?.label || "Link"}
+									</Link>
+								</Button>
+							);
+						})}
 					</div>
 				</div>
 			</div>

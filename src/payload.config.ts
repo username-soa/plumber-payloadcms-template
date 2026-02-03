@@ -97,10 +97,11 @@ export default buildConfig({
 			},
 		}),
 		seoPlugin({
-			collections: ["blog-posts", "case-studies", "pages"],
+			collections: ["blog-posts", "case-studies"],
 			uploadsCollection: "media",
 			generateTitle: ({ doc }) => `FlowMasters | ${doc.title}`,
 			generateDescription: ({ doc }) => doc.description || doc.excerpt,
+			tabbedUI: true,
 		}),
 	],
 });

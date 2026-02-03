@@ -10,6 +10,7 @@ import {
 	cleanupServiceRelations,
 	syncServiceRelations,
 } from "./hooks/sync-service-relations";
+import { hero } from "../fields/hero";
 
 export const Services: CollectionConfig = {
 	slug: "services",
@@ -22,6 +23,7 @@ export const Services: CollectionConfig = {
 		afterDelete: [cleanupServiceRelations],
 	},
 	fields: [
+		hero,
 		{
 			type: "tabs",
 			tabs: [

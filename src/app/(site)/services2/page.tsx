@@ -3,7 +3,7 @@ import { SITE_CONFIG } from "@/lib/site-config";
 import { ProcessSteps } from "./_components/process-steps";
 import { ReviewSection } from "@/components/sections/review";
 import { FAQSection } from "@/components/sections/faq";
-import { ServicesHeroMain } from "./_components/services-hero-main";
+import { Hero } from "@/components/heroes";
 import { ServicesGrid } from "./_components/services-grid";
 import { QuoteFormCTA } from "./_components/quote-form";
 import { JsonLd } from "@/components/json-ld";
@@ -25,6 +25,17 @@ export default async function ServicesPage() {
 	const { siteUrl } = seo;
 
 	const payload = await getPayload({ config });
+
+	// Fetch 'services' page data for the hero
+	const pageResult = await payload.find({
+		collection: "pages",
+		where: {
+			slug: { equals: "services" },
+		},
+		limit: 1,
+	});
+	const page = pageResult.docs[0] || null;
+
 	const services = await payload.find({
 		collection: "services",
 		limit: 100,
@@ -50,7 +61,7 @@ export default async function ServicesPage() {
 		<>
 			<JsonLd data={jsonLd} />
 
-			<ServicesHeroMain />
+			<Hero page={page} />
 			<ServicesGrid services={services.docs} />
 			<ProcessSteps />
 			<QuoteFormCTA serviceName="General Plumbing" />

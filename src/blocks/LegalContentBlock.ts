@@ -4,8 +4,8 @@ import { customLexical } from "@/lib/lexical-config";
 export const LegalContentBlock: Block = {
 	slug: "legalContent",
 	labels: {
-		singular: "Legal Content",
-		plural: "Legal Content Blocks",
+		singular: "Content",
+		plural: "Content Blocks",
 	},
 	fields: [
 		{

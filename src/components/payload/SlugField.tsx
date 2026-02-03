@@ -13,7 +13,15 @@ function formatSlug(value: string): string {
 		.replace(/[^\w-]+/g, "");
 }
 
-export const SlugField: React.FC<TextFieldClientProps> = ({ field, path }) => {
+type SlugFieldProps = TextFieldClientProps & {
+	className?: string;
+};
+
+export const SlugField: React.FC<SlugFieldProps> = ({
+	field,
+	path,
+	className,
+}) => {
 	const { value, setValue } = useField<string>({ path });
 
 	// Get the title field - only re-renders when title field changes
@@ -27,27 +35,45 @@ export const SlugField: React.FC<TextFieldClientProps> = ({ field, path }) => {
 	}, [title, setValue]);
 
 	return (
-		<div className="field-type text">
+		<div
+			className={[className, "field-type text"].filter(Boolean).join(" ")}
+			style={
+				{
+					"--field-width": field.admin?.width || "100%",
+				} as React.CSSProperties
+			}
+		>
+			<FieldLabel
+				label={field.label || "Slug"}
+				path={path}
+				required={field.required}
+			/>
 			<div
 				style={{
 					display: "flex",
-					alignItems: "center",
-					gap: "0.5rem",
-					marginBottom: "0.5rem",
+					alignItems: "stretch", // Stretch to match input height
+					gap: "10px",
 				}}
 			>
-				<FieldLabel
-					label={field.label || "Slug"}
-					path={path}
-					required={field.required}
-				/>
+				<div style={{ flexGrow: 1, position: "relative" }}>
+					<TextInput
+						path={path}
+						value={value || ""}
+						onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+							setValue(e.target.value)
+						}
+					/>
+				</div>
 				<button
 					type="button"
 					onClick={handleGenerate}
 					disabled={!title}
 					style={{
-						padding: "4px 10px",
-						fontSize: "12px",
+						padding: "0 25px", // Horizontal padding only, let height be determined by container
+						display: "flex",
+						alignItems: "center",
+						justifyContent: "center",
+						fontSize: "13px",
 						borderRadius: "4px",
 						border: "1px solid var(--theme-elevation-400)",
 						background: "var(--theme-elevation-100)",
@@ -55,6 +81,7 @@ export const SlugField: React.FC<TextFieldClientProps> = ({ field, path }) => {
 						cursor: title ? "pointer" : "not-allowed",
 						opacity: title ? 1 : 0.5,
 						transition: "all 0.15s ease",
+						whiteSpace: "nowrap",
 					}}
 					onMouseEnter={(e) => {
 						if (title) {
@@ -68,13 +95,7 @@ export const SlugField: React.FC<TextFieldClientProps> = ({ field, path }) => {
 					Generate
 				</button>
 			</div>
-			<TextInput
-				path={path}
-				value={value || ""}
-				onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-					setValue(e.target.value)
-				}
-			/>
+
 			{field.admin?.description && (
 				<div
 					className="field-description"

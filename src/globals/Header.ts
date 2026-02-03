@@ -1,5 +1,6 @@
 import type { GlobalConfig } from "payload";
 import { revalidateGlobal } from "../hooks/revalidateGlobal";
+import { link } from "../fields/link";
 
 export const Header: GlobalConfig = {
 	slug: "header",
@@ -17,18 +18,7 @@ export const Header: GlobalConfig = {
 			type: "array",
 			required: true,
 			minRows: 1,
-			fields: [
-				{
-					name: "label",
-					type: "text",
-					required: true,
-				},
-				{
-					name: "href",
-					type: "text",
-					required: true,
-				},
-			],
+			fields: [link()],
 		},
 	],
 };

@@ -1,5 +1,6 @@
 import type { GlobalConfig } from "payload";
 import { revalidateGlobal } from "../hooks/revalidateGlobal";
+import { link } from "../fields/link";
 
 export const Footer: GlobalConfig = {
 	slug: "footer",
@@ -33,20 +34,9 @@ export const Footer: GlobalConfig = {
 									required: true,
 								},
 								{
-									name: "primaryButtonText",
-									type: "text",
-									required: true,
-								},
-								{
-									name: "primaryButtonLink",
-									type: "text",
-									required: true,
-									defaultValue: "/contact",
-								},
-								{
-									name: "secondaryButtonText",
-									type: "text",
-									required: true,
+									name: "links",
+									type: "array",
+									fields: [link()],
 								},
 							],
 						},
@@ -59,18 +49,7 @@ export const Footer: GlobalConfig = {
 							name: "navLinks",
 							type: "array",
 							label: "Footer Links",
-							fields: [
-								{
-									name: "label",
-									type: "text",
-									required: true,
-								},
-								{
-									name: "href",
-									type: "text",
-									required: true,
-								},
-							],
+							fields: [link()],
 						},
 					],
 				},
@@ -89,24 +68,7 @@ export const Footer: GlobalConfig = {
 							name: "bottomLinks",
 							type: "array",
 							label: "Bottom Links",
-							fields: [
-								{
-									name: "label",
-									type: "text",
-									required: true,
-								},
-								{
-									name: "href",
-									type: "text",
-									required: true,
-								},
-								{
-									name: "newTab",
-									type: "checkbox",
-									label: "Open in new tab",
-									defaultValue: false,
-								},
-							],
+							fields: [link()],
 						},
 					],
 				},

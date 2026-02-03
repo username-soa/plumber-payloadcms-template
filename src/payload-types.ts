@@ -368,6 +368,60 @@ export interface CaseStudy {
  */
 export interface Service {
   id: number;
+  hero: {
+    type: 'default' | 'highImpact' | 'servicesHero' | 'minimal' | 'none';
+    title?: string | null;
+    /**
+     * Text to highlight in primary color (case-insensitive)
+     */
+    titleHighlight?: string | null;
+    description?: string | null;
+    floatingText?: string | null;
+    badge?: {
+      content: string;
+      variant?: ('default' | 'secondary' | 'destructive' | 'outline') | null;
+      size?: ('sm' | 'default' | 'lg') | null;
+      icon?: string | null;
+    };
+    bgImage?: (number | null) | Media;
+    fgImage?: (number | null) | Media;
+    heroTheme?: ('muted' | 'primary-gradient') | null;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+            label: string;
+            url?: string | null;
+            newTab?: boolean | null;
+            email?: string | null;
+            phoneNumber?: string | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'services';
+                  value: number | Service;
+                } | null);
+            style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Add up to 4 trust indicators (icons with text)
+     */
+    trustIndicators?:
+      | {
+          icon: string;
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+    showDate?: boolean | null;
+  };
   title: string;
   slug: string;
   description: string;
@@ -422,67 +476,10 @@ export interface Service {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "reviews".
- */
-export interface Review {
-  id: number;
-  author: string;
-  rating: number;
-  content: string;
-  date: string;
-  platform: 'google' | 'facebook' | 'yelp' | 'website' | 'other';
-  avatar?: (number | null) | Media;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "pages".
  */
 export interface Page {
   id: number;
-  hero: {
-    type: 'default' | 'highImpact' | 'service' | 'minimal' | 'none';
-    title?: string | null;
-    /**
-     * Text to highlight in primary color (case-insensitive)
-     */
-    titleHighlight?: string | null;
-    description?: string | null;
-    floatingText?: string | null;
-    badge?: string | null;
-    badgeVariant?: ('default' | 'secondary' | 'destructive' | 'outline') | null;
-    badgeSize?: ('sm' | 'default' | 'lg') | null;
-    bgImage?: (number | null) | Media;
-    fgImage?: (number | null) | Media;
-    icon?: string | null;
-    heroTheme?: ('muted' | 'primary-gradient') | null;
-    links?:
-      | {
-          link: {
-            type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
-            label: string;
-            url?: string | null;
-            newTab?: boolean | null;
-            email?: string | null;
-            phoneNumber?: string | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null)
-              | ({
-                  relationTo: 'services';
-                  value: number | Service;
-                } | null);
-            style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
-          };
-          id?: string | null;
-        }[]
-      | null;
-    showDate?: boolean | null;
-    breadcrumbs?: boolean | null;
-  };
   title: string;
   slug: string;
   /**
@@ -491,19 +488,6 @@ export interface Page {
   lastUpdated?: string | null;
   status: 'draft' | 'published';
   layout: (
-    | {
-        badge?: string | null;
-        /**
-         * Defaults to page title if empty
-         */
-        title?: string | null;
-        subtitle?: string | null;
-        icon?: ('shield' | 'file') | null;
-        showLastUpdated?: boolean | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'legalHero';
-      }
     | {
         content: {
           root: {
@@ -552,6 +536,60 @@ export interface Page {
         blockType: 'backLink';
       }
   )[];
+  hero: {
+    type: 'default' | 'highImpact' | 'servicesHero' | 'minimal' | 'none';
+    title?: string | null;
+    /**
+     * Text to highlight in primary color (case-insensitive)
+     */
+    titleHighlight?: string | null;
+    description?: string | null;
+    floatingText?: string | null;
+    badge?: {
+      content: string;
+      variant?: ('default' | 'secondary' | 'destructive' | 'outline') | null;
+      size?: ('sm' | 'default' | 'lg') | null;
+      icon?: string | null;
+    };
+    bgImage?: (number | null) | Media;
+    fgImage?: (number | null) | Media;
+    heroTheme?: ('muted' | 'primary-gradient') | null;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+            label: string;
+            url?: string | null;
+            newTab?: boolean | null;
+            email?: string | null;
+            phoneNumber?: string | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'services';
+                  value: number | Service;
+                } | null);
+            style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
+    /**
+     * Add up to 4 trust indicators (icons with text)
+     */
+    trustIndicators?:
+      | {
+          icon: string;
+          title: string;
+          description: string;
+          id?: string | null;
+        }[]
+      | null;
+    showDate?: boolean | null;
+  };
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -563,6 +601,21 @@ export interface Page {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: number;
+  author: string;
+  rating: number;
+  content: string;
+  date: string;
+  platform: 'google' | 'facebook' | 'yelp' | 'website' | 'other';
+  avatar?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -843,6 +896,52 @@ export interface TagsSelect<T extends boolean = true> {
  * via the `definition` "services_select".
  */
 export interface ServicesSelect<T extends boolean = true> {
+  hero?:
+    | T
+    | {
+        type?: T;
+        title?: T;
+        titleHighlight?: T;
+        description?: T;
+        floatingText?: T;
+        badge?:
+          | T
+          | {
+              content?: T;
+              variant?: T;
+              size?: T;
+              icon?: T;
+            };
+        bgImage?: T;
+        fgImage?: T;
+        heroTheme?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    label?: T;
+                    url?: T;
+                    newTab?: T;
+                    email?: T;
+                    phoneNumber?: T;
+                    reference?: T;
+                    style?: T;
+                  };
+              id?: T;
+            };
+        trustIndicators?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+        showDate?: T;
+      };
   title?: T;
   slug?: T;
   description?: T;
@@ -896,41 +995,6 @@ export interface ReviewsSelect<T extends boolean = true> {
  * via the `definition` "pages_select".
  */
 export interface PagesSelect<T extends boolean = true> {
-  hero?:
-    | T
-    | {
-        type?: T;
-        title?: T;
-        titleHighlight?: T;
-        description?: T;
-        floatingText?: T;
-        badge?: T;
-        badgeVariant?: T;
-        badgeSize?: T;
-        bgImage?: T;
-        fgImage?: T;
-        icon?: T;
-        heroTheme?: T;
-        links?:
-          | T
-          | {
-              link?:
-                | T
-                | {
-                    type?: T;
-                    label?: T;
-                    url?: T;
-                    newTab?: T;
-                    email?: T;
-                    phoneNumber?: T;
-                    reference?: T;
-                    style?: T;
-                  };
-              id?: T;
-            };
-        showDate?: T;
-        breadcrumbs?: T;
-      };
   title?: T;
   slug?: T;
   lastUpdated?: T;
@@ -938,17 +1002,6 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
-        legalHero?:
-          | T
-          | {
-              badge?: T;
-              title?: T;
-              subtitle?: T;
-              icon?: T;
-              showLastUpdated?: T;
-              id?: T;
-              blockName?: T;
-            };
         legalContent?:
           | T
           | {
@@ -976,6 +1029,52 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+      };
+  hero?:
+    | T
+    | {
+        type?: T;
+        title?: T;
+        titleHighlight?: T;
+        description?: T;
+        floatingText?: T;
+        badge?:
+          | T
+          | {
+              content?: T;
+              variant?: T;
+              size?: T;
+              icon?: T;
+            };
+        bgImage?: T;
+        fgImage?: T;
+        heroTheme?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    label?: T;
+                    url?: T;
+                    newTab?: T;
+                    email?: T;
+                    phoneNumber?: T;
+                    reference?: T;
+                    style?: T;
+                  };
+              id?: T;
+            };
+        trustIndicators?:
+          | T
+          | {
+              icon?: T;
+              title?: T;
+              description?: T;
+              id?: T;
+            };
+        showDate?: T;
       };
   meta?:
     | T
@@ -1035,8 +1134,24 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
 export interface Header {
   id: number;
   navItems: {
-    label: string;
-    href: string;
+    link: {
+      type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+      label: string;
+      url?: string | null;
+      newTab?: boolean | null;
+      email?: string | null;
+      phoneNumber?: string | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'services';
+            value: number | Service;
+          } | null);
+      style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+    };
     id?: string | null;
   }[];
   updatedAt?: string | null;
@@ -1051,14 +1166,50 @@ export interface Footer {
   cta: {
     headline: string;
     subheadline: string;
-    primaryButtonText: string;
-    primaryButtonLink: string;
-    secondaryButtonText: string;
+    links?:
+      | {
+          link: {
+            type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+            label: string;
+            url?: string | null;
+            newTab?: boolean | null;
+            email?: string | null;
+            phoneNumber?: string | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'services';
+                  value: number | Service;
+                } | null);
+            style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+          };
+          id?: string | null;
+        }[]
+      | null;
   };
   navLinks?:
     | {
-        label: string;
-        href: string;
+        link: {
+          type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+          label: string;
+          url?: string | null;
+          newTab?: boolean | null;
+          email?: string | null;
+          phoneNumber?: string | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'services';
+                value: number | Service;
+              } | null);
+          style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+        };
         id?: string | null;
       }[]
     | null;
@@ -1068,9 +1219,24 @@ export interface Footer {
   copyrightText?: string | null;
   bottomLinks?:
     | {
-        label: string;
-        href: string;
-        newTab?: boolean | null;
+        link: {
+          type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+          label: string;
+          url?: string | null;
+          newTab?: boolean | null;
+          email?: string | null;
+          phoneNumber?: string | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'services';
+                value: number | Service;
+              } | null);
+          style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+        };
         id?: string | null;
       }[]
     | null;
@@ -1181,8 +1347,18 @@ export interface HeaderSelect<T extends boolean = true> {
   navItems?:
     | T
     | {
-        label?: T;
-        href?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              label?: T;
+              url?: T;
+              newTab?: T;
+              email?: T;
+              phoneNumber?: T;
+              reference?: T;
+              style?: T;
+            };
         id?: T;
       };
   updatedAt?: T;
@@ -1199,24 +1375,57 @@ export interface FooterSelect<T extends boolean = true> {
     | {
         headline?: T;
         subheadline?: T;
-        primaryButtonText?: T;
-        primaryButtonLink?: T;
-        secondaryButtonText?: T;
+        links?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    label?: T;
+                    url?: T;
+                    newTab?: T;
+                    email?: T;
+                    phoneNumber?: T;
+                    reference?: T;
+                    style?: T;
+                  };
+              id?: T;
+            };
       };
   navLinks?:
     | T
     | {
-        label?: T;
-        href?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              label?: T;
+              url?: T;
+              newTab?: T;
+              email?: T;
+              phoneNumber?: T;
+              reference?: T;
+              style?: T;
+            };
         id?: T;
       };
   copyrightText?: T;
   bottomLinks?:
     | T
     | {
-        label?: T;
-        href?: T;
-        newTab?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              label?: T;
+              url?: T;
+              newTab?: T;
+              email?: T;
+              phoneNumber?: T;
+              reference?: T;
+              style?: T;
+            };
         id?: T;
       };
   updatedAt?: T;

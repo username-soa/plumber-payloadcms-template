@@ -3,11 +3,12 @@ import { usePathname } from "next/navigation";
 import { motion } from "motion/react";
 import { LiquidGlass } from "@/components/ui/liquid-glass";
 import { cn } from "@/lib/utils";
+import { getCMSLinkHref, type CMSLinkType } from "@/lib/cms-link";
 
 export function DesktopNav({
 	navItems,
 }: {
-	navItems: { label: string; href: string }[];
+	navItems: { link: CMSLinkType }[];
 }) {
 	const pathname = usePathname();
 
@@ -19,13 +20,21 @@ export function DesktopNav({
 			softness={10}
 		>
 			<nav className="flex items-center gap-2 text-white font-medium px-1 py-[5px]">
-				{navItems.map((link) => {
-					const isActive = pathname === link.href;
+				{navItems.map((item, i) => {
+					const href = getCMSLinkHref(item.link);
+					const isActive = pathname === href;
+					const key =
+						item.link?.url ||
+						(typeof item.link?.reference?.value === "object"
+							? item.link.reference.value.slug
+							: item.link?.reference?.value) ||
+						i;
 
 					return (
 						<Link
-							key={link.href + link.label}
-							href={link.href}
+							key={key.toString()}
+							href={href}
+							target={item.link?.newTab ? "_blank" : undefined}
 							className={cn(
 								"relative px-4 py-1.5 rounded-full transition-colors [text-shadow:2px_2px_4px_rgba(0,0,0,0.4)]",
 								isActive ? "text-white/80" : "text-white hover:text-white/80",
@@ -42,7 +51,9 @@ export function DesktopNav({
 									}}
 								/>
 							)}
-							<span className="relative z-10">{link.label}</span>
+							<span className="relative z-10">
+								{item.link?.label || "Link"}
+							</span>
 						</Link>
 					);
 				})}

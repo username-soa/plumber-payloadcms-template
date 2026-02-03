@@ -1,6 +1,7 @@
 import Image from "next/image";
 
 import { Badge } from "@/components/ui/badge";
+import DynamicIcon from "@/components/ui/dynamic-icon";
 import type { Page } from "@/payload-types";
 
 import { CMSLinkItem, type CMSLinkType } from "../components/cms-link-item";
@@ -43,12 +44,16 @@ export const DefaultHero = ({ hero, pageTitle }: HeroProps) => {
 
 			<div className="flex flex-col justify-center container mx-auto z-10 px-6">
 				<div className="max-w-3xl">
-					{badge && (
+					{badge && badge.content && (
 						<Badge
-							variant="secondary"
+							size={badge.size || "default"}
+							variant={badge.variant || "secondary"}
 							className="mb-6 px-4 py-1.5 text-sm font-medium bg-primary/20 hover:bg-primary/10 text-primary-foreground backdrop-blur-sm border border-white/10"
 						>
-							{badge}
+							{badge.icon && (
+								<DynamicIcon name={badge.icon} className="w-4 h-4 mr-2" />
+							)}
+							{badge.content}
 						</Badge>
 					)}
 

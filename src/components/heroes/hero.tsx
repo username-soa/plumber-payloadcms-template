@@ -1,31 +1,31 @@
-import type { Page } from "@/payload-types";
+import type { Page, Service } from "@/payload-types";
 import { DefaultHero } from "./templates/default";
 import { HighImpactHero } from "./templates/high-impact";
-import { ServiceHero } from "./templates/service";
 import { MinimalHero } from "./templates/minimal";
+import { ServicesHero } from "./templates/services-hero";
 
 type HeroProps = {
-	page: Page;
+	page?: Page;
+	hero?: Page["hero"] | Service["hero"];
+	title?: string;
 };
 
-export function Hero({ page }: HeroProps) {
-	const hero = page.hero;
+export function Hero({ page, hero: heroProp, title }: HeroProps) {
+	const hero = heroProp || page?.hero;
+	const pageTitle = title || page?.title;
 
 	if (!hero || hero.type === "none") return null;
-
-	// Pass page title as fallback
-	const pageTitle = page.title;
 
 	switch (hero.type) {
 		case "highImpact":
 			return <HighImpactHero hero={hero} pageTitle={pageTitle} />;
-		case "service":
-			return <ServiceHero hero={hero} pageTitle={pageTitle} />;
+		case "servicesHero":
+			return <ServicesHero hero={hero} />;
 		case "minimal":
 			return (
 				<MinimalHero
 					hero={hero}
-					updatedAt={page.updatedAt}
+					updatedAt={page?.updatedAt || ""}
 					pageTitle={pageTitle}
 				/>
 			);

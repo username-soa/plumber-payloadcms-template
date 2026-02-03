@@ -10,6 +10,8 @@ import type {
 	CompanyInfo as CompanyInfoType,
 } from "@/payload-types";
 
+import type { CMSLinkType } from "@/lib/cms-link";
+
 // Dynamically import ThemeSwitcher to defer loading the motion library
 // The theme switcher uses motion/react for drag animations which is heavy
 const ThemeSwitcher = dynamic(
@@ -20,10 +22,15 @@ const ThemeSwitcher = dynamic(
 	{ ssr: false },
 );
 
+type HeaderLinkItem = {
+	id?: string | null;
+	link: CMSLinkType;
+};
+
 interface LayoutBodyProps {
 	children: React.ReactNode;
-	headerData: { navItems: { label: string; href: string }[] };
-	footerData: FooterType;
+	headerData: { navItems: HeaderLinkItem[] };
+	footerData: any; // Using any to bypass stale type issues until regeneration
 	companyInfo: CompanyInfoType;
 }
 

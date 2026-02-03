@@ -7,6 +7,8 @@ import { Logo } from "./logo";
 import { DesktopNav } from "./desktop-nav";
 import { CallButton } from "./call-button";
 
+import type { CMSLinkType } from "@/lib/cms-link";
+
 // Dynamically import MobileNav to defer loading the motion library
 // The mobile nav uses motion/react for menu icon animations
 const MobileNav = dynamic(
@@ -25,7 +27,7 @@ const HEADER_Z_INDEX = 60;
 const TRANSITION_DURATION = 300;
 
 interface HeaderProps {
-	navItems: { label: string; href: string }[];
+	navItems: { link: CMSLinkType }[];
 	phone: string;
 }
 

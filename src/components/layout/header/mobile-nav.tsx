@@ -12,12 +12,13 @@ import {
 	SheetTitle,
 } from "@/components/ui/sheet";
 import { CallButton } from "./call-button";
+import { getCMSLinkHref, type CMSLinkType } from "@/lib/cms-link";
 
 export function MobileNav({
 	navItems,
 	phone,
 }: {
-	navItems: { label: string; href: string }[];
+	navItems: { link: CMSLinkType }[];
 	phone: string;
 }) {
 	const [isOpen, setIsOpen] = React.useState(false);
@@ -65,16 +66,26 @@ export function MobileNav({
 					<SheetTitle className="sr-only">Mobile Navigation</SheetTitle>
 					<div className="flex flex-col h-full px-6 pb-6 pt-24">
 						<nav className="flex flex-col gap-4 text-left mt-24 items-start">
-							{navItems.map((link) => (
-								<Link
-									key={link.href + link.label}
-									href={link.href}
-									className="text-4xl font-semibold text-white hover:text-primary transition-colors py-2"
-									onClick={() => setIsOpen(false)}
-								>
-									{link.label}
-								</Link>
-							))}
+							{navItems.map((item, i) => {
+								const href = getCMSLinkHref(item.link);
+								const key =
+									item.link?.url ||
+									(typeof item.link?.reference?.value === "object"
+										? item.link.reference.value.slug
+										: item.link?.reference?.value) ||
+									i;
+								return (
+									<Link
+										key={key.toString()}
+										href={href}
+										target={item.link?.newTab ? "_blank" : undefined}
+										className="text-4xl font-semibold text-white hover:text-primary transition-colors py-2"
+										onClick={() => setIsOpen(false)}
+									>
+										{item.link?.label || "Link"}
+									</Link>
+								);
+							})}
 						</nav>
 
 						<div className="mt-auto sm:hidden flex flex-col gap-4">

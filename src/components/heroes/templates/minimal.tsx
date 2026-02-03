@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import { cn } from "@/lib/utils";
+
 import { Badge } from "@/components/ui/badge";
 import DynamicIcon from "@/components/ui/dynamic-icon";
 import {
@@ -7,6 +7,7 @@ import {
 	TypographyLead,
 	TypographyMuted,
 } from "@/components/ui/typography";
+import { cn } from "@/lib/utils";
 import type { Page } from "@/payload-types";
 
 type HeroProps = {
@@ -16,21 +17,8 @@ type HeroProps = {
 };
 
 export const MinimalHero = ({ hero, updatedAt, pageTitle }: HeroProps) => {
-	const {
-		title,
-		description,
-		badge,
-		// @ts-ignore
-		badgeVariant,
-		// @ts-ignore
-		badgeSize,
-		icon,
-		showDate,
-		// @ts-ignore
-		titleHighlight,
-		// @ts-ignore
-		heroTheme,
-	} = hero;
+	const { title, description, badge, showDate, titleHighlight, heroTheme } =
+		hero;
 
 	const displayTitle = title || pageTitle;
 
@@ -42,20 +30,28 @@ export const MinimalHero = ({ hero, updatedAt, pageTitle }: HeroProps) => {
 		if (!displayTitle) return null;
 		if (!titleHighlight) {
 			return (
-				<TypographyH1 className="text-4xl md:text-5xl font-bold mb-4">
+				<TypographyH1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
 					{displayTitle}
 				</TypographyH1>
 			);
 		}
 
-		const parts = displayTitle.split(new RegExp(`(${titleHighlight})`, "gi"));
+		const parts = displayTitle
+			.split(new RegExp(`(${titleHighlight})`, "gi"))
+			.map((part, index) => ({
+				text: part,
+				// using index as ID is safe here because the derived list is static and never reordered
+				id: index,
+				isHighlight: part.toLowerCase() === titleHighlight.toLowerCase(),
+			}));
+
 		return (
-			<TypographyH1 className="text-4xl md:text-5xl font-bold mb-4">
-				{parts.map((part, i) => {
-					if (part.toLowerCase() === titleHighlight.toLowerCase()) {
+			<TypographyH1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+				{parts.map(({ text, id, isHighlight }) => {
+					if (isHighlight) {
 						return (
-							<span key={i} className="text-primary relative inline-block">
-								{part}
+							<span key={id} className="text-primary relative inline-block">
+								{text}
 								<svg
 									className="absolute -bottom-2 left-0 w-full"
 									viewBox="0 0 200 12"
@@ -74,7 +70,7 @@ export const MinimalHero = ({ hero, updatedAt, pageTitle }: HeroProps) => {
 							</span>
 						);
 					}
-					return <span key={i}>{part}</span>;
+					return <span key={id}>{text}</span>;
 				})}
 			</TypographyH1>
 		);
@@ -102,14 +98,16 @@ export const MinimalHero = ({ hero, updatedAt, pageTitle }: HeroProps) => {
 
 			<div className="container mx-auto px-4 py-16 md:py-24 relative z-10">
 				<div className="max-w-3xl mx-auto text-center mt-14">
-					{badge && (
+					{badge && badge.content && (
 						<Badge
-							variant={badgeVariant || "outline"}
-							size={badgeSize || "default"}
 							className="mb-4 gap-2"
+							size={badge.size || "default"}
+							variant={badge.variant || "outline"}
 						>
-							{icon && <DynamicIcon name={icon} className="w-4 h-4" />}
-							{badge}
+							{badge.icon && (
+								<DynamicIcon name={badge.icon} className="w-4 h-4" />
+							)}
+							{badge.content}
 						</Badge>
 					)}
 

@@ -1,13 +1,7 @@
 import type { CollectionConfig } from "payload";
 
 import { customLexical } from "@/lib/lexical-config";
-import {
-	MetaDescriptionField,
-	MetaImageField,
-	MetaTitleField,
-	OverviewField,
-	PreviewField,
-} from "@payloadcms/plugin-seo/fields";
+
 
 export const BlogPosts: CollectionConfig = {
 	slug: "blog-posts",
@@ -166,30 +160,6 @@ export const BlogPosts: CollectionConfig = {
 								position: "sidebar",
 							},
 						},
-					],
-				},
-				{
-					label: "SEO",
-					name: "meta",
-					fields: [
-						OverviewField({
-							titlePath: "meta.title",
-							descriptionPath: "meta.description",
-							imagePath: "meta.image",
-						}),
-						MetaTitleField({
-							hasGenerateFn: true,
-						}),
-						MetaDescriptionField({}),
-						MetaImageField({
-							relationTo: "media",
-						}),
-						PreviewField({
-							// if the `generateUrl` function is configured
-							hasGenerateFn: true,
-							titlePath: "meta.title",
-							descriptionPath: "meta.description",
-						}),
 					],
 				},
 			],

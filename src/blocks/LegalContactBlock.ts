@@ -3,8 +3,8 @@ import type { Block } from "payload";
 export const LegalContactBlock: Block = {
 	slug: "legalContact",
 	labels: {
-		singular: "Legal Contact Card",
-		plural: "Legal Contact Cards",
+		singular: "Contact Card",
+		plural: "Contact Cards",
 	},
 	fields: [
 		{
