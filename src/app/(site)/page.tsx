@@ -5,7 +5,7 @@ import { ReviewSection } from "@/components/sections/review";
 import { LocationSection } from "@/components/sections/location";
 import { HeroSection } from "@/components/sections/hero";
 import { JsonLd } from "@/components/json-ld";
-import { QuoteFormCTA } from "./services/_components/quote-form";
+// import { QuoteFormCTA } from "./services/_components/quote-form";
 import {
 	generateOrganizationSchema,
 	generateWebsiteSchema,
@@ -32,7 +32,7 @@ export default async function Home() {
 			<ServicesSection />
 			<LocationSection companyInfo={companyInfo} />
 			{/* <ReviewSection companyInfo={companyInfo} /> */}
-			<QuoteFormCTA serviceName="General Plumbing" />
+			{/* <QuoteFormCTA serviceName="General Plumbing" /> */}
 			<FAQSection />
 		</>
 	);

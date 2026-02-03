@@ -10,6 +10,8 @@ import {
 import { LegalContentBlock } from "@/blocks/LegalContentBlock";
 import { LegalContactBlock } from "@/blocks/LegalContactBlock";
 import { BackLinkBlock } from "@/blocks/BackLinkBlock";
+import { FAQBlock } from "@/blocks/FAQBlock";
+import { ReviewBlock } from "@/blocks/ReviewBlock";
 import { populateLegalContact } from "@/hooks/populateLegalContact";
 import { hero } from "../fields/hero";
 
@@ -112,6 +114,8 @@ export const Pages: CollectionConfig = {
 								LegalContentBlock,
 								LegalContactBlock,
 								BackLinkBlock,
+								FAQBlock,
+								ReviewBlock,
 							],
 						},
 					],

@@ -1,14 +1,16 @@
-import Link from "next/link";
 import dynamic from "next/dynamic";
-import { MessageCircleQuestion, ArrowRight } from "lucide-react";
+import { MessageCircleQuestion } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
 	TypographyH2,
 	TypographyH3,
 	TypographyMuted,
 } from "@/components/ui/typography";
+import {
+	CMSLinkItem,
+	CMSLinkType,
+} from "@/components/heroes/components/cms-link-item";
 
 // Skeleton Loader for the Accordion
 const FAQSkeleton = () => (
@@ -27,7 +29,64 @@ const FAQAccordion = dynamic(() => import("./faq-accordion"), {
 	loading: () => <FAQSkeleton />,
 });
 
-export function FAQSection() {
+import type { Faq } from "@/payload-types";
+
+interface FAQBlockProps {
+	title?: string | null;
+	titleHighlight?: string | null;
+	description?: string | null;
+	faqs?: (Faq | number)[] | null;
+	cta?: {
+		showCta?: boolean | null;
+		headline?: string | null;
+		text?: string | null;
+		ctaLink?: CMSLinkType;
+	} | null;
+}
+
+export function FAQSection({
+	title,
+	titleHighlight,
+	description,
+	faqs,
+	cta,
+}: FAQBlockProps) {
+	// Transform relationship data to the format expected by FAQAccordion
+	const transformedFaqs =
+		faqs
+			?.map((faq) => {
+				if (typeof faq === "object" && faq !== null) {
+					return {
+						id: faq.id.toString(),
+						question: faq.question,
+						answer: faq.answer,
+					};
+				}
+				return null;
+			})
+			.filter((item) => item !== null) || [];
+
+	// Logic to highlight title
+	const renderTitle = () => {
+		if (!title) return "Your Questions, Our Answers";
+		if (!titleHighlight) return title;
+
+		const parts = title.split(new RegExp(`(${titleHighlight})`, "gi"));
+		return (
+			<>
+				{parts.map((part, i) =>
+					part.toLowerCase() === titleHighlight.toLowerCase() ? (
+						<span key={i} className="text-primary">
+							{part}
+						</span>
+					) : (
+						part
+					),
+				)}
+			</>
+		);
+	};
+
 	return (
 		<section className="w-full py-24 bg-muted/20">
 			<div className="container mx-auto px-6 md:px-12">
@@ -40,47 +99,45 @@ export function FAQSection() {
 						</div>
 
 						<TypographyH2 className="text-4xl md:text-5xl font-bold border-none tracking-tight">
-							Your Questions, Our Answers{" "}
-							<span className="text-primary">Clear, Honest And Helpful</span>
+							{renderTitle()}
 						</TypographyH2>
 
-						<TypographyMuted className="text-lg  max-w-md">
-							Have questions about our plumbing services? We&apos;re here to
-							make everything clear. From booking to pricing, find your answers
-							here.
-						</TypographyMuted>
+						{description && (
+							<TypographyMuted className="text-lg max-w-md">
+								{description}
+							</TypographyMuted>
+						)}
 
-						<Card className="bg-card/50 border-none shadow-sm max-w-md">
-							<CardContent className="p-4 flex flex-col gap-6">
-								<div className="flex items-start gap-4">
-									<div className="p-3 bg-primary/10 rounded-xl text-primary shrink-0">
-										<MessageCircleQuestion className="w-8 h-8" />
+						{cta?.showCta && (
+							<Card className="bg-card/50 border-none shadow-sm max-w-md">
+								<CardContent className="p-4 flex flex-col gap-6">
+									<div className="flex items-start gap-4">
+										<div className="p-3 bg-primary/10 rounded-xl text-primary shrink-0">
+											<MessageCircleQuestion className="w-8 h-8" />
+										</div>
+										<div>
+											<TypographyH3 className="text-lg font-bold mb-2">
+												{cta.headline || "Still Have Questions?"}
+											</TypographyH3>
+											{cta.text && (
+												<TypographyMuted>{cta.text}</TypographyMuted>
+											)}
+										</div>
 									</div>
-									<div>
-										<TypographyH3 className="text-lg font-bold mb-2">
-											Still Have Questions?
-										</TypographyH3>
-										<TypographyMuted>
-											Can&apos;t find the answer you&apos;re looking for? Our
-											team is here to help!
-										</TypographyMuted>
-									</div>
-								</div>
-								<Button
-									className="w-full h-12 text-base font-semibold shadow-md"
-									asChild
-								>
-									<Link href="/contact">
-										Contact Support <ArrowRight className="ml-2 w-4 h-4" />
-									</Link>
-								</Button>
-							</CardContent>
-						</Card>
+									{cta.ctaLink && (
+										<CMSLinkItem
+											link={cta.ctaLink}
+											className="w-full h-12 text-base font-semibold shadow-md"
+										/>
+									)}
+								</CardContent>
+							</Card>
+						)}
 					</div>
 
 					{/* Right Column: Accordion */}
 					<div className="w-full">
-						<FAQAccordion />
+						<FAQAccordion items={transformedFaqs as any} />
 					</div>
 				</div>
 			</div>

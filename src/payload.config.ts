@@ -17,6 +17,7 @@ import { Tags } from "./collections/Tags";
 import { Services } from "./collections/Services";
 import { Reviews } from "./collections/Reviews";
 import { Pages } from "./collections/Pages";
+import { Faqs } from "./collections/Faqs";
 
 import { Header } from "./globals/Header";
 import { Footer } from "./globals/Footer";
@@ -42,6 +43,7 @@ export default buildConfig({
 		Services,
 		Reviews,
 		Pages,
+		Faqs,
 	],
 
 	globals: [Header, Footer, CompanyInfo],

@@ -77,6 +77,7 @@ export interface Config {
     services: Service;
     reviews: Review;
     pages: Page;
+    faqs: Faq;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -94,6 +95,7 @@ export interface Config {
     services: ServicesSelect<false> | ServicesSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
+    faqs: FaqsSelect<false> | FaqsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -535,6 +537,42 @@ export interface Page {
         blockName?: string | null;
         blockType: 'backLink';
       }
+    | {
+        title?: string | null;
+        /**
+         * Text to highlight in primary color (case-insensitive)
+         */
+        titleHighlight?: string | null;
+        description?: string | null;
+        faqs?: (number | Faq)[] | null;
+        cta: {
+          showCta?: boolean | null;
+          headline?: string | null;
+          text?: string | null;
+          ctaLink: {
+            type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+            label: string;
+            url?: string | null;
+            newTab?: boolean | null;
+            email?: string | null;
+            phoneNumber?: string | null;
+            reference?:
+              | ({
+                  relationTo: 'pages';
+                  value: number | Page;
+                } | null)
+              | ({
+                  relationTo: 'services';
+                  value: number | Service;
+                } | null);
+            style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+          };
+        };
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'faq';
+      }
+    | ReviewBlock
   )[];
   hero: {
     type: 'default' | 'highImpact' | 'servicesHero' | 'minimal' | 'none';
@@ -601,6 +639,42 @@ export interface Page {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  question: string;
+  answer: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ReviewBlock".
+ */
+export interface ReviewBlock {
+  title?: string | null;
+  subtitle?: string | null;
+  /**
+   * Choose 'Manual' to add one-off reviews for this page only, or 'From Collection' to select shared reviews from the main Reviews list.
+   */
+  source?: ('manual' | 'collection') | null;
+  manualReviews?:
+    | {
+        author: string;
+        rating?: number | null;
+        content: string;
+        date?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  selectedReviews?: (number | Review)[] | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'reviewBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -680,6 +754,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'pages';
         value: number | Page;
+      } | null)
+    | ({
+        relationTo: 'faqs';
+        value: number | Faq;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1029,6 +1107,36 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        faq?:
+          | T
+          | {
+              title?: T;
+              titleHighlight?: T;
+              description?: T;
+              faqs?: T;
+              cta?:
+                | T
+                | {
+                    showCta?: T;
+                    headline?: T;
+                    text?: T;
+                    ctaLink?:
+                      | T
+                      | {
+                          type?: T;
+                          label?: T;
+                          url?: T;
+                          newTab?: T;
+                          email?: T;
+                          phoneNumber?: T;
+                          reference?: T;
+                          style?: T;
+                        };
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        reviewBlock?: T | ReviewBlockSelect<T>;
       };
   hero?:
     | T
@@ -1086,6 +1194,37 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ReviewBlock_select".
+ */
+export interface ReviewBlockSelect<T extends boolean = true> {
+  title?: T;
+  subtitle?: T;
+  source?: T;
+  manualReviews?:
+    | T
+    | {
+        author?: T;
+        rating?: T;
+        content?: T;
+        date?: T;
+        id?: T;
+      };
+  selectedReviews?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs_select".
+ */
+export interface FaqsSelect<T extends boolean = true> {
+  question?: T;
+  answer?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

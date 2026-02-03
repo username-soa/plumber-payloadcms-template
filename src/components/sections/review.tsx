@@ -1,49 +1,77 @@
-import * as React from "react";
 import { Star } from "lucide-react";
 
 import Marquee from "@/components/ui/marquee";
 import { TypographyH2 } from "@/components/ui/typography";
-import {
-	fetchGoogleReviews,
-	GOOGLE_RATING,
-	TOTAL_REVIEWS,
-} from "@/lib/google-reviews";
 import { ReviewCard } from "@/components/review-card";
 import type { CompanyInfo } from "@/payload-types";
-import { SITE_CONFIG } from "@/lib/site-config";
 
 interface ReviewSectionProps {
 	companyInfo?: CompanyInfo;
 }
 
-export async function ReviewSection({ companyInfo }: ReviewSectionProps) {
+export async function ReviewSection({
+	companyInfo,
+	title = "Why People Love Us",
+	subtitle = "Testimonials",
+	source,
+	manualReviews,
+	selectedReviews,
+}: ReviewSectionProps & {
+	title?: string;
+	subtitle?: string;
+	source?: "manual" | "collection" | "google-api" | "hardcoded";
+	manualReviews?: any[];
+	selectedReviews?: any[];
+}) {
 	// Determine review source
-	const reviewConfig = companyInfo?.seo?.reviews;
-	const sourceType = reviewConfig?.source || "google-api"; // Default to API if not set
+	// Priority: Direct Props (Block) > Company Info (Global)
+	const globalReviews = companyInfo?.seo?.reviews;
+
+	// If source is provided in props (Block), use it.
+	// Otherwise check global config.
+	// We default to 'collection' if nothing is set, assuming the user will populate it.
+	const activeSource = source || globalReviews?.source || "collection";
 
 	let reviews: any[] = [];
-	let rating = GOOGLE_RATING;
-	let totalReviews = TOTAL_REVIEWS;
+	
+	// Default stats
+	let rating = 5.0;
+	let totalReviews = 0;
 
-	if (sourceType === "hardcoded") {
-		// Use manual featured reviews from Payload
-		// Use highlighted reviews from Reviews collection
-		if (
-			reviewConfig?.highlightedReviews &&
-			reviewConfig.highlightedReviews.length > 0
-		) {
-			reviews = reviewConfig.highlightedReviews
+	if (activeSource === "manual") {
+		// 1. Manual Reviews (from Block)
+		if (manualReviews && manualReviews.length > 0) {
+			reviews = manualReviews.map((r) => ({
+				id: r.id || Math.random().toString(),
+				authorName: r.author,
+				authorImage: "", // Manual reviews typically don't have images unless added to schema
+				rating: r.rating,
+				title: "5 Star Review",
+				role: "Customer",
+				relativeTime: r.date
+					? new Date(r.date).toLocaleDateString()
+					: "Recent",
+				text: r.content,
+			}));
+		}
+	} else {
+		// 2. Collection Reviews (from Block or Global)
+		// This covers 'collection', 'hardcoded', or legacy 'google-api' if it had highlighted reviews mapped
+		const reviewsToProcess = selectedReviews || globalReviews?.highlightedReviews;
+
+		if (reviewsToProcess && reviewsToProcess.length > 0) {
+			reviews = reviewsToProcess
 				.map((r: any) => {
-					// Handle both populated object and ID-only cases (though should be populated)
+					// Handle unpopulated ID strings
 					if (typeof r === "string") return null;
 
 					return {
 						id: r.id,
 						authorName: r.author,
-						authorImage: r.avatar?.url || "", // Access media URL if populated
+						authorImage: r.avatar?.url || "",
 						rating: r.rating,
 						title: "5 Star Review",
-						text: r.content, // 'content' field in Reviews collection
+						text: r.content,
 						role: "Customer",
 						relativeTime: r.date
 							? new Date(r.date).toLocaleDateString()
@@ -51,44 +79,24 @@ export async function ReviewSection({ companyInfo }: ReviewSectionProps) {
 					};
 				})
 				.filter(Boolean);
-		} else {
-			// Fallback to static config featured if available
-			reviews = SITE_CONFIG.seo.reviews.featured.map((r) => ({
-				id: Math.random().toString(),
-				authorName: r.author,
-				authorImage: "",
-				rating: r.rating,
-				title: "5 Star Review",
-				role: "Customer",
-				relativeTime: "Recent",
-				text: r.text,
-			}));
 		}
-
-		// Use aggregate data from Payload if available (flattened)
-		if (reviewConfig?.ratingValue) {
-			rating = reviewConfig.ratingValue;
-			totalReviews = reviewConfig.reviewCount || 0;
-		}
-	} else {
-		// Verify if we have a custom place ID in payload
-		// For now we continue to use fetchGoogleReviews which presumably uses env var or hardcoded ID.
-		// If we wanted to use payload Place ID, we'd need to update fetchGoogleReviews to accept it.
-		// For this task, we will just use the existing fetch function but use payload as toggle.
-		reviews = await fetchGoogleReviews();
 	}
 
-	// Split reviews into two rows or just use the same reviews for both
-	// Ensure we have reviews to display
-	if (!reviews || reviews.length === 0) {
-		return null; // Or return empty section
+	// 3. Calculate Stats
+	if (reviews.length > 0) {
+		const count = reviews.length;
+		const sum = reviews.reduce((acc, r) => acc + (Number(r.rating) || 0), 0);
+		const avg = sum / count;
+		
+		rating = Number(avg.toFixed(1));
+		totalReviews = count;
+	} else {
+		// If no reviews found, return null to hide the section
+		return null;
 	}
 
 	const firstRow = reviews.slice(0, Math.ceil(reviews.length / 2));
 	const secondRow = reviews.slice(Math.ceil(reviews.length / 2));
-
-	// Handle case where we have very few reviews (duplicate them for marquee effect if needed?)
-	// For now assume enough reviews exist or marquee handles it.
 
 	return (
 		<section className="w-full py-24 bg-background overflow-hidden relative">
@@ -98,11 +106,11 @@ export async function ReviewSection({ companyInfo }: ReviewSectionProps) {
 					<div className="max-w-2xl">
 						<div className="flex items-center gap-2 text-primary font-medium mb-4">
 							<span className="uppercase tracking-wider text-sm">
-								Testimonials
+								{subtitle}
 							</span>
 						</div>
 						<TypographyH2 className="text-4xl md:text-5xl font-bold border-none tracking-tight">
-							Why People Love Us
+							{title}
 						</TypographyH2>
 					</div>
 
@@ -171,8 +179,8 @@ export async function ReviewSection({ companyInfo }: ReviewSectionProps) {
 					))}
 				</Marquee>
 
-				<div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-gradient-to-r from-white dark:from-background"></div>
-				<div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-gradient-to-l from-white dark:from-background"></div>
+				<div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-white dark:from-background"></div>
+				<div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-linear-to-l from-white dark:from-background"></div>
 			</div>
 		</section>
 	);
