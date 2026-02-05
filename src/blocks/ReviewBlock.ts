@@ -1,7 +1,7 @@
 import { Block } from "payload";
 
 export const ReviewBlock: Block = {
-	slug: "reviewBlock",
+	slug: "reviewsSection",
 	interfaceName: "ReviewBlock",
 	fields: [
 		{

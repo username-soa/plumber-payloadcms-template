@@ -10,7 +10,7 @@ import { seoPlugin } from "@payloadcms/plugin-seo";
 import { Users } from "./collections/Users";
 import { Media } from "./collections/Media";
 import { Authors } from "./collections/Authors";
-import { Testimonials } from "./collections/Testimonials";
+
 import { BlogPosts } from "./collections/BlogPosts";
 import { CaseStudies } from "./collections/CaseStudies";
 import { Tags } from "./collections/Tags";
@@ -18,6 +18,8 @@ import { Services } from "./collections/Services";
 import { Reviews } from "./collections/Reviews";
 import { Pages } from "./collections/Pages";
 import { Faqs } from "./collections/Faqs";
+import { TeamMembers } from "./collections/TeamMembers";
+import { Categories } from "./collections/Categories";
 
 import { Header } from "./globals/Header";
 import { Footer } from "./globals/Footer";
@@ -36,7 +38,7 @@ export default buildConfig({
 		Users,
 		Media,
 		Authors,
-		Testimonials,
+
 		BlogPosts,
 		CaseStudies,
 		Tags,
@@ -44,6 +46,8 @@ export default buildConfig({
 		Reviews,
 		Pages,
 		Faqs,
+		TeamMembers,
+		Categories,
 	],
 
 	globals: [Header, Footer, CompanyInfo],

@@ -15,7 +15,7 @@ import { ImageGallery } from "@/components/blocks/image-gallery";
 import { ServiceLink } from "@/components/blocks/service-link";
 import { StatsRow } from "@/components/blocks/stats-row";
 import { Testimonial } from "@/components/blocks/testimonial";
-import { Timeline } from "@/components/blocks/timeline";
+import { StepTimeline } from "@/components/richtext/step-timeline";
 import { YouTubeEmbed } from "@/components/blocks/youtube-embed";
 import { VideoPlayer } from "@/components/blocks/video-player";
 import { Spacing } from "@/components/blocks/spacing";
@@ -42,18 +42,18 @@ interface CalloutBlock {
 	content?: string;
 }
 
-interface TimelineItem {
-	date: string;
-	title: string;
-	description?: string;
-	id?: string;
+interface StepTimelineItem {
+	label?: string | null;
+	heading: string;
+	content?: string | null;
+	id?: string | null;
 }
 
-interface TimelineBlock {
-	blockType: "timeline";
+interface StepTimelineBlock {
+	blockType: "stepTimeline";
 	paddingTop?: boolean;
 	paddingBottom?: boolean;
-	items?: TimelineItem[];
+	items?: StepTimelineItem[];
 }
 
 interface StatItem {
@@ -174,7 +174,7 @@ interface TableBlock {
 
 type CustomBlocks =
 	| CalloutBlock
-	| TimelineBlock
+	| StepTimelineBlock
 	| StatsRowBlock
 	| BeforeAfterBlock
 	| YouTubeEmbedBlock
@@ -219,32 +219,20 @@ function CalloutRenderer({
 	);
 }
 
-// Timeline Component
-function TimelineRenderer({
+// StepTimeline Component for richtext content
+function StepTimelineRenderer({
 	node,
 }: {
-	node: SerializedBlockNode<TimelineBlock>;
+	node: SerializedBlockNode<StepTimelineBlock>;
 }) {
 	const { items = [], paddingTop, paddingBottom } = node.fields;
 
-	// Map the Payload block data to the Timeline component props
-	// We ensure description is a string since it's required in the component but optional in the block
-	const steps = items.map((item) => ({
-		title: item.title,
-		description: item.description || "",
-		date: item.date,
-		id: item.id,
-	}));
-
 	return (
-		<div
-			className={cn(
-				paddingTop && "pt-10 md:pt-20",
-				paddingBottom && "pb-10 md:pb-20",
-			)}
-		>
-			<Timeline steps={steps} />
-		</div>
+		<StepTimeline
+			items={items}
+			paddingTop={paddingTop}
+			paddingBottom={paddingBottom}
+		/>
 	);
 }
 
@@ -607,8 +595,10 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 		callout: ({ node }) => (
 			<CalloutRenderer node={node as SerializedBlockNode<CalloutBlock>} />
 		),
-		timeline: ({ node }) => (
-			<TimelineRenderer node={node as SerializedBlockNode<TimelineBlock>} />
+		stepTimeline: ({ node }) => (
+			<StepTimelineRenderer
+				node={node as SerializedBlockNode<StepTimelineBlock>}
+			/>
 		),
 		statsRow: ({ node }) => (
 			<StatsRowRenderer node={node as SerializedBlockNode<StatsRowBlock>} />

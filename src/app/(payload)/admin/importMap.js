@@ -4,7 +4,6 @@ import { LexicalDiffComponent as LexicalDiffComponent_44fe37237e0ebf4470c9990d8c
 import { BlocksFeatureClient as BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { default as default_c657011beb9b4610344c292cc96228e0 } from '@/components/payload/BlockDescription'
 import { CalloutLabel as CalloutLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
-import { TimelineLabel as TimelineLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { StatsRowLabel as StatsRowLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { GalleryLabel as GalleryLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { BeforeAfterLabel as BeforeAfterLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
@@ -52,7 +51,6 @@ export const importMap = {
   "@payloadcms/richtext-lexical/client#BlocksFeatureClient": BlocksFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@/components/payload/BlockDescription#default": default_c657011beb9b4610344c292cc96228e0,
   "@/components/payload/BlockRowLabel#CalloutLabel": CalloutLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
-  "@/components/payload/BlockRowLabel#TimelineLabel": TimelineLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#StatsRowLabel": StatsRowLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#GalleryLabel": GalleryLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#BeforeAfterLabel": BeforeAfterLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,

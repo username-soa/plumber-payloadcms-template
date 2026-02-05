@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Poppins, Bebas_Neue } from "next/font/google";
 import "../globals.css";
 import { LayoutBody } from "@/components/layout/layout-body";
 import { Toaster } from "@/components/ui/sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const geistSans = Geist({
 	variable: "--font-geist-sans",
@@ -45,14 +46,16 @@ export default async function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${bebas.variable} antialiased min-h-screen flex flex-col`}
 			>
-				<LayoutBody
-					headerData={headerData}
-					footerData={footerData}
-					companyInfo={companyInfo}
-				>
-					{children}
-				</LayoutBody>
-				<Toaster />
+				<NuqsAdapter>
+					<LayoutBody
+						headerData={headerData}
+						footerData={footerData}
+						companyInfo={companyInfo}
+					>
+						{children}
+					</LayoutBody>
+					<Toaster />
+				</NuqsAdapter>
 			</body>
 		</html>
 	);

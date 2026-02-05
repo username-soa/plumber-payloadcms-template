@@ -53,10 +53,13 @@ export async function generateMetadata({
 
 export default async function DynamicPage({
 	params,
+	searchParams,
 }: {
 	params: Promise<{ slug: string }>;
+	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
 	const { slug } = await params;
+	const resolvedSearchParams = await searchParams;
 	const page = (await getPageData(slug)) as PayloadPage | null;
 
 	if (!page) {
@@ -71,6 +74,7 @@ export default async function DynamicPage({
 				pageTitle={page.title}
 				updatedAt={page.updatedAt}
 				lastUpdated={page.lastUpdated}
+				searchParams={resolvedSearchParams}
 			/>
 		</main>
 	);

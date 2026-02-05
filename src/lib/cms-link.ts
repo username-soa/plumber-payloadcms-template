@@ -2,11 +2,11 @@ import type { Page, Service } from "@/payload-types";
 
 type Reference = {
 	relationTo: "pages" | "services";
-	value: string | Page | Service;
+	value: number | string | Page | Service;
 };
 
 export type CMSLinkType = {
-	type: "reference" | "custom" | "email" | "phone" | "badge";
+	type?: "reference" | "custom" | "email" | "phone" | "badge" | null;
 	label: string;
 	url?: string | null;
 	newTab?: boolean | null;
@@ -20,7 +20,8 @@ export type CMSLinkType = {
 		| "ghost"
 		| "destructive"
 		| "badge"
-		| "badge-pulsing";
+		| "badge-pulsing"
+		| null;
 };
 
 export function getCMSLinkHref(link: CMSLinkType | null | undefined): string {

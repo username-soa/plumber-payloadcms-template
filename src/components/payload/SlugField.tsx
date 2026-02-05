@@ -24,15 +24,18 @@ export const SlugField: React.FC<SlugFieldProps> = ({
 }) => {
 	const { value, setValue } = useField<string>({ path });
 
-	// Get the title field - only re-renders when title field changes
-	const titleField = useFormFields(([fields]) => fields.title);
-	const title = titleField?.value as string | undefined;
+	// Get the target field to generate from (default to 'title' for backward compatibility)
+	const generateFrom = field.admin?.custom?.generateFrom || "title";
+
+	// Get the source field - only re-renders when source field changes
+	const sourceField = useFormFields(([fields]) => fields[generateFrom]);
+	const sourceValue = sourceField?.value as string | undefined;
 
 	const handleGenerate = useCallback(() => {
-		if (title) {
-			setValue(formatSlug(title));
+		if (sourceValue) {
+			setValue(formatSlug(sourceValue));
 		}
-	}, [title, setValue]);
+	}, [sourceValue, setValue]);
 
 	return (
 		<div
@@ -67,7 +70,7 @@ export const SlugField: React.FC<SlugFieldProps> = ({
 				<button
 					type="button"
 					onClick={handleGenerate}
-					disabled={!title}
+					disabled={!sourceValue}
 					style={{
 						padding: "0 25px", // Horizontal padding only, let height be determined by container
 						display: "flex",
@@ -78,13 +81,13 @@ export const SlugField: React.FC<SlugFieldProps> = ({
 						border: "1px solid var(--theme-elevation-400)",
 						background: "var(--theme-elevation-100)",
 						color: "var(--theme-text)",
-						cursor: title ? "pointer" : "not-allowed",
-						opacity: title ? 1 : 0.5,
+						cursor: sourceValue ? "pointer" : "not-allowed",
+						opacity: sourceValue ? 1 : 0.5,
 						transition: "all 0.15s ease",
 						whiteSpace: "nowrap",
 					}}
 					onMouseEnter={(e) => {
-						if (title) {
+						if (sourceValue) {
 							e.currentTarget.style.background = "var(--theme-elevation-200)";
 						}
 					}}

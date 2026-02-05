@@ -2,17 +2,10 @@ import type { Block } from "payload";
 
 export const TimelineBlock: Block = {
 	slug: "timeline",
+	interfaceName: "TimelineBlock",
 	labels: {
 		singular: "Timeline",
 		plural: "Timelines",
-	},
-	admin: {
-		components: {
-			Label: {
-				path: "@/components/payload/BlockRowLabel",
-				exportName: "TimelineLabel",
-			},
-		},
 	},
 	fields: [
 		{
@@ -28,6 +21,15 @@ export const TimelineBlock: Block = {
 					description:
 						"Display a chronological sequence of events or milestones with dates and descriptions in a visual timeline format.",
 				},
+			},
+		},
+		{
+			name: "title",
+			type: "text",
+			label: "Section Title",
+			required: true,
+			admin: {
+				description: "The main heading for the timeline section",
 			},
 		},
 		{
@@ -72,31 +74,6 @@ export const TimelineBlock: Block = {
 					admin: {
 						description: "Detailed information about this timeline entry",
 					},
-				},
-			],
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTop",
-					type: "checkbox",
-					label: "Add Top Padding",
-					admin: {
-						description: "Adds vertical spacing above the timeline",
-						width: "50%",
-					},
-					defaultValue: true,
-				},
-				{
-					name: "paddingBottom",
-					type: "checkbox",
-					label: "Add Bottom Padding",
-					admin: {
-						description: "Adds vertical spacing below the timeline",
-						width: "50%",
-					},
-					defaultValue: true,
 				},
 			],
 		},

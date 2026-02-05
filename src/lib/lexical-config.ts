@@ -1,6 +1,6 @@
 import { BlocksFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
 import { CalloutBlock } from "@/blocks/CalloutBlock";
-import { TimelineBlock } from "@/blocks/TimelineBlock";
+import { StepTimelineBlock } from "@/blocks/StepTimelineBlock";
 import { StatsRowBlock } from "@/blocks/StatsRowBlock";
 import { ImageGalleryBlock } from "@/blocks/ImageGalleryBlock";
 import { BeforeAfterBlock } from "@/blocks/BeforeAfterBlock";
@@ -19,7 +19,7 @@ export const customLexical = lexicalEditor({
 		BlocksFeature({
 			blocks: [
 				CalloutBlock,
-				TimelineBlock,
+				StepTimelineBlock,
 				StatsRowBlock,
 				ImageGalleryBlock,
 				BeforeAfterBlock,

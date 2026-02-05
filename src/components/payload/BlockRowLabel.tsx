@@ -6,7 +6,6 @@ import {
 	AlertCircle,
 	BarChart,
 	Box,
-	Clock,
 	FlipHorizontal,
 	Image as ImageIcon,
 	Info,
@@ -374,7 +373,6 @@ export const TimelineLabel = ({
 			index={index}
 			blockType="Timeline"
 			label="Timeline"
-			icon={Clock}
 			metadata={metadata}
 		/>
 	);

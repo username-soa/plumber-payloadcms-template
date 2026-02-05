@@ -12,36 +12,31 @@ export const CompanyInfo: GlobalConfig = {
 	},
 	fields: [
 		{
+			name: "brand",
+			type: "group",
+			fields: [
+				{
+					name: "name",
+					type: "text",
+					required: true,
+					defaultValue: "FlowMasters",
+				},
+				{
+					name: "description",
+					type: "textarea",
+					required: true,
+				},
+				{
+					name: "logo",
+					type: "upload",
+					relationTo: "media",
+					required: true,
+				},
+			],
+		},
+		{
 			type: "tabs",
 			tabs: [
-				{
-					label: "General Info",
-					fields: [
-						{
-							name: "brand",
-							type: "group",
-							fields: [
-								{
-									name: "name",
-									type: "text",
-									required: true,
-									defaultValue: "FlowMasters",
-								},
-								{
-									name: "description",
-									type: "textarea",
-									required: true,
-								},
-								{
-									name: "logo",
-									type: "upload",
-									relationTo: "media",
-									required: true,
-								},
-							],
-						},
-					],
-				},
 				{
 					label: "Contact & Socials",
 					description:
@@ -167,7 +162,7 @@ export const CompanyInfo: GlobalConfig = {
 																},
 															],
 															required: true,
-															admin: { width: "50%" },
+															admin: { width: "33%" },
 														},
 														{
 															name: "foundingDate",
@@ -177,20 +172,21 @@ export const CompanyInfo: GlobalConfig = {
 																	pickerAppearance: "dayOnly",
 																	displayFormat: "d MMM yyy",
 																},
-																width: "50%",
+																width: "33%",
+															},
+														},
+														{
+															name: "phoneDisplay",
+															type: "text",
+															label: "Display Phone (e.g. (02) 1234 5678)",
+															required: true,
+															admin: {
+																description:
+																	"The primary phone number displayed for SEO and services.",
+																width: "34%",
 															},
 														},
 													],
-												},
-												{
-													name: "phoneDisplay",
-													type: "text",
-													label: "Display Phone (e.g. (02) 1234 5678)",
-													required: true,
-													admin: {
-														description:
-															"The primary phone number displayed for SEO and services.",
-													},
 												},
 												{
 													name: "location",
@@ -198,30 +194,25 @@ export const CompanyInfo: GlobalConfig = {
 													label: "Physical Location",
 													fields: [
 														{
-															name: "streetAddress",
-															type: "text",
-															required: true,
-														},
-														{
 															type: "row",
 															fields: [
+																{
+																	name: "streetAddress",
+																	type: "text",
+																	required: true,
+																	admin: { width: "33%" },
+																},
 																{
 																	name: "city",
 																	type: "text",
 																	required: true,
-																	admin: { width: "50%" },
+																	admin: { width: "33%" },
 																},
 																{
 																	name: "state",
 																	type: "text",
 																	required: true,
-																	admin: { width: "25%" },
-																},
-																{
-																	name: "stateCode",
-																	type: "text",
-																	required: true,
-																	admin: { width: "25%" },
+																	admin: { width: "34%" },
 																},
 															],
 														},
@@ -229,22 +220,22 @@ export const CompanyInfo: GlobalConfig = {
 															type: "row",
 															fields: [
 																{
+																	name: "stateCode",
+																	type: "text",
+																	required: true,
+																	admin: { width: "33%" },
+																},
+																{
 																	name: "postalCode",
 																	type: "text",
 																	required: true,
-																	admin: { width: "50%" },
+																	admin: { width: "33%" },
 																},
 																{
 																	name: "country",
 																	type: "text",
 																	required: true,
-																	admin: { width: "25%" },
-																},
-																{
-																	name: "countryCode",
-																	type: "text",
-																	required: true,
-																	admin: { width: "25%" },
+																	admin: { width: "34%" },
 																},
 															],
 														},
@@ -252,16 +243,22 @@ export const CompanyInfo: GlobalConfig = {
 															type: "row",
 															fields: [
 																{
+																	name: "countryCode",
+																	type: "text",
+																	required: true,
+																	admin: { width: "33%" },
+																},
+																{
 																	name: "latitude",
 																	type: "text",
 																	required: true,
-																	admin: { width: "50%" },
+																	admin: { width: "33%" },
 																},
 																{
 																	name: "longitude",
 																	type: "text",
 																	required: true,
-																	admin: { width: "50%" },
+																	admin: { width: "34%" },
 																},
 															],
 														},

@@ -2,7 +2,6 @@ import type { CollectionConfig } from "payload";
 
 import { customLexical } from "@/lib/lexical-config";
 
-
 export const BlogPosts: CollectionConfig = {
 	slug: "blog-posts",
 	admin: {
@@ -43,13 +42,12 @@ export const BlogPosts: CollectionConfig = {
 								},
 								{
 									name: "category",
-									type: "select",
-									options: [
-										{ label: "Plumbing", value: "plumbing" },
-										{ label: "Tips", value: "tips" },
-										{ label: "News", value: "news" },
-									],
+									type: "relationship",
+									relationTo: "categories",
 									required: true,
+									filterOptions: {
+										appliesTo: { contains: "blogs" },
+									},
 									admin: {
 										width: "40%",
 									},
@@ -98,6 +96,9 @@ export const BlogPosts: CollectionConfig = {
 							type: "relationship",
 							relationTo: "tags",
 							hasMany: true,
+							filterOptions: {
+								appliesTo: { contains: "blogs" },
+							},
 							admin: {
 								description:
 									"Select tags or start typing to search/create new ones",

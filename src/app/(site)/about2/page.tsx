@@ -73,15 +73,15 @@ export default async function AboutPage() {
 		<>
 			<JsonLd data={jsonLd} />
 
-			<AboutHero />
+			{/* <AboutHero /> */}
 			<CompanyStory />
 			<OurValues />
 			<ServiceAreas companyInfo={companyInfo} />
 			<TrustStats />
-			<MeetTheTeam />
-			<Certifications />
+			{/* <MeetTheTeam /> */}
+			{/* <Certifications /> */}
 			{/* <ReviewSection /> */}
-			<FAQSection />
+			{/* <FAQSection /> */}
 		</>
 	);
 }

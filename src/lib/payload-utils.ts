@@ -1,4 +1,4 @@
-import type { Media } from "@/payload-types";
+import type { Media, Category, Tag } from "@/payload-types";
 
 /**
  * Safely extracts the URL from a Payload Media object or ID.
@@ -36,4 +36,42 @@ export function isMediaObject(media: unknown): media is Media {
 		"url" in media &&
 		typeof (media as Media).url === "string"
 	);
+}
+
+/**
+ * Safely extracts the category name from a Payload Category relationship.
+ * Handles both populated Category objects and unpopulated IDs.
+ */
+export function getCategoryName(
+	category: number | Category | null | undefined,
+	fallback = "Uncategorized",
+): string {
+	if (!category) return fallback;
+	if (typeof category === "number") return fallback; // Cannot get name from ID alone
+	return category.name || fallback;
+}
+
+/**
+ * Safely extracts the category slug from a Payload Category relationship.
+ * Handles both populated Category objects and unpopulated IDs.
+ */
+export function getCategorySlug(
+	category: number | Category | null | undefined,
+): string | null {
+	if (!category) return null;
+	if (typeof category === "number") return null;
+	return category.slug || null;
+}
+
+/**
+ * Safely extracts the tag name from a Payload Tag relationship.
+ * Handles both populated Tag objects and unpopulated IDs.
+ */
+export function getTagName(
+	tag: number | Tag | null | undefined,
+	fallback = "Tag",
+): string {
+	if (!tag) return fallback;
+	if (typeof tag === "number") return fallback; // Cannot get name from ID alone
+	return tag.name || fallback;
 }

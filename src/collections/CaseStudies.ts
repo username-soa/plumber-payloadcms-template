@@ -2,7 +2,6 @@ import type { CollectionConfig } from "payload";
 
 import { customLexical } from "@/lib/lexical-config";
 
-
 export const CaseStudies: CollectionConfig = {
 	slug: "case-studies",
 	admin: {
@@ -53,18 +52,17 @@ export const CaseStudies: CollectionConfig = {
 								},
 							],
 						},
-						// Row: Category + Service Type + Related Service
+						// Row: Category + Related Service
 						{
 							type: "row",
 							fields: [
 								{
 									name: "category",
-									type: "select",
-									options: [
-										{ label: "Residential", value: "residential" },
-										{ label: "Commercial", value: "commercial" },
-										{ label: "Emergency", value: "emergency" },
-									],
+									type: "relationship",
+									relationTo: "categories",
+									filterOptions: {
+										appliesTo: { contains: "case-studies" },
+									},
 									admin: {
 										width: "33%",
 									},
@@ -136,9 +134,9 @@ export const CaseStudies: CollectionConfig = {
 									},
 								},
 								{
-									name: "testimonial",
+									name: "review",
 									type: "relationship",
-									relationTo: "testimonials",
+									relationTo: "reviews",
 									admin: {
 										width: "40%",
 									},
@@ -150,6 +148,20 @@ export const CaseStudies: CollectionConfig = {
 							name: "content",
 							type: "richText",
 							editor: customLexical,
+						},
+						// Tags - relationship to Tags collection
+						{
+							name: "tags",
+							type: "relationship",
+							relationTo: "tags",
+							hasMany: true,
+							filterOptions: {
+								appliesTo: { contains: "case-studies" },
+							},
+							admin: {
+								description:
+									"Select tags for this case study to help with filtering and organization",
+							},
 						},
 						// Sidebar fields
 						{

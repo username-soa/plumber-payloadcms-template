@@ -70,7 +70,6 @@ export interface Config {
     users: User;
     media: Media;
     authors: Author;
-    testimonials: Testimonial;
     'blog-posts': BlogPost;
     'case-studies': CaseStudy;
     tags: Tag;
@@ -78,6 +77,8 @@ export interface Config {
     reviews: Review;
     pages: Page;
     faqs: Faq;
+    'team-members': TeamMember;
+    categories: Category;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -88,7 +89,6 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     authors: AuthorsSelect<false> | AuthorsSelect<true>;
-    testimonials: TestimonialsSelect<false> | TestimonialsSelect<true>;
     'blog-posts': BlogPostsSelect<false> | BlogPostsSelect<true>;
     'case-studies': CaseStudiesSelect<false> | CaseStudiesSelect<true>;
     tags: TagsSelect<false> | TagsSelect<true>;
@@ -96,6 +96,8 @@ export interface Config {
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     faqs: FaqsSelect<false> | FaqsSelect<true>;
+    'team-members': TeamMembersSelect<false> | TeamMembersSelect<true>;
+    categories: CategoriesSelect<false> | CategoriesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -228,27 +230,12 @@ export interface Author {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials".
- */
-export interface Testimonial {
-  id: number;
-  quote: string;
-  author: string;
-  role?: string | null;
-  company?: string | null;
-  rating: number;
-  avatar?: (number | null) | Media;
-  updatedAt: string;
-  createdAt: string;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "blog-posts".
  */
 export interface BlogPost {
   id: number;
   title: string;
-  category: 'plumbing' | 'tips' | 'news';
+  category: number | Category;
   featuredImage?: (number | null) | Media;
   /**
    * Enable to display this post prominently on the homepage or featured sections
@@ -294,6 +281,35 @@ export interface BlogPost {
   _status?: ('draft' | 'published') | null;
 }
 /**
+ * Manage categories for Blog Posts and Case Studies
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories".
+ */
+export interface Category {
+  id: number;
+  /**
+   * Display name for the category
+   */
+  name: string;
+  /**
+   * URL-friendly identifier (auto-generated from name if left empty)
+   */
+  slug: string;
+  /**
+   * Select which content types this category applies to. A category can apply to multiple content types.
+   */
+  appliesTo: ('blogs' | 'case-studies')[];
+  /**
+   * Optional description for this category
+   */
+  description?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Manage tags for Blog Posts and Case Studies
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "tags".
  */
@@ -303,6 +319,18 @@ export interface Tag {
    * The display name of the tag (e.g., 'Water Heater', 'DIY')
    */
   name: string;
+  /**
+   * URL-friendly identifier (auto-generated from name if left empty)
+   */
+  slug: string;
+  /**
+   * Select which content types this tag applies to. A tag can apply to multiple content types.
+   */
+  appliesTo: ('blogs' | 'case-studies')[];
+  /**
+   * Optional description for this tag
+   */
+  description?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -319,7 +347,7 @@ export interface CaseStudy {
   summary?: string | null;
   client?: string | null;
   location?: string | null;
-  category?: ('residential' | 'commercial' | 'emergency') | null;
+  category?: (number | null) | Category;
   /**
    * Select the primary service related to this case study
    */
@@ -335,7 +363,7 @@ export interface CaseStudy {
   completedAt?: string | null;
   featured?: boolean | null;
   featuredImage?: (number | null) | Media;
-  testimonial?: (number | null) | Testimonial;
+  review?: (number | null) | Review;
   content?: {
     root: {
       type: string;
@@ -351,6 +379,10 @@ export interface CaseStudy {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * Select tags for this case study to help with filtering and organization
+   */
+  tags?: (number | Tag)[] | null;
   slug?: string | null;
   meta?: {
     title?: string | null;
@@ -573,6 +605,93 @@ export interface Page {
         blockType: 'faq';
       }
     | ReviewBlock
+    | {
+        subtitle?: string | null;
+        title?: string | null;
+        /**
+         * Text to highlight in primary color
+         */
+        titleHighlight?: string | null;
+        description?: string | null;
+        certifications?:
+          | {
+              name: string;
+              description?: string | null;
+              icon?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'certifications';
+      }
+    | {
+        title?: string | null;
+        /**
+         * Text to highlight in the title (e.g. 'Water City Plumbing Experts')
+         */
+        titleHighlight?: string | null;
+        description?: string | null;
+        selectedMembers: (number | TeamMember)[];
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'team';
+      }
+    | {
+        /**
+         * The full main heading
+         */
+        title: string;
+        /**
+         * Text to highlight (must match exactly)
+         */
+        titleHighlight?: string | null;
+        /**
+         * Optional tagline like 'BY THE NUMBERS'
+         */
+        bottomText?: string | null;
+        cols?: ('3' | '4' | '6') | null;
+        backgroundColor?: ('transparent' | 'muted') | null;
+        stats?:
+          | {
+              /**
+               * e.g., '500+' or '99%'
+               */
+              value: string;
+              /**
+               * e.g., 'Projects Completed'
+               */
+              label: string;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'trustStats';
+      }
+    | TimelineBlock
+    | {
+        contentType: 'blogs' | 'case-studies' | 'services';
+        limit?: number | null;
+        itemsPerRow?: ('1' | '2' | '3' | '4') | null;
+        sortBy?: ('newest' | 'oldest' | 'titleAsc' | 'titleDesc') | null;
+        /**
+         * Only display items marked as featured
+         */
+        featuredOnly?: boolean | null;
+        /**
+         * Allow visitors to filter content by category, search, etc.
+         */
+        showFilters?: boolean | null;
+        /**
+         * Show a search input to filter by text
+         */
+        showSearch?: boolean | null;
+        paginationStyle?: ('none' | 'numbered' | 'loadMore' | 'infiniteScroll') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'contentFetcher';
+      }
   )[];
   hero: {
     type: 'default' | 'highImpact' | 'servicesHero' | 'minimal' | 'none';
@@ -674,7 +793,7 @@ export interface ReviewBlock {
   selectedReviews?: (number | Review)[] | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'reviewBlock';
+  blockType: 'reviewsSection';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -684,12 +803,61 @@ export interface Review {
   id: number;
   author: string;
   rating: number;
-  content: string;
   date: string;
   platform: 'google' | 'facebook' | 'yelp' | 'website' | 'other';
   avatar?: (number | null) | Media;
+  content: string;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members".
+ */
+export interface TeamMember {
+  id: number;
+  name: string;
+  role: string;
+  bio?: string | null;
+  image: number | Media;
+  certifications?:
+    | {
+        certification: string;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TimelineBlock".
+ */
+export interface TimelineBlock {
+  /**
+   * The main heading for the timeline section
+   */
+  title: string;
+  items?:
+    | {
+        /**
+         * The main heading for this timeline entry
+         */
+        title: string;
+        /**
+         * When this event occurred
+         */
+        date: string;
+        /**
+         * Detailed information about this timeline entry
+         */
+        description?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'timeline';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -728,10 +896,6 @@ export interface PayloadLockedDocument {
         value: number | Author;
       } | null)
     | ({
-        relationTo: 'testimonials';
-        value: number | Testimonial;
-      } | null)
-    | ({
         relationTo: 'blog-posts';
         value: number | BlogPost;
       } | null)
@@ -758,6 +922,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'faqs';
         value: number | Faq;
+      } | null)
+    | ({
+        relationTo: 'team-members';
+        value: number | TeamMember;
+      } | null)
+    | ({
+        relationTo: 'categories';
+        value: number | Category;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -891,20 +1063,6 @@ export interface AuthorsSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "testimonials_select".
- */
-export interface TestimonialsSelect<T extends boolean = true> {
-  quote?: T;
-  author?: T;
-  role?: T;
-  company?: T;
-  rating?: T;
-  avatar?: T;
-  updatedAt?: T;
-  createdAt?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "blog-posts_select".
  */
 export interface BlogPostsSelect<T extends boolean = true> {
@@ -946,8 +1104,9 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   completedAt?: T;
   featured?: T;
   featuredImage?: T;
-  testimonial?: T;
+  review?: T;
   content?: T;
+  tags?: T;
   slug?: T;
   meta?:
     | T
@@ -966,6 +1125,9 @@ export interface CaseStudiesSelect<T extends boolean = true> {
  */
 export interface TagsSelect<T extends boolean = true> {
   name?: T;
+  slug?: T;
+  appliesTo?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1061,10 +1223,10 @@ export interface ServicesSelect<T extends boolean = true> {
 export interface ReviewsSelect<T extends boolean = true> {
   author?: T;
   rating?: T;
-  content?: T;
   date?: T;
   platform?: T;
   avatar?: T;
+  content?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1136,7 +1298,68 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        reviewBlock?: T | ReviewBlockSelect<T>;
+        reviewsSection?: T | ReviewBlockSelect<T>;
+        certifications?:
+          | T
+          | {
+              subtitle?: T;
+              title?: T;
+              titleHighlight?: T;
+              description?: T;
+              certifications?:
+                | T
+                | {
+                    name?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              title?: T;
+              titleHighlight?: T;
+              description?: T;
+              selectedMembers?: T;
+              id?: T;
+              blockName?: T;
+            };
+        trustStats?:
+          | T
+          | {
+              title?: T;
+              titleHighlight?: T;
+              bottomText?: T;
+              cols?: T;
+              backgroundColor?: T;
+              stats?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        timeline?: T | TimelineBlockSelect<T>;
+        contentFetcher?:
+          | T
+          | {
+              contentType?: T;
+              limit?: T;
+              itemsPerRow?: T;
+              sortBy?: T;
+              featuredOnly?: T;
+              showFilters?: T;
+              showSearch?: T;
+              paginationStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   hero?:
     | T
@@ -1218,11 +1441,58 @@ export interface ReviewBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TimelineBlock_select".
+ */
+export interface TimelineBlockSelect<T extends boolean = true> {
+  title?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        date?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "faqs_select".
  */
 export interface FaqsSelect<T extends boolean = true> {
   question?: T;
   answer?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "team-members_select".
+ */
+export interface TeamMembersSelect<T extends boolean = true> {
+  name?: T;
+  role?: T;
+  bio?: T;
+  image?: T;
+  certifications?:
+    | T
+    | {
+        certification?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "categories_select".
+ */
+export interface CategoriesSelect<T extends boolean = true> {
+  name?: T;
+  slug?: T;
+  appliesTo?: T;
+  description?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1645,6 +1915,34 @@ export interface CompanyInfoSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "StepTimelineBlock".
+ */
+export interface StepTimelineBlock {
+  paddingTop?: boolean | null;
+  paddingBottom?: boolean | null;
+  items?:
+    | {
+        /**
+         * Small label shown above the heading
+         */
+        label?: string | null;
+        /**
+         * The main heading for this item
+         */
+        heading: string;
+        /**
+         * Detailed information for this item
+         */
+        content?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'stepTimeline';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
