@@ -235,20 +235,24 @@ export interface Author {
 export interface BlogPost {
   id: number;
   title: string;
+  slug?: string | null;
+  status: 'draft' | 'published';
+  publishedAt?: string | null;
+  author?: (number | null) | Author;
   category: number | Category;
-  featuredImage?: (number | null) | Media;
-  /**
-   * Enable to display this post prominently on the homepage or featured sections
-   */
-  featured?: boolean | null;
-  /**
-   * Brief summary for blog listing pages
-   */
-  summary?: string | null;
   /**
    * Select tags or start typing to search/create new ones
    */
   tags?: (number | Tag)[] | null;
+  /**
+   * Enable to display this post prominently on the homepage or featured sections
+   */
+  featured?: boolean | null;
+  featuredImage?: (number | null) | Media;
+  /**
+   * Brief summary for blog listing pages
+   */
+  summary?: string | null;
   content?: {
     root: {
       type: string;
@@ -264,10 +268,6 @@ export interface BlogPost {
     };
     [k: string]: unknown;
   } | null;
-  slug?: string | null;
-  status: 'draft' | 'published';
-  publishedAt?: string | null;
-  author?: (number | null) | Author;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -341,17 +341,14 @@ export interface Tag {
 export interface CaseStudy {
   id: number;
   title: string;
+  slug?: string | null;
+  completedAt?: string | null;
   /**
-   * Brief summary for case study listing pages
+   * Check this box to highlight this case study on the homepage
    */
-  summary?: string | null;
+  featured?: boolean | null;
   client?: string | null;
   location?: string | null;
-  category?: (number | null) | Category;
-  /**
-   * Select the primary service related to this case study
-   */
-  relatedService?: (number | null) | Service;
   /**
    * e.g. '$950'
    */
@@ -360,10 +357,21 @@ export interface CaseStudy {
    * e.g. '2 Hours'
    */
   duration?: string | null;
-  completedAt?: string | null;
-  featured?: boolean | null;
-  featuredImage?: (number | null) | Media;
+  /**
+   * Select the primary service related to this case study
+   */
+  relatedService?: (number | null) | Service;
+  /**
+   * Select tags for this case study to help with filtering and organization
+   */
+  tags?: (number | Tag)[] | null;
   review?: (number | null) | Review;
+  category?: (number | null) | Category;
+  /**
+   * Brief summary for case study listing pages
+   */
+  summary?: string | null;
+  featuredImage?: (number | null) | Media;
   content?: {
     root: {
       type: string;
@@ -379,11 +387,6 @@ export interface CaseStudy {
     };
     [k: string]: unknown;
   } | null;
-  /**
-   * Select tags for this case study to help with filtering and organization
-   */
-  tags?: (number | Tag)[] | null;
-  slug?: string | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -438,7 +441,18 @@ export interface Service {
                   relationTo: 'services';
                   value: number | Service;
                 } | null);
-            style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+            style?:
+              | (
+                  | 'primary'
+                  | 'secondary'
+                  | 'outline'
+                  | 'ghost'
+                  | 'destructive'
+                  | 'badge'
+                  | 'badge-pulsing'
+                  | 'primary-gradient-dots'
+                )
+              | null;
           };
           id?: string | null;
         }[]
@@ -483,20 +497,6 @@ export interface Service {
    */
   subServices?: (number | Service)[] | null;
   parentService?: (number | null) | Service;
-  process?:
-    | {
-        title: string;
-        description?: string | null;
-        id?: string | null;
-      }[]
-    | null;
-  faqs?:
-    | {
-        question: string;
-        answer: string;
-        id?: string | null;
-      }[]
-    | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -597,7 +597,18 @@ export interface Page {
                   relationTo: 'services';
                   value: number | Service;
                 } | null);
-            style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+            style?:
+              | (
+                  | 'primary'
+                  | 'secondary'
+                  | 'outline'
+                  | 'ghost'
+                  | 'destructive'
+                  | 'badge'
+                  | 'badge-pulsing'
+                  | 'primary-gradient-dots'
+                )
+              | null;
           };
         };
         id?: string | null;
@@ -692,6 +703,261 @@ export interface Page {
         blockName?: string | null;
         blockType: 'contentFetcher';
       }
+    | {
+        /**
+         * Small tag text displayed above the main title
+         */
+        tagTitle?: string | null;
+        mainTitle: string;
+        /**
+         * Text segment from the Main Title to highlight in primary color (case-sensitive)
+         */
+        highlightedText?: string | null;
+        description?: string | null;
+        links?:
+          | {
+              link: {
+                type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                label: string;
+                url?: string | null;
+                newTab?: boolean | null;
+                email?: string | null;
+                phoneNumber?: string | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'services';
+                      value: number | Service;
+                    } | null);
+                style?:
+                  | (
+                      | 'primary'
+                      | 'secondary'
+                      | 'outline'
+                      | 'ghost'
+                      | 'destructive'
+                      | 'badge'
+                      | 'badge-pulsing'
+                      | 'primary-gradient-dots'
+                    )
+                  | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        textAlign?: ('left' | 'center' | 'right') | null;
+        buttonsAlign?: ('left' | 'center' | 'right') | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'titleContent';
+      }
+    | {
+        textAlign?: ('left' | 'center' | 'right') | null;
+        columns?: ('1' | '2' | '3' | '4' | '5' | '6') | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        items?:
+          | {
+              image: number | Media;
+              title: string;
+              link?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'imagesGrid';
+      }
+    | {
+        columns?: ('1' | '2' | '3' | '4' | '5' | '6') | null;
+        cardLayout?: ('stacked' | 'sideBySide') | null;
+        /**
+         * If enabled, cards will show a shadow and primary color border on hover, and icons will turn primary color.
+         */
+        enableHighlight?: boolean | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        cards?:
+          | {
+              icon?: string | null;
+              title: string;
+              description?: string | null;
+              link?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'cardsGrid';
+      }
+    | {
+        title?: string | null;
+        headline?: string | null;
+        /**
+         * Text to be highlighted with primary color within the headline (if applicable)
+         */
+        highlightedHeadlineText?: string | null;
+        description?: string | null;
+        useGlobalServiceAreas?: boolean | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        customServiceAreas?:
+          | {
+              name: string;
+              id?: string | null;
+            }[]
+          | null;
+        /**
+         * Text displayed below the service areas grid.
+         */
+        bottomText?: string | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'serviceAreasBlock';
+      }
+    | {
+        tag?: string | null;
+        title: string;
+        /**
+         * Text to highlight within the Title. Case-sensitive.
+         */
+        highlightedText?: string | null;
+        description?: string | null;
+        /**
+         * Select a service to highlight as the emergency service (e.g. 24/7). This will appear first.
+         */
+        emergencyService?: (number | null) | Service;
+        selectedServices: (number | Service)[];
+        layout?: ('grid' | 'carousel') | null;
+        cta: {
+          type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+          label: string;
+          url?: string | null;
+          newTab?: boolean | null;
+          email?: string | null;
+          phoneNumber?: string | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: number | Page;
+              } | null)
+            | ({
+                relationTo: 'services';
+                value: number | Service;
+              } | null);
+          style?:
+            | (
+                | 'primary'
+                | 'secondary'
+                | 'outline'
+                | 'ghost'
+                | 'destructive'
+                | 'badge'
+                | 'badge-pulsing'
+                | 'primary-gradient-dots'
+              )
+            | null;
+        };
+        /**
+         * Legacy option. Prefer using the Call to Action field above.
+         */
+        linkToAllServices?: boolean | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'highlightedServices';
+      }
+    | {
+        textAlign?: ('left' | 'center' | 'right') | null;
+        textColor?: ('regular' | 'primary') | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        columns?: ('1' | '2' | '3' | '4' | '5' | '6') | null;
+        /**
+         * Show vertical and horizontal separators between items.
+         */
+        showSeparators?: boolean | null;
+        numberItems?:
+          | {
+              title: string;
+              subTitle?: string | null;
+              description?: string | null;
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'numbers';
+      }
+    | {
+        columns?:
+          | {
+              type?: ('content' | 'image') | null;
+              image?: (number | null) | Media;
+              richText?: {
+                root: {
+                  type: string;
+                  children: {
+                    type: any;
+                    version: number;
+                    [k: string]: unknown;
+                  }[];
+                  direction: ('ltr' | 'rtl') | null;
+                  format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                  indent: number;
+                  version: number;
+                };
+                [k: string]: unknown;
+              } | null;
+              links?:
+                | {
+                    link: {
+                      type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                      label: string;
+                      url?: string | null;
+                      newTab?: boolean | null;
+                      email?: string | null;
+                      phoneNumber?: string | null;
+                      reference?:
+                        | ({
+                            relationTo: 'pages';
+                            value: number | Page;
+                          } | null)
+                        | ({
+                            relationTo: 'services';
+                            value: number | Service;
+                          } | null);
+                      style?:
+                        | (
+                            | 'primary'
+                            | 'secondary'
+                            | 'outline'
+                            | 'ghost'
+                            | 'destructive'
+                            | 'badge'
+                            | 'badge-pulsing'
+                            | 'primary-gradient-dots'
+                          )
+                        | null;
+                    };
+                    id?: string | null;
+                  }[]
+                | null;
+              id?: string | null;
+            }[]
+          | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'dualColumn';
+      }
   )[];
   hero: {
     type: 'default' | 'highImpact' | 'servicesHero' | 'minimal' | 'none';
@@ -729,7 +995,18 @@ export interface Page {
                   relationTo: 'services';
                   value: number | Service;
                 } | null);
-            style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+            style?:
+              | (
+                  | 'primary'
+                  | 'secondary'
+                  | 'outline'
+                  | 'ghost'
+                  | 'destructive'
+                  | 'badge'
+                  | 'badge-pulsing'
+                  | 'primary-gradient-dots'
+                )
+              | null;
           };
           id?: string | null;
         }[]
@@ -1067,16 +1344,16 @@ export interface AuthorsSelect<T extends boolean = true> {
  */
 export interface BlogPostsSelect<T extends boolean = true> {
   title?: T;
-  category?: T;
-  featuredImage?: T;
-  featured?: T;
-  summary?: T;
-  tags?: T;
-  content?: T;
   slug?: T;
   status?: T;
   publishedAt?: T;
   author?: T;
+  category?: T;
+  tags?: T;
+  featured?: T;
+  featuredImage?: T;
+  summary?: T;
+  content?: T;
   meta?:
     | T
     | {
@@ -1094,20 +1371,20 @@ export interface BlogPostsSelect<T extends boolean = true> {
  */
 export interface CaseStudiesSelect<T extends boolean = true> {
   title?: T;
-  summary?: T;
-  client?: T;
-  location?: T;
-  category?: T;
-  relatedService?: T;
-  budget?: T;
-  duration?: T;
+  slug?: T;
   completedAt?: T;
   featured?: T;
-  featuredImage?: T;
-  review?: T;
-  content?: T;
+  client?: T;
+  location?: T;
+  budget?: T;
+  duration?: T;
+  relatedService?: T;
   tags?: T;
-  slug?: T;
+  review?: T;
+  category?: T;
+  summary?: T;
+  featuredImage?: T;
+  content?: T;
   meta?:
     | T
     | {
@@ -1192,20 +1469,6 @@ export interface ServicesSelect<T extends boolean = true> {
   availability?: T;
   subServices?: T;
   parentService?: T;
-  process?:
-    | T
-    | {
-        title?: T;
-        description?: T;
-        id?: T;
-      };
-  faqs?:
-    | T
-    | {
-        question?: T;
-        answer?: T;
-        id?: T;
-      };
   meta?:
     | T
     | {
@@ -1357,6 +1620,176 @@ export interface PagesSelect<T extends boolean = true> {
               showFilters?: T;
               showSearch?: T;
               paginationStyle?: T;
+              id?: T;
+              blockName?: T;
+            };
+        titleContent?:
+          | T
+          | {
+              tagTitle?: T;
+              mainTitle?: T;
+              highlightedText?: T;
+              description?: T;
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          label?: T;
+                          url?: T;
+                          newTab?: T;
+                          email?: T;
+                          phoneNumber?: T;
+                          reference?: T;
+                          style?: T;
+                        };
+                    id?: T;
+                  };
+              textAlign?: T;
+              buttonsAlign?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imagesGrid?:
+          | T
+          | {
+              textAlign?: T;
+              columns?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    link?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cardsGrid?:
+          | T
+          | {
+              columns?: T;
+              cardLayout?: T;
+              enableHighlight?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              cards?:
+                | T
+                | {
+                    icon?: T;
+                    title?: T;
+                    description?: T;
+                    link?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        serviceAreasBlock?:
+          | T
+          | {
+              title?: T;
+              headline?: T;
+              highlightedHeadlineText?: T;
+              description?: T;
+              useGlobalServiceAreas?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              customServiceAreas?:
+                | T
+                | {
+                    name?: T;
+                    id?: T;
+                  };
+              bottomText?: T;
+              id?: T;
+              blockName?: T;
+            };
+        highlightedServices?:
+          | T
+          | {
+              tag?: T;
+              title?: T;
+              highlightedText?: T;
+              description?: T;
+              emergencyService?: T;
+              selectedServices?: T;
+              layout?: T;
+              cta?:
+                | T
+                | {
+                    type?: T;
+                    label?: T;
+                    url?: T;
+                    newTab?: T;
+                    email?: T;
+                    phoneNumber?: T;
+                    reference?: T;
+                    style?: T;
+                  };
+              linkToAllServices?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        numbers?:
+          | T
+          | {
+              textAlign?: T;
+              textColor?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              columns?: T;
+              showSeparators?: T;
+              numberItems?:
+                | T
+                | {
+                    title?: T;
+                    subTitle?: T;
+                    description?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        dualColumn?:
+          | T
+          | {
+              columns?:
+                | T
+                | {
+                    type?: T;
+                    image?: T;
+                    richText?: T;
+                    links?:
+                      | T
+                      | {
+                          link?:
+                            | T
+                            | {
+                                type?: T;
+                                label?: T;
+                                url?: T;
+                                newTab?: T;
+                                email?: T;
+                                phoneNumber?: T;
+                                reference?: T;
+                                style?: T;
+                              };
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -1559,7 +1992,18 @@ export interface Header {
             relationTo: 'services';
             value: number | Service;
           } | null);
-      style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+      style?:
+        | (
+            | 'primary'
+            | 'secondary'
+            | 'outline'
+            | 'ghost'
+            | 'destructive'
+            | 'badge'
+            | 'badge-pulsing'
+            | 'primary-gradient-dots'
+          )
+        | null;
     };
     id?: string | null;
   }[];
@@ -1593,7 +2037,18 @@ export interface Footer {
                   relationTo: 'services';
                   value: number | Service;
                 } | null);
-            style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+            style?:
+              | (
+                  | 'primary'
+                  | 'secondary'
+                  | 'outline'
+                  | 'ghost'
+                  | 'destructive'
+                  | 'badge'
+                  | 'badge-pulsing'
+                  | 'primary-gradient-dots'
+                )
+              | null;
           };
           id?: string | null;
         }[]
@@ -1617,7 +2072,18 @@ export interface Footer {
                 relationTo: 'services';
                 value: number | Service;
               } | null);
-          style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+          style?:
+            | (
+                | 'primary'
+                | 'secondary'
+                | 'outline'
+                | 'ghost'
+                | 'destructive'
+                | 'badge'
+                | 'badge-pulsing'
+                | 'primary-gradient-dots'
+              )
+            | null;
         };
         id?: string | null;
       }[]
@@ -1644,7 +2110,18 @@ export interface Footer {
                 relationTo: 'services';
                 value: number | Service;
               } | null);
-          style?: ('primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'badge' | 'badge-pulsing') | null;
+          style?:
+            | (
+                | 'primary'
+                | 'secondary'
+                | 'outline'
+                | 'ghost'
+                | 'destructive'
+                | 'badge'
+                | 'badge-pulsing'
+                | 'primary-gradient-dots'
+              )
+            | null;
         };
         id?: string | null;
       }[]

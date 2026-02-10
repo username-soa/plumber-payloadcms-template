@@ -17,6 +17,14 @@ import { TeamBlock } from "@/blocks/TeamBlock";
 import { TrustStatsBlock } from "@/blocks/TrustStatsBlock";
 import { TimelineBlock } from "@/blocks/TimelineBlock";
 import { ContentFetcherBlock } from "@/blocks/ContentFetcherBlock";
+import { TitleContentBlock } from "@/blocks/TitleContentBlock";
+
+import { ImagesGridBlock } from "@/blocks/ImagesGridBlock";
+import { CardsGridBlock } from "@/blocks/CardsGridBlock";
+import { ServiceAreasBlock } from "@/blocks/ServiceAreasBlock";
+import { HighlightedServicesBlock } from "@/blocks/HighlightedServicesBlock";
+import { NumbersBlock } from "@/blocks/NumbersBlock";
+import { DualColumnBlock } from "@/blocks/DualColumnBlock";
 import { populateLegalContact } from "@/hooks/populateLegalContact";
 import { hero } from "../fields/hero";
 
@@ -126,6 +134,14 @@ export const Pages: CollectionConfig = {
 								TrustStatsBlock,
 								TimelineBlock,
 								ContentFetcherBlock,
+								TitleContentBlock,
+
+								ImagesGridBlock,
+								CardsGridBlock,
+								ServiceAreasBlock,
+								HighlightedServicesBlock,
+								NumbersBlock,
+								DualColumnBlock,
 							],
 						},
 					],

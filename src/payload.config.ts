@@ -24,6 +24,7 @@ import { Categories } from "./collections/Categories";
 import { Header } from "./globals/Header";
 import { Footer } from "./globals/Footer";
 import { CompanyInfo } from "./globals/CompanyInfo";
+import { CustomColorFeature } from "./components/richtext/features/custom-color/CustomColorFeature";
 
 const filename = fileURLToPath(import.meta.url);
 const dirname = path.dirname(filename);
@@ -63,7 +64,17 @@ export default buildConfig({
 	},
 
 	// Rich text editor configuration
-	editor: lexicalEditor({}),
+	editor: lexicalEditor({
+		features: ({ defaultFeatures }) => {
+			console.log("Registering Lexical features...");
+			const features = [
+				...defaultFeatures,
+				CustomColorFeature(),
+			];
+			console.log("Feature keys:", features.map(f => f.key));
+			return features;
+		},
+	}),
 
 	// Database adapter - SQLite for development, PostgreSQL for production
 	db: process.env.DATABASE_URL
@@ -71,6 +82,7 @@ export default buildConfig({
 				pool: {
 					connectionString: process.env.DATABASE_URL,
 				},
+				push: false,
 			})
 		: sqliteAdapter({
 				client: {
@@ -103,11 +115,11 @@ export default buildConfig({
 			},
 		}),
 		seoPlugin({
-			collections: ["blog-posts", "case-studies"],
+			collections: [],
 			uploadsCollection: "media",
 			generateTitle: ({ doc }) => `FlowMasters | ${doc.title}`,
 			generateDescription: ({ doc }) => doc.description || doc.excerpt,
-			tabbedUI: true,
+			tabbedUI: false,
 		}),
 	],
 });

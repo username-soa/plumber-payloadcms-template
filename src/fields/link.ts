@@ -89,6 +89,7 @@ export const link = ({
 					{ label: "Destructive", value: "destructive" },
 					{ label: "Badge", value: "badge" },
 					{ label: "Badge (Pulsing)", value: "badge-pulsing" },
+					{ label: "Primary Gradient Dots", value: "primary-gradient-dots" },
 				],
 			},
 		],

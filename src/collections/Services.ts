@@ -126,39 +126,6 @@ export const Services: CollectionConfig = {
 								position: "sidebar",
 							},
 						},
-						{
-							name: "process",
-							type: "array",
-							label: "Workflow",
-							fields: [
-								{
-									name: "title",
-									type: "text",
-									required: true,
-								},
-								{
-									name: "description",
-									type: "textarea",
-								},
-							],
-						},
-						{
-							name: "faqs",
-							type: "array",
-							label: "FAQs",
-							fields: [
-								{
-									name: "question",
-									type: "text",
-									required: true,
-								},
-								{
-									name: "answer",
-									type: "textarea",
-									required: true,
-								},
-							],
-						},
 					],
 				},
 				{

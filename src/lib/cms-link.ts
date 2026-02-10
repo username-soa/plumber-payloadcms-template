@@ -21,6 +21,7 @@ export type CMSLinkType = {
 		| "destructive"
 		| "badge"
 		| "badge-pulsing"
+		| "primary-gradient-dots"
 		| null;
 };
 

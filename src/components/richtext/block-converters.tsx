@@ -7,10 +7,15 @@ import type {
 import type { JSXConvertersFunction } from "@payloadcms/richtext-lexical/react";
 import type { Media } from "@/payload-types";
 import { cn } from "@/lib/utils";
+import { RICH_TEXT_COLORS, type RichTextColor } from "@/lib/rich-text-colors";
 import { BeforeAfter } from "@/components/blocks/before-after";
 import { Callout } from "@/components/blocks/callout";
 import { CTA } from "@/components/blocks/cta";
 import { ImageGallery } from "@/components/blocks/image-gallery";
+
+import { FeatureListBlock } from "@/components/blocks/feature-list-block";
+import { WorkflowStepBlock } from "@/components/blocks/workflow-step-block";
+import { SimpleStatsBlock } from "@/components/blocks/simple-stats-block";
 
 import { ServiceLink } from "@/components/blocks/service-link";
 import { StatsRow } from "@/components/blocks/stats-row";
@@ -172,6 +177,23 @@ interface TableBlock {
 	bordered?: boolean;
 }
 
+interface FeatureListBlockType {
+	blockType: "featureList";
+	features: { icon?: string; text: string }[];
+}
+
+interface WorkflowStepBlockType {
+	blockType: "workflowStep";
+	stepNumber: number;
+	title: string;
+	description?: string;
+}
+
+interface SimpleStatsBlockType {
+	blockType: "simpleStats";
+	stats: { value: string; label: string }[];
+}
+
 type CustomBlocks =
 	| CalloutBlock
 	| StepTimelineBlock
@@ -184,7 +206,11 @@ type CustomBlocks =
 	| CTABlock
 	| ImageGalleryBlock
 	| SpacingBlock
-	| TableBlock;
+	| SpacingBlock
+	| TableBlock
+	| FeatureListBlockType
+	| WorkflowStepBlockType
+	| SimpleStatsBlockType;
 
 type NodeTypes = DefaultNodeTypes | SerializedBlockNode<CustomBlocks>;
 
@@ -503,11 +529,53 @@ function TableRenderer({ node }: { node: SerializedBlockNode<TableBlock> }) {
 	);
 }
 
+const formatStyle = (style: string): React.CSSProperties => {
+	if (!style) return {};
+	return style.split(";").reduce((acc, rule) => {
+		const [key, value] = rule.split(":");
+		if (key && value) {
+			const camelKey = key
+				.trim()
+				.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
+			// eslint-disable-next-line @typescript-eslint/no-explicit-any
+			(acc as any)[camelKey] = value.trim();
+		}
+		return acc;
+	}, {});
+};
+
 // Export the converters function
 export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 	defaultConverters,
 }) => ({
 	...defaultConverters,
+	text: ({ node }) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		const anyNode = node as any;
+		const style = anyNode.style;
+		const metadata = anyNode.$;
+
+		let combinedStyle: React.CSSProperties = {};
+
+		if (style) {
+			combinedStyle = { ...combinedStyle, ...formatStyle(style) };
+		}
+
+		if (metadata && metadata.color) {
+			const colorKey = metadata.color as RichTextColor;
+			if (RICH_TEXT_COLORS[colorKey]) {
+				combinedStyle = {
+					...combinedStyle,
+					...RICH_TEXT_COLORS[colorKey].css, // { color: "#..." }
+				};
+			}
+		}
+
+		if (Object.keys(combinedStyle).length > 0) {
+			return <span style={combinedStyle}>{node.text}</span>;
+		}
+		return <>{node.text}</>;
+	},
 	heading: ({ node, nodesToJSX }) => {
 		const tag = node.tag;
 		const children = nodesToJSX({ nodes: node.children });
@@ -642,6 +710,13 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 		),
 		table: ({ node }) => (
 			<TableRenderer node={node as SerializedBlockNode<TableBlock>} />
+		),
+		featureList: ({ node }) => (
+			<FeatureListBlock features={(node.fields as any).features} />
+		),
+		workflowStep: ({ node }) => <WorkflowStepBlock {...(node.fields as any)} />,
+		simpleStats: ({ node }) => (
+			<SimpleStatsBlock stats={(node.fields as any).stats} />
 		),
 	},
 });

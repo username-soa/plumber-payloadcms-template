@@ -48,11 +48,11 @@ export function RelatedServices({ services }: RelatedServicesProps) {
 									<DynamicIcon name={service.icon} className="w-5 h-5" />
 								</div>
 
-								<h4 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors">
+								<h4 className="font-bold text-lg mb-2 group-hover:text-primary transition-colors capitalize">
 									{service.title}
 								</h4>
 
-								<p className="text-muted-foreground text-sm line-clamp-2">
+								<p className="text-muted-foreground text-sm line-clamp-2 capitalize">
 									{service.description}
 								</p>
 							</Link>

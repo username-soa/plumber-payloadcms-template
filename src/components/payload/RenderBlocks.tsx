@@ -10,6 +10,13 @@ import { Team } from "@/components/blocks/team";
 import { TrustStats } from "@/components/blocks/trust-stats";
 import { Timeline } from "@/components/blocks/timeline";
 import { ContentFetcher } from "@/components/blocks/content-fetcher";
+import { TitleContentBlock } from "@/components/blocks/title-content-block";
+import { NumbersBlock } from "@/components/blocks/numbers-block";
+import { ImagesGridBlock } from "@/components/blocks/images-grid-block";
+import { CardsGridBlock } from "@/components/blocks/cards-grid-block";
+import { ServiceAreasBlockComponent } from "@/components/blocks/service-areas-block";
+import { HighlightedServicesBlockComponent } from "@/components/blocks/highlighted-services-block";
+import { DualColumnBlock } from "@/components/blocks/dual-column-block";
 
 interface RenderBlocksProps {
 	layout: Page["layout"];
@@ -76,6 +83,27 @@ export function RenderBlocks({
 								searchParams={searchParams}
 							/>
 						);
+					case "titleContent":
+						// @ts-ignore
+						return <TitleContentBlock key={key} {...block} />;
+					case "numbers":
+						// @ts-ignore
+						return <NumbersBlock key={key} {...block} />;
+					case "imagesGrid":
+						// @ts-ignore
+						return <ImagesGridBlock key={key} {...block} />;
+					case "cardsGrid":
+						// @ts-ignore
+						return <CardsGridBlock key={key} {...block} />;
+					case "serviceAreasBlock":
+						// @ts-ignore
+						return <ServiceAreasBlockComponent key={key} {...block} />;
+					case "highlightedServices":
+						// @ts-ignore
+						return <HighlightedServicesBlockComponent key={key} {...block} />;
+					case "dualColumn":
+						// @ts-ignore
+						return <DualColumnBlock key={key} {...block} />;
 					default:
 						// Fallback for unknown blocks or standard blocks if needed
 						return null;
