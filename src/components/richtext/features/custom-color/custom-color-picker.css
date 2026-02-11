@@ -1,0 +1,91 @@
+/* Custom Color Picker – trigger button */
+.custom-color-trigger {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	border: none;
+	background: transparent;
+	border-radius: 4px;
+	cursor: pointer;
+	color: inherit;
+}
+
+.custom-color-trigger:hover {
+	background: var(--theme-elevation-100);
+}
+
+/* ── Portal container ─────────────────────────────── */
+.ccp-portal {
+	border-radius: 8px;
+	box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+	background: var(--theme-elevation-100); /* Theme card background */
+	color: var(--theme-elevation-800); /* Theme text color */
+	border: 1px solid var(--theme-elevation-200); /* Theme border */
+	overflow: hidden;
+}
+
+/* ── Force Sketch Picker Theming ───────────────────── */
+/* Root container */
+.ccp-portal .w-color-sketch {
+	background: transparent !important;
+	box-shadow: none !important;
+	border-radius: 0 !important;
+	color: inherit !important;
+}
+
+/* Inputs (Hex, RGB, etc.) */
+.ccp-portal input {
+	background: var(--theme-elevation-50) !important;
+	color: var(--theme-elevation-800) !important;
+	border: 1px solid var(--theme-elevation-200) !important;
+	box-shadow: none !important;
+}
+
+/* Labels (Hex, R, G, B labels) */
+.ccp-portal label {
+	color: var(--theme-elevation-800) !important;
+}
+
+/* ── Remove Color Button ──────────────────────────── */
+.ccp-remove-color-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	padding: 8px 12px;
+	border: none;
+	border-top: 1px solid var(--theme-elevation-200);
+	background: var(--theme-elevation-100);
+	color: var(--theme-elevation-500);
+	font-size: 13px;
+	font-weight: 500;
+	cursor: pointer;
+	gap: 8px; /* User preferred gap */
+	transition: all 0.2s ease;
+}
+
+.ccp-remove-color-btn:hover {
+	background: var(--theme-elevation-150);
+	color: var(--error-500); /* Payload error red */
+}
+
+/* Fallback for error red if variable missing */
+@supports not (color: var(--error-500)) {
+	.ccp-remove-color-btn:hover {
+		color: #e11d48;
+	}
+}
+
+.ccp-remove-color-btn svg {
+	width: 16px; /* User preferred size */
+	height: 16px;
+	opacity: 0.7;
+	stroke: currentColor;
+}
+
+.ccp-remove-color-btn:hover svg {
+	opacity: 1;
+}

@@ -1,10 +1,15 @@
 "use client";
 import { createClientFeature } from "@payloadcms/richtext-lexical/client";
 import { CustomColorPicker } from "./CustomColorPicker";
-
-console.log("Loading CustomColorFeatureClient...");
+import { CustomColorPlugin } from "./CustomColorPlugin";
 
 export const CustomColorFeatureClient = createClientFeature({
+	plugins: [
+		{
+			Component: CustomColorPlugin,
+			position: "normal", // Rendered as a normal plugin in the editor
+		},
+	],
 	toolbarFixed: {
 		groups: [
 			{
@@ -35,5 +40,4 @@ export const CustomColorFeatureClient = createClientFeature({
 			},
 		],
 	},
-
 });

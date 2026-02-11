@@ -7,7 +7,7 @@ import type {
 import type { JSXConvertersFunction } from "@payloadcms/richtext-lexical/react";
 import type { Media } from "@/payload-types";
 import { cn } from "@/lib/utils";
-import { RICH_TEXT_COLORS, type RichTextColor } from "@/lib/rich-text-colors";
+
 import { BeforeAfter } from "@/components/blocks/before-after";
 import { Callout } from "@/components/blocks/callout";
 import { CTA } from "@/components/blocks/cta";
@@ -553,22 +553,11 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const anyNode = node as any;
 		const style = anyNode.style;
-		const metadata = anyNode.$;
 
 		let combinedStyle: React.CSSProperties = {};
 
 		if (style) {
 			combinedStyle = { ...combinedStyle, ...formatStyle(style) };
-		}
-
-		if (metadata && metadata.color) {
-			const colorKey = metadata.color as RichTextColor;
-			if (RICH_TEXT_COLORS[colorKey]) {
-				combinedStyle = {
-					...combinedStyle,
-					...RICH_TEXT_COLORS[colorKey].css, // { color: "#..." }
-				};
-			}
 		}
 
 		if (Object.keys(combinedStyle).length > 0) {

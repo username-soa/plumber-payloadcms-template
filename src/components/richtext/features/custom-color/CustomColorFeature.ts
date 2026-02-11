@@ -7,5 +7,3 @@ export const CustomColorFeature = createServerFeature({
 	},
 	key: "custom-color",
 });
-
-console.log("CustomColorFeature loaded/initialized");

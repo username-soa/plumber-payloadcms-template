@@ -42,7 +42,6 @@ import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c08
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { IconPicker as IconPicker_7cc4ab20ce4622826a55342170d51be7 } from '@/components/payload/IconPicker'
 import { CustomColorFeatureClient as CustomColorFeatureClient_b83ad90ea9134ea5eaa80a2a49485dd9 } from '@/components/richtext/features/custom-color/CustomColorFeatureClient'
-import { TextStateFeatureClient as TextStateFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { S3ClientUploadHandler as S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24 } from '@payloadcms/storage-s3/client'
 import { CollectionCards as CollectionCards_ab83ff7e88da8d3530831f296ec4756a } from '@payloadcms/ui/rsc'
 
@@ -91,7 +90,6 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@/components/payload/IconPicker#IconPicker": IconPicker_7cc4ab20ce4622826a55342170d51be7,
   "@/components/richtext/features/custom-color/CustomColorFeatureClient#CustomColorFeatureClient": CustomColorFeatureClient_b83ad90ea9134ea5eaa80a2a49485dd9,
-  "@payloadcms/richtext-lexical/client#TextStateFeatureClient": TextStateFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/storage-s3/client#S3ClientUploadHandler": S3ClientUploadHandler_f97aa6c64367fa259c5bc0567239ef24,
   "@payloadcms/ui/rsc#CollectionCards": CollectionCards_ab83ff7e88da8d3530831f296ec4756a
 }

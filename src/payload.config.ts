@@ -66,12 +66,7 @@ export default buildConfig({
 	// Rich text editor configuration
 	editor: lexicalEditor({
 		features: ({ defaultFeatures }) => {
-			console.log("Registering Lexical features...");
-			const features = [
-				...defaultFeatures,
-				CustomColorFeature(),
-			];
-			console.log("Feature keys:", features.map(f => f.key));
+			const features = [...defaultFeatures, CustomColorFeature()];
 			return features;
 		},
 	}),

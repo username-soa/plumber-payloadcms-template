@@ -1,16 +1,10 @@
 import type { Block } from "payload";
-import {
-	lexicalEditor,
-	BlocksFeature,
-	FixedToolbarFeature,
-	InlineToolbarFeature,
-	TextStateFeature,
-} from "@payloadcms/richtext-lexical";
+import { lexicalEditor, BlocksFeature } from "@payloadcms/richtext-lexical";
 import { FeatureListBlock } from "./FeatureListBlock";
 import { WorkflowStepBlock } from "./WorkflowStepBlock";
 import { SimpleStatsBlock } from "./SimpleStatsBlock";
 import { link } from "@/fields/link";
-import { RICH_TEXT_COLORS } from "@/lib/rich-text-colors";
+
 import { CustomColorFeature } from "@/components/richtext/features/custom-color/CustomColorFeature";
 
 export const DualColumnBlock: Block = {
@@ -62,11 +56,6 @@ export const DualColumnBlock: Block = {
 							...defaultFeatures,
 							BlocksFeature({
 								blocks: [FeatureListBlock, WorkflowStepBlock, SimpleStatsBlock],
-							}),
-							TextStateFeature({
-								state: {
-									color: RICH_TEXT_COLORS,
-								},
 							}),
 						],
 					}),
