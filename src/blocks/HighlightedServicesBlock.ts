@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 import { link } from "@/fields/link";
 
@@ -9,6 +10,7 @@ export const HighlightedServicesBlock: Block = {
 		plural: "Highlighted Services Blocks",
 	},
 	fields: [
+		background,
 		{
 			name: "tag",
 			type: "text",

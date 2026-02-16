@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const YouTubeEmbedBlock: Block = {
 	slug: "youtubeEmbed",
@@ -15,6 +16,7 @@ export const YouTubeEmbedBlock: Block = {
 		},
 	},
 	fields: [
+		background,
 		{
 			name: "blockDescription",
 			type: "ui",

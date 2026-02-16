@@ -6,7 +6,12 @@ import type { PaddingOption } from "../ui/section-wrapper";
 import Link from "next/link";
 import Image from "next/image";
 
-type Props = Extract<Page["layout"][0], { blockType: "imagesGrid" }>;
+type Props = Extract<Page["layout"][0], { blockType: "imagesGrid" }> & {
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
+};
 
 export const ImagesGridBlock: FC<Props> = ({
 	textAlign = "left",
@@ -14,6 +19,7 @@ export const ImagesGridBlock: FC<Props> = ({
 	paddingBottomOption = "default",
 	columns = 3,
 	items,
+	background,
 }) => {
 	const alignmentClasses = {
 		left: "text-left items-start",
@@ -34,6 +40,7 @@ export const ImagesGridBlock: FC<Props> = ({
 		<SectionWrapper
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}
+			background={background}
 		>
 			<div className="container mx-auto">
 				{items && items.length > 0 && (

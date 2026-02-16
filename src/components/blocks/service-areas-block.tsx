@@ -23,6 +23,10 @@ interface ServiceAreasProps {
 	bottomText?: string;
 	paddingTopOption?: "none" | "small" | "default" | "big";
 	paddingBottomOption?: "none" | "small" | "default" | "big";
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 }
 
 export async function ServiceAreasBlockComponent(props: ServiceAreasProps) {
@@ -36,6 +40,7 @@ export async function ServiceAreasBlockComponent(props: ServiceAreasProps) {
 		bottomText,
 		paddingTopOption = "default",
 		paddingBottomOption = "default",
+		background,
 	} = props;
 
 	let serviceAreas: string[] = [];
@@ -77,7 +82,8 @@ export async function ServiceAreasBlockComponent(props: ServiceAreasProps) {
 		<SectionWrapper
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}
-			className="bg-muted/30"
+			// className="bg-muted/30" // Removed to allow background prop to control
+			background={background}
 		>
 			<div className="text-center max-w-2xl mx-auto mb-12">
 				{title && (

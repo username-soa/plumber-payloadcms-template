@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const CardsGridBlock: Block = {
 	slug: "cardsGrid",
@@ -7,6 +8,7 @@ export const CardsGridBlock: Block = {
 		plural: "Cards Grids",
 	},
 	fields: [
+		background,
 		{
 			type: "row",
 			fields: [

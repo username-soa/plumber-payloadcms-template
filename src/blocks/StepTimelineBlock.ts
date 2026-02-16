@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const StepTimelineBlock: Block = {
 	slug: "stepTimeline",
@@ -8,6 +9,7 @@ export const StepTimelineBlock: Block = {
 		plural: "Step Timelines",
 	},
 	fields: [
+		background,
 		{
 			name: "blockDescription",
 			type: "ui",

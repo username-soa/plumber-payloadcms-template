@@ -1,4 +1,5 @@
 import { Block } from "payload";
+import { background } from "@/fields/background";
 import { lexicalEditor, BlocksFeature } from "@payloadcms/richtext-lexical";
 import { FeatureListBlock } from "./FeatureListBlock";
 import { WorkflowStepBlock } from "./WorkflowStepBlock";
@@ -15,6 +16,7 @@ export const FormBlock: Block = {
 		singularName: "FormBlock",
 	},
 	fields: [
+		background,
 		{
 			name: "form",
 			type: "relationship",

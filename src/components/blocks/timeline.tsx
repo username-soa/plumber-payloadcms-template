@@ -4,6 +4,10 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { TypographyH3 } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
+import {
+	SectionWrapper,
+	type PaddingOption,
+} from "@/components/ui/section-wrapper";
 
 interface TimelineItem {
 	title: string;
@@ -16,9 +20,22 @@ interface TimelineProps {
 	title?: string;
 	items?: TimelineItem[] | null;
 	className?: string;
+	paddingTopOption?: string | null;
+	paddingBottomOption?: string | null;
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 }
 
-export function Timeline({ title, items, className }: TimelineProps) {
+export function Timeline({
+	title,
+	items,
+	className,
+	paddingTopOption,
+	paddingBottomOption,
+	background,
+}: TimelineProps) {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	// Track scroll progress of the timeline container relative to viewport
@@ -33,7 +50,12 @@ export function Timeline({ title, items, className }: TimelineProps) {
 	if (!items || items.length === 0) return null;
 
 	return (
-		<div className={cn("container mx-auto px-6 py-20 ", className)}>
+		<SectionWrapper
+			className={className}
+			paddingTop={paddingTopOption as PaddingOption}
+			paddingBottom={paddingBottomOption as PaddingOption}
+			background={background}
+		>
 			{title && (
 				<div className="text-center mb-12">
 					<TypographyH3 className="text-2xl md:text-3xl font-bold">
@@ -142,6 +164,6 @@ export function Timeline({ title, items, className }: TimelineProps) {
 					)}
 				</div>
 			</div>
-		</div>
+		</SectionWrapper>
 	);
 }

@@ -4,7 +4,12 @@ import type { Page } from "@/payload-types";
 import { SectionWrapper } from "../ui/section-wrapper";
 import type { PaddingOption } from "../ui/section-wrapper";
 
-type Props = Extract<Page["layout"][0], { blockType: "numbers" }>;
+type Props = Extract<Page["layout"][0], { blockType: "numbers" }> & {
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
+};
 
 export const NumbersBlock: React.FC<Props> = ({
 	textAlign = "left",
@@ -14,6 +19,7 @@ export const NumbersBlock: React.FC<Props> = ({
 	columns = 3,
 	showSeparators = true,
 	numberItems,
+	background,
 }) => {
 	const alignmentClasses = {
 		left: "text-left items-start",
@@ -34,6 +40,7 @@ export const NumbersBlock: React.FC<Props> = ({
 		<SectionWrapper
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}
+			background={background}
 		>
 			<div className="container mx-auto">
 				{/* Items Grid */}

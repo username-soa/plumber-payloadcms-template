@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const FeatureListBlock: Block = {
 	slug: "featureList",
@@ -7,6 +8,7 @@ export const FeatureListBlock: Block = {
 		plural: "Feature Lists",
 	},
 	fields: [
+		background,
 		{
 			name: "layout",
 			type: "select",

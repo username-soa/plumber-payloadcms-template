@@ -39,6 +39,10 @@ import { PaginationNumbered } from "./pagination-numbered";
 import { LoadMoreButton } from "./load-more-button";
 import { InfiniteScroll } from "./infinite-scroll";
 import { cn } from "@/lib/utils";
+import {
+	SectionWrapper,
+	type PaddingOption,
+} from "@/components/ui/section-wrapper";
 
 // Re-export for backwards compatibility
 export type { CategoryOption, TagOption } from "@/lib/content";
@@ -60,11 +64,15 @@ interface ContentFetcherProps {
 	showSearch?: boolean | null;
 	paginationStyle?: PaginationStyle | null;
 	searchParams?: SearchParams;
+	paddingTopOption?: string | null;
+	paddingBottomOption?: string | null;
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 }
 
-// =============================================================================
-// Type Guards
-// =============================================================================
+// ... Type Guards and Error Component are unchanged ...
 
 function isBlogPost(item: ContentItem): item is BlogPost {
 	return "publishedAt" in item && "status" in item;
@@ -148,6 +156,9 @@ export async function ContentFetcher({
 	showSearch = false,
 	paginationStyle = "none",
 	searchParams = {},
+	paddingTopOption,
+	paddingBottomOption,
+	background,
 }: ContentFetcherProps) {
 	try {
 		const payload = await getPayload({ config });
@@ -184,11 +195,11 @@ export async function ContentFetcher({
 		});
 
 		return (
-			<section
-				className={cn(
-					"py-8 md:py-14",
-					contentType !== "services" && "bg-muted/30",
-				)}
+			<SectionWrapper
+				className={cn(contentType !== "services" && "bg-muted/30")}
+				paddingTop={paddingTopOption as PaddingOption}
+				paddingBottom={paddingBottomOption as PaddingOption}
+				background={background}
 			>
 				<div className="container mx-auto px-6">
 					<FilterSection
@@ -215,7 +226,7 @@ export async function ContentFetcher({
 						<InfiniteScroll totalPages={totalPages} totalItems={totalDocs} />
 					)}
 				</div>
-			</section>
+			</SectionWrapper>
 		);
 	} catch (error) {
 		console.error("ContentFetcher error:", error);

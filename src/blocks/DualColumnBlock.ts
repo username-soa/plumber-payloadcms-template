@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 import { lexicalEditor, BlocksFeature } from "@payloadcms/richtext-lexical";
 import { FeatureListBlock } from "./FeatureListBlock";
 import { WorkflowStepBlock } from "./WorkflowStepBlock";
@@ -14,6 +15,7 @@ export const DualColumnBlock: Block = {
 		plural: "Dual Columns",
 	},
 	fields: [
+		background,
 		{
 			name: "columns",
 			type: "array",

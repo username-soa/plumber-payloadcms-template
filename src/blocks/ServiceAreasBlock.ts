@@ -1,4 +1,5 @@
 import { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const ServiceAreasBlock: Block = {
 	slug: "serviceAreasBlock", // camelCase standard for blocks
@@ -7,6 +8,7 @@ export const ServiceAreasBlock: Block = {
 		plural: "Service Areas Blocks",
 	},
 	fields: [
+		background,
 		{
 			name: "title",
 			type: "text",

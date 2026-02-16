@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const NumbersBlock: Block = {
 	slug: "numbers",
@@ -7,6 +8,7 @@ export const NumbersBlock: Block = {
 		plural: "Numbers & Custom Characters Blocks",
 	},
 	fields: [
+		background,
 		{
 			type: "row",
 			fields: [

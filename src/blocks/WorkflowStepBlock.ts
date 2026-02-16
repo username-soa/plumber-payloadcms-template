@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const WorkflowStepBlock: Block = {
 	slug: "workflowStep",
@@ -7,6 +8,7 @@ export const WorkflowStepBlock: Block = {
 		plural: "Workflow Steps",
 	},
 	fields: [
+		background,
 		{
 			type: "row",
 			fields: [

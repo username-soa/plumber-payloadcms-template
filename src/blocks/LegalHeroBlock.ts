@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const LegalHeroBlock: Block = {
 	slug: "legalHero",
@@ -7,6 +8,7 @@ export const LegalHeroBlock: Block = {
 		plural: "Legal Heroes",
 	},
 	fields: [
+		background,
 		{
 			name: "badge",
 			type: "text",

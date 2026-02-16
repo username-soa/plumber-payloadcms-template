@@ -1,14 +1,33 @@
 import type { Page } from "@/payload-types";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
+import {
+	SectionWrapper,
+	type PaddingOption,
+} from "@/components/ui/section-wrapper";
 
 type BackLinkProps = NonNullable<Page["layout"]>[number] & {
 	blockType: "backLink";
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 };
 
-export function BackLink({ label, href, centered }: BackLinkProps) {
+export function BackLink({
+	label,
+	href,
+	centered,
+	paddingTopOption,
+	paddingBottomOption,
+	background,
+}: BackLinkProps) {
 	return (
-		<section className="container mx-auto px-4 pt-4 pb-10">
+		<SectionWrapper
+			paddingTop={paddingTopOption as PaddingOption}
+			paddingBottom={paddingBottomOption as PaddingOption}
+			background={background}
+		>
 			<div
 				className={cn(
 					"max-w-3xl mx-auto",
@@ -22,6 +41,6 @@ export function BackLink({ label, href, centered }: BackLinkProps) {
 					← {label || "Back to Home"}
 				</Link>
 			</div>
-		</section>
+		</SectionWrapper>
 	);
 }

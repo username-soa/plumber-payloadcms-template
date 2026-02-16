@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const BeforeAfterBlock: Block = {
 	slug: "beforeAfter",
@@ -15,6 +16,7 @@ export const BeforeAfterBlock: Block = {
 		},
 	},
 	fields: [
+		background,
 		{
 			name: "blockDescription",
 			type: "ui",

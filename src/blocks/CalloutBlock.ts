@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const CalloutBlock: Block = {
 	slug: "callout",
@@ -15,6 +16,7 @@ export const CalloutBlock: Block = {
 		plural: "Callouts",
 	},
 	fields: [
+		background,
 		{
 			name: "blockDescription",
 			type: "ui",

@@ -7,17 +7,24 @@ import { blockConverters } from "@/components/richtext/block-converters";
 import { CMSLink } from "../payload/CMSLink";
 import type { Page } from "@/payload-types";
 
-type Props = Extract<Page["layout"][0], { blockType: "dualColumn" }>;
+type Props = Extract<Page["layout"][0], { blockType: "dualColumn" }> & {
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
+};
 
 export const DualColumnBlock: React.FC<Props> = ({
 	columns,
 	paddingTopOption = "default",
 	paddingBottomOption = "default",
+	background,
 }) => {
 	return (
 		<SectionWrapper
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}
+			background={background}
 		>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
 				{columns?.map((col, index) => {

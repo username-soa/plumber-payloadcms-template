@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const LegalContactBlock: Block = {
 	slug: "legalContact",
@@ -7,6 +8,7 @@ export const LegalContactBlock: Block = {
 		plural: "Contact Cards",
 	},
 	fields: [
+		background,
 		{
 			name: "title",
 			type: "text",
@@ -42,6 +44,41 @@ export const LegalContactBlock: Block = {
 			admin: {
 				description: "Leave blank to use address from Company Info global",
 			},
+		},
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTopOption",
+					type: "select",
+					label: "Padding Top",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottomOption",
+					type: "select",
+					label: "Padding Bottom",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+			],
 		},
 	],
 };

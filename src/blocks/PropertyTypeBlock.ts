@@ -1,4 +1,5 @@
 import { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const PropertyTypeBlock: Block = {
 	slug: "propertyType",
@@ -7,6 +8,7 @@ export const PropertyTypeBlock: Block = {
 		plural: "Property Type Selectors",
 	},
 	fields: [
+		background,
 		{
 			name: "name",
 			type: "text",

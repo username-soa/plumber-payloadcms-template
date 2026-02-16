@@ -1,21 +1,40 @@
 import type { Page } from "@/payload-types";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 import { blockConverters } from "@/components/richtext/block-converters";
+import {
+	SectionWrapper,
+	type PaddingOption,
+} from "@/components/ui/section-wrapper";
 
 type LegalContentProps = NonNullable<Page["layout"]>[number] & {
 	blockType: "legalContent";
+	paddingTopOption?: string | null;
+	paddingBottomOption?: string | null;
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 };
 
-export function LegalContent({ content }: LegalContentProps) {
+export function LegalContent({
+	content,
+	paddingTopOption,
+	paddingBottomOption,
+	background,
+}: LegalContentProps) {
 	if (!content) return null;
 
 	return (
-		<section className="container mx-auto px-4 py-12 md:py-16">
+		<SectionWrapper
+			paddingTop={paddingTopOption as PaddingOption}
+			paddingBottom={paddingBottomOption as PaddingOption}
+			background={background}
+		>
 			<div className="max-w-3xl mx-auto">
 				<div className="prose prose-slate dark:prose-invert max-w-none">
 					<RichText data={content} converters={blockConverters} />
 				</div>
 			</div>
-		</section>
+		</SectionWrapper>
 	);
 }

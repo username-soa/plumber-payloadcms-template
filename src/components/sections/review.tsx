@@ -4,6 +4,10 @@ import Marquee from "@/components/ui/marquee";
 import { TypographyH2 } from "@/components/ui/typography";
 import { ReviewCard } from "@/components/review-card";
 import type { CompanyInfo } from "@/payload-types";
+import {
+	SectionWrapper,
+	type PaddingOption,
+} from "@/components/ui/section-wrapper";
 
 interface ReviewSectionProps {
 	companyInfo?: CompanyInfo;
@@ -16,12 +20,21 @@ export async function ReviewSection({
 	source,
 	manualReviews,
 	selectedReviews,
+	paddingTopOption,
+	paddingBottomOption,
+	background,
 }: ReviewSectionProps & {
 	title?: string;
 	subtitle?: string;
 	source?: "manual" | "collection" | "google-api" | "hardcoded";
 	manualReviews?: any[];
 	selectedReviews?: any[];
+	paddingTopOption?: string | null;
+	paddingBottomOption?: string | null;
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 }) {
 	// Determine review source
 	// Priority: Direct Props (Block) > Company Info (Global)
@@ -33,7 +46,7 @@ export async function ReviewSection({
 	const activeSource = source || globalReviews?.source || "collection";
 
 	let reviews: any[] = [];
-	
+
 	// Default stats
 	let rating = 5.0;
 	let totalReviews = 0;
@@ -48,16 +61,15 @@ export async function ReviewSection({
 				rating: r.rating,
 				title: "5 Star Review",
 				role: "Customer",
-				relativeTime: r.date
-					? new Date(r.date).toLocaleDateString()
-					: "Recent",
+				relativeTime: r.date ? new Date(r.date).toLocaleDateString() : "Recent",
 				text: r.content,
 			}));
 		}
 	} else {
 		// 2. Collection Reviews (from Block or Global)
 		// This covers 'collection', 'hardcoded', or legacy 'google-api' if it had highlighted reviews mapped
-		const reviewsToProcess = selectedReviews || globalReviews?.highlightedReviews;
+		const reviewsToProcess =
+			selectedReviews || globalReviews?.highlightedReviews;
 
 		if (reviewsToProcess && reviewsToProcess.length > 0) {
 			reviews = reviewsToProcess
@@ -87,7 +99,7 @@ export async function ReviewSection({
 		const count = reviews.length;
 		const sum = reviews.reduce((acc, r) => acc + (Number(r.rating) || 0), 0);
 		const avg = sum / count;
-		
+
 		rating = Number(avg.toFixed(1));
 		totalReviews = count;
 	} else {
@@ -99,8 +111,14 @@ export async function ReviewSection({
 	const secondRow = reviews.slice(Math.ceil(reviews.length / 2));
 
 	return (
-		<section className="w-full py-24 bg-background overflow-hidden relative">
-			<div className="container mx-auto px-6 md:px-12 mb-12">
+		<SectionWrapper
+			className="w-full overflow-hidden relative"
+			// className="w-full bg-background overflow-hidden relative" // Removed bg-background
+			background={background}
+			paddingTop={paddingTopOption as PaddingOption}
+			paddingBottom={paddingBottomOption as PaddingOption}
+		>
+			<div className="mb-12">
 				{/* Header */}
 				<div className="flex flex-col md:flex-row justify-between md:items-end gap-6">
 					<div className="max-w-2xl">
@@ -182,6 +200,6 @@ export async function ReviewSection({
 				<div className="pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-linear-to-r from-white dark:from-background"></div>
 				<div className="pointer-events-none absolute inset-y-0 right-0 w-1/3 bg-linear-to-l from-white dark:from-background"></div>
 			</div>
-		</section>
+		</SectionWrapper>
 	);
 }

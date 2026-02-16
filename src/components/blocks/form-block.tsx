@@ -19,6 +19,10 @@ type Props = {
 	paddingTopOption?: string;
 	paddingBottomOption?: string;
 	className?: string;
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 };
 
 const customRenderers = {};
@@ -35,6 +39,7 @@ export const FormBlock = ({
 	paddingTopOption = "default",
 	paddingBottomOption = "default",
 	className,
+	background,
 }: Props) => {
 	if (!form || typeof form !== "object") {
 		return null;
@@ -45,6 +50,7 @@ export const FormBlock = ({
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}
 			className={`form-block ${className || ""}`}
+			background={background}
 		>
 			<div className="container mx-auto px-4">
 				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">

@@ -8,6 +8,10 @@ interface SectionWrapperProps {
 	className?: string;
 	paddingTop?: PaddingOption | string;
 	paddingBottom?: PaddingOption | string;
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 }
 
 const paddingClasses: Record<string, string> = {
@@ -17,26 +21,63 @@ const paddingClasses: Record<string, string> = {
 	big: "24",
 };
 
+// Add helper for background styles
+const getBackgroundClass = (bg: string | undefined) => {
+	switch (bg) {
+		case "muted":
+			return "bg-muted";
+		case "primary":
+			return "bg-primary text-primary-foreground";
+		default:
+			return "bg-transparent"; // transparent is default
+	}
+};
+
 export const SectionWrapper: React.FC<SectionWrapperProps> = ({
 	children,
 	className,
 	paddingTop = "default",
 	paddingBottom = "default",
+	background,
 }) => {
 	const ptKey =
 		paddingTop && paddingClasses[paddingTop] ? paddingTop : "default";
 	const pbKey =
 		paddingBottom && paddingClasses[paddingBottom] ? paddingBottom : "default";
 
+	const bgClass = getBackgroundClass(background?.bg);
+	const decorationStyle =
+		background?.decoration === "dots"
+			? {
+					backgroundImage:
+						"radial-gradient(circle, currentColor 1px, transparent 1px)",
+					backgroundSize: "20px 20px",
+					opacity: 0.8, // subtle effect
+				}
+			: {};
+
 	return (
 		<section
 			className={cn(
 				`pt-${paddingClasses[ptKey]}`,
 				`pb-${paddingClasses[pbKey]}`,
+				bgClass,
+				"relative",
 				className,
 			)}
+			style={
+				background?.decoration === "dots"
+					? {
+							backgroundImage:
+								"radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px)", // Default fallback
+							...decorationStyle,
+						}
+					: undefined
+			}
 		>
-			<div className="mx-auto px-6 md:px-12 container">{children}</div>
+			<div className="mx-auto px-6 md:px-12 container relative z-10">
+				{children}
+			</div>
 		</section>
 	);
 };

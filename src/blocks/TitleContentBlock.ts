@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 import { link } from "@/fields/link";
 
 export const TitleContentBlock: Block = {
@@ -8,6 +9,7 @@ export const TitleContentBlock: Block = {
 		plural: "Title & Content Blocks",
 	},
 	fields: [
+		background,
 		{
 			name: "tagTitle",
 			type: "text",

@@ -527,6 +527,10 @@ export interface Page {
   status: 'draft' | 'published';
   layout: (
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         content: {
           root: {
             type: string;
@@ -542,11 +546,17 @@ export interface Page {
           };
           [k: string]: unknown;
         };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'legalContent';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         title?: string | null;
         description?: string | null;
         /**
@@ -561,14 +571,22 @@ export interface Page {
          * Leave blank to use address from Company Info global
          */
         address?: string | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'legalContact';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         label?: string | null;
         href?: string | null;
         centered?: boolean | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'backLink';
@@ -579,6 +597,10 @@ export interface Page {
          * Text to highlight in primary color (case-insensitive)
          */
         titleHighlight?: string | null;
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         description?: string | null;
         faqs?: (number | Faq)[] | null;
         cta: {
@@ -615,12 +637,18 @@ export interface Page {
               | null;
           };
         };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'faq';
       }
     | ReviewBlock
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         subtitle?: string | null;
         title?: string | null;
         /**
@@ -636,11 +664,17 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'certifications';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         title?: string | null;
         /**
          * Text to highlight in the title (e.g. 'Water City Plumbing Experts')
@@ -648,11 +682,17 @@ export interface Page {
         titleHighlight?: string | null;
         description?: string | null;
         selectedMembers: (number | TeamMember)[];
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'team';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         /**
          * The full main heading
          */
@@ -680,12 +720,18 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'trustStats';
       }
     | TimelineBlock
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         contentType: 'blogs' | 'case-studies' | 'services';
         limit?: number | null;
         itemsPerRow?: ('1' | '2' | '3' | '4') | null;
@@ -703,11 +749,17 @@ export interface Page {
          */
         showSearch?: boolean | null;
         paginationStyle?: ('none' | 'numbered' | 'loadMore' | 'infiniteScroll') | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'contentFetcher';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         /**
          * Small tag text displayed above the main title
          */
@@ -761,6 +813,10 @@ export interface Page {
         blockType: 'titleContent';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         textAlign?: ('left' | 'center' | 'right') | null;
         columns?: ('1' | '2' | '3' | '4' | '5' | '6') | null;
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -778,6 +834,10 @@ export interface Page {
         blockType: 'imagesGrid';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         columns?: ('1' | '2' | '3' | '4' | '5' | '6') | null;
         cardLayout?: ('stacked' | 'sideBySide') | null;
         /**
@@ -800,6 +860,10 @@ export interface Page {
         blockType: 'cardsGrid';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         title?: string | null;
         headline?: string | null;
         /**
@@ -825,6 +889,10 @@ export interface Page {
         blockType: 'serviceAreasBlock';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         tag?: string | null;
         title: string;
         /**
@@ -878,6 +946,10 @@ export interface Page {
         blockType: 'highlightedServices';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         textAlign?: ('left' | 'center' | 'right') | null;
         textColor?: ('regular' | 'primary') | null;
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -900,6 +972,10 @@ export interface Page {
         blockType: 'numbers';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         columns?:
           | {
               type?: ('content' | 'image') | null;
@@ -963,6 +1039,10 @@ export interface Page {
         blockType: 'dualColumn';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
         form: number | Form;
         enableIntro?: boolean | null;
         introContent?: {
@@ -1113,6 +1193,10 @@ export interface Faq {
  * via the `definition` "ReviewBlock".
  */
 export interface ReviewBlock {
+  background?: {
+    bg?: ('transparent' | 'muted' | 'primary') | null;
+    decoration?: ('none' | 'dots') | null;
+  };
   title?: string | null;
   subtitle?: string | null;
   /**
@@ -1129,6 +1213,8 @@ export interface ReviewBlock {
       }[]
     | null;
   selectedReviews?: (number | Review)[] | null;
+  paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+  paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'reviewsSection';
@@ -1172,6 +1258,10 @@ export interface TeamMember {
  * via the `definition` "TimelineBlock".
  */
 export interface TimelineBlock {
+  background?: {
+    bg?: ('transparent' | 'muted' | 'primary') | null;
+    decoration?: ('none' | 'dots') | null;
+  };
   /**
    * The main heading for the timeline section
    */
@@ -1193,6 +1283,8 @@ export interface TimelineBlock {
         id?: string | null;
       }[]
     | null;
+  paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+  paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'timeline';
@@ -1298,6 +1390,10 @@ export interface Form {
             blockType: 'textarea';
           }
         | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
             name: string;
             label?: string | null;
             width?: number | null;
@@ -1307,6 +1403,10 @@ export interface Form {
             blockType: 'urgency';
           }
         | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
             name: string;
             label?: string | null;
             width?: number | null;
@@ -1316,6 +1416,10 @@ export interface Form {
             blockType: 'propertyType';
           }
         | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
             name: string;
             label: string;
             width?: number | null;
@@ -1326,6 +1430,10 @@ export interface Form {
             blockType: 'file';
           }
         | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
             name: string;
             label?: string | null;
             options?:
@@ -1798,27 +1906,51 @@ export interface PagesSelect<T extends boolean = true> {
         legalContent?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               content?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
         legalContact?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               title?: T;
               description?: T;
               email?: T;
               phone?: T;
               address?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
         backLink?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               label?: T;
               href?: T;
               centered?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -1827,6 +1959,12 @@ export interface PagesSelect<T extends boolean = true> {
           | {
               title?: T;
               titleHighlight?: T;
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               description?: T;
               faqs?: T;
               cta?:
@@ -1848,6 +1986,8 @@ export interface PagesSelect<T extends boolean = true> {
                           style?: T;
                         };
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -1855,6 +1995,12 @@ export interface PagesSelect<T extends boolean = true> {
         certifications?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               subtitle?: T;
               title?: T;
               titleHighlight?: T;
@@ -1867,22 +2013,38 @@ export interface PagesSelect<T extends boolean = true> {
                     icon?: T;
                     id?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
         team?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               title?: T;
               titleHighlight?: T;
               description?: T;
               selectedMembers?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
         trustStats?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               title?: T;
               titleHighlight?: T;
               bottomText?: T;
@@ -1895,6 +2057,8 @@ export interface PagesSelect<T extends boolean = true> {
                     label?: T;
                     id?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -1902,6 +2066,12 @@ export interface PagesSelect<T extends boolean = true> {
         contentFetcher?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               contentType?: T;
               limit?: T;
               itemsPerRow?: T;
@@ -1910,12 +2080,20 @@ export interface PagesSelect<T extends boolean = true> {
               showFilters?: T;
               showSearch?: T;
               paginationStyle?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
         titleContent?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               tagTitle?: T;
               mainTitle?: T;
               highlightedText?: T;
@@ -1947,6 +2125,12 @@ export interface PagesSelect<T extends boolean = true> {
         imagesGrid?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               textAlign?: T;
               columns?: T;
               paddingTopOption?: T;
@@ -1965,6 +2149,12 @@ export interface PagesSelect<T extends boolean = true> {
         cardsGrid?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               columns?: T;
               cardLayout?: T;
               enableHighlight?: T;
@@ -1985,6 +2175,12 @@ export interface PagesSelect<T extends boolean = true> {
         serviceAreasBlock?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               title?: T;
               headline?: T;
               highlightedHeadlineText?: T;
@@ -2005,6 +2201,12 @@ export interface PagesSelect<T extends boolean = true> {
         highlightedServices?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               tag?: T;
               title?: T;
               highlightedText?: T;
@@ -2033,6 +2235,12 @@ export interface PagesSelect<T extends boolean = true> {
         numbers?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               textAlign?: T;
               textColor?: T;
               paddingTopOption?: T;
@@ -2053,6 +2261,12 @@ export interface PagesSelect<T extends boolean = true> {
         dualColumn?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               columns?:
                 | T
                 | {
@@ -2086,6 +2300,12 @@ export interface PagesSelect<T extends boolean = true> {
         formBlock?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               form?: T;
               enableIntro?: T;
               introContent?: T;
@@ -2162,6 +2382,12 @@ export interface PagesSelect<T extends boolean = true> {
  * via the `definition` "ReviewBlock_select".
  */
 export interface ReviewBlockSelect<T extends boolean = true> {
+  background?:
+    | T
+    | {
+        bg?: T;
+        decoration?: T;
+      };
   title?: T;
   subtitle?: T;
   source?: T;
@@ -2175,6 +2401,8 @@ export interface ReviewBlockSelect<T extends boolean = true> {
         id?: T;
       };
   selectedReviews?: T;
+  paddingTopOption?: T;
+  paddingBottomOption?: T;
   id?: T;
   blockName?: T;
 }
@@ -2183,6 +2411,12 @@ export interface ReviewBlockSelect<T extends boolean = true> {
  * via the `definition` "TimelineBlock_select".
  */
 export interface TimelineBlockSelect<T extends boolean = true> {
+  background?:
+    | T
+    | {
+        bg?: T;
+        decoration?: T;
+      };
   title?: T;
   items?:
     | T
@@ -2192,6 +2426,8 @@ export interface TimelineBlockSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
+  paddingTopOption?: T;
+  paddingBottomOption?: T;
   id?: T;
   blockName?: T;
 }
@@ -2331,6 +2567,12 @@ export interface FormsSelect<T extends boolean = true> {
         urgency?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               name?: T;
               label?: T;
               width?: T;
@@ -2341,6 +2583,12 @@ export interface FormsSelect<T extends boolean = true> {
         propertyType?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               name?: T;
               label?: T;
               width?: T;
@@ -2351,6 +2599,12 @@ export interface FormsSelect<T extends boolean = true> {
         file?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               name?: T;
               label?: T;
               width?: T;
@@ -2362,6 +2616,12 @@ export interface FormsSelect<T extends boolean = true> {
         checkboxGroup?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               name?: T;
               label?: T;
               options?:
@@ -2885,6 +3145,10 @@ export interface CompanyInfoSelect<T extends boolean = true> {
  * via the `definition` "StepTimelineBlock".
  */
 export interface StepTimelineBlock {
+  background?: {
+    bg?: ('transparent' | 'muted' | 'primary') | null;
+    decoration?: ('none' | 'dots') | null;
+  };
   paddingTop?: boolean | null;
   paddingBottom?: boolean | null;
   items?:

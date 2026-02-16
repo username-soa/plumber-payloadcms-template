@@ -33,6 +33,10 @@ type Props = {
 		description?: string;
 		link?: string;
 	}[];
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 };
 
 export const CardsGridBlock: React.FC<Props> = ({
@@ -42,6 +46,7 @@ export const CardsGridBlock: React.FC<Props> = ({
 	paddingBottomOption = "default",
 	enableHighlight = true,
 	cards,
+	background,
 }) => {
 	const gridColsClass = {
 		"1": "grid-cols-1",
@@ -56,6 +61,7 @@ export const CardsGridBlock: React.FC<Props> = ({
 		<SectionWrapper
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}
+			background={background}
 		>
 			<div className={cn("grid gap-6", gridColsClass)}>
 				{cards?.map((card, index) => {

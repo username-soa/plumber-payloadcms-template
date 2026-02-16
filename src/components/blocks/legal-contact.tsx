@@ -2,6 +2,10 @@ import type { Page } from "@/payload-types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/site-config";
+import {
+	SectionWrapper,
+	type PaddingOption,
+} from "@/components/ui/section-wrapper";
 
 type LegalContactProps = NonNullable<Page["layout"]>[number] & {
 	blockType: "legalContact";
@@ -12,6 +16,10 @@ type LegalContactProps = NonNullable<Page["layout"]>[number] & {
 		address: string;
 		brandName?: string;
 	};
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 };
 
 export function LegalContact({
@@ -21,6 +29,9 @@ export function LegalContact({
 	phone: localPhone,
 	address: localAddress,
 	globalData,
+	paddingTopOption,
+	paddingBottomOption,
+	background,
 }: LegalContactProps) {
 	const { brand } = SITE_CONFIG;
 
@@ -31,7 +42,11 @@ export function LegalContact({
 	const businessName = globalData?.brandName || brand.name;
 
 	return (
-		<section className="container mx-auto px-4 py-4">
+		<SectionWrapper
+			paddingTop={paddingTopOption as PaddingOption}
+			paddingBottom={paddingBottomOption as PaddingOption}
+			background={background}
+		>
 			<div className="max-w-3xl mx-auto">
 				<Card className="bg-primary/5 border-primary/20">
 					<CardContent className="pt-6">
@@ -81,6 +96,6 @@ export function LegalContact({
 					</CardContent>
 				</Card>
 			</div>
-		</section>
+		</SectionWrapper>
 	);
 }

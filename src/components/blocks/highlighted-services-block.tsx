@@ -34,6 +34,10 @@ interface HighlightedServicesBlockProps {
 	linkToAllServices?: boolean;
 	paddingTopOption?: "none" | "small" | "default" | "big";
 	paddingBottomOption?: "none" | "small" | "default" | "big";
+	background?: {
+		bg?: "transparent" | "muted" | "primary";
+		decoration?: "none" | "dots";
+	};
 }
 
 export const HighlightedServicesBlockComponent = (
@@ -51,6 +55,7 @@ export const HighlightedServicesBlockComponent = (
 		linkToAllServices = true,
 		paddingTopOption = "default",
 		paddingBottomOption = "default",
+		background,
 	} = props;
 
 	// Helper to highlight text
@@ -102,6 +107,7 @@ export const HighlightedServicesBlockComponent = (
 		<SectionWrapper
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}
+			background={background}
 		>
 			<div className="container mx-auto">
 				{/* Header */}

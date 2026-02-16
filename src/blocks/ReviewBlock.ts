@@ -1,9 +1,11 @@
-import { Block } from "payload";
+import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const ReviewBlock: Block = {
 	slug: "reviewsSection",
 	interfaceName: "ReviewBlock",
 	fields: [
+		background,
 		{
 			type: "row",
 			fields: [
@@ -77,6 +79,41 @@ export const ReviewBlock: Block = {
 			admin: {
 				condition: (_, siblingData) => siblingData.source === "collection",
 			},
+		},
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTopOption",
+					type: "select",
+					label: "Padding Top",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottomOption",
+					type: "select",
+					label: "Padding Bottom",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+			],
 		},
 	],
 };

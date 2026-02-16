@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const TableBlock: Block = {
 	slug: "table",
@@ -15,6 +16,7 @@ export const TableBlock: Block = {
 		},
 	},
 	fields: [
+		background,
 		{
 			name: "blockDescription",
 			type: "ui",

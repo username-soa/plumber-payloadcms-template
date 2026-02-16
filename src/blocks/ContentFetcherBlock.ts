@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const ContentFetcherBlock: Block = {
 	slug: "contentFetcher",
@@ -15,6 +16,7 @@ export const ContentFetcherBlock: Block = {
 				initCollapsed: false,
 			},
 			fields: [
+				background,
 				{
 					type: "row",
 					fields: [
@@ -133,6 +135,41 @@ export const ContentFetcherBlock: Block = {
 						{ label: "Load More Button", value: "loadMore" },
 						{ label: "Infinite Scroll", value: "infiniteScroll" },
 					],
+				},
+			],
+		},
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTopOption",
+					type: "select",
+					label: "Padding Top",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottomOption",
+					type: "select",
+					label: "Padding Bottom",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
 				},
 			],
 		},

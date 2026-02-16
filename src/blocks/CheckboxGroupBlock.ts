@@ -1,4 +1,5 @@
 import { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const CheckboxGroupBlock: Block = {
 	slug: "checkboxGroup",
@@ -7,6 +8,7 @@ export const CheckboxGroupBlock: Block = {
 		plural: "Checkbox Groups",
 	},
 	fields: [
+		background,
 		{
 			name: "name",
 			type: "text",

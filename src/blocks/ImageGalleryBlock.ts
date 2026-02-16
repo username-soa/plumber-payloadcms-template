@@ -1,4 +1,5 @@
 import type { Block } from "payload";
+import { background } from "@/fields/background";
 
 export const ImageGalleryBlock: Block = {
 	slug: "imageGallery",
@@ -15,6 +16,7 @@ export const ImageGalleryBlock: Block = {
 		plural: "Image Galleries",
 	},
 	fields: [
+		background,
 		{
 			name: "blockDescription",
 			type: "ui",
