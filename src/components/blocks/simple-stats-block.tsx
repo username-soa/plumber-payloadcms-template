@@ -12,7 +12,7 @@ export const SimpleStatsBlock: React.FC<Props> = ({ stats }) => {
 	if (!stats || stats.length === 0) return null;
 
 	return (
-		<div className="grid grid-cols-2 gap-4 my-8">
+		<div className="grid grid-cols-2 gap-4 my-6">
 			{stats.map((stat, index) => (
 				<div
 					key={stat.id || index}

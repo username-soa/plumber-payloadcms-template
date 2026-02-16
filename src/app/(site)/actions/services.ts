@@ -1,7 +1,7 @@
 "use server";
 
-import { getPayload } from "payload";
 import config from "@payload-config";
+import { getPayload } from "payload";
 import type { Service } from "@/payload-types";
 
 export async function getServiceBySlug(slug: string): Promise<Service | null> {

@@ -25,6 +25,7 @@ import { ServiceAreasBlock } from "@/blocks/ServiceAreasBlock";
 import { HighlightedServicesBlock } from "@/blocks/HighlightedServicesBlock";
 import { NumbersBlock } from "@/blocks/NumbersBlock";
 import { DualColumnBlock } from "@/blocks/DualColumnBlock";
+import { FormBlock } from "@/blocks/FormBlock";
 import { populateLegalContact } from "@/hooks/populateLegalContact";
 import { hero } from "../fields/hero";
 
@@ -142,6 +143,7 @@ export const Pages: CollectionConfig = {
 								HighlightedServicesBlock,
 								NumbersBlock,
 								DualColumnBlock,
+								FormBlock,
 							],
 						},
 					],

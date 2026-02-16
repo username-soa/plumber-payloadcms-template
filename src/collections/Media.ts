@@ -33,7 +33,7 @@ export const Media: CollectionConfig = {
 			},
 		],
 		adminThumbnail: "thumbnail",
-		mimeTypes: ["image/*"],
+		// mimeTypes: ["image/*"],
 	},
 	fields: [
 		{

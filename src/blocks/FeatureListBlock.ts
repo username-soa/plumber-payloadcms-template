@@ -8,6 +8,19 @@ export const FeatureListBlock: Block = {
 	},
 	fields: [
 		{
+			name: "layout",
+			type: "select",
+			defaultValue: "default",
+			options: [
+				{ label: "Default (List)", value: "default" },
+				{ label: "Pills (Horizontal Badges)", value: "pills" },
+			],
+			admin: {
+				description:
+					"Choose 'Pills' for checkmark badges layout (e.g. Licensed & Insured)",
+			},
+		},
+		{
 			name: "features",
 			type: "array",
 			label: "Features",
@@ -24,7 +37,12 @@ export const FeatureListBlock: Block = {
 								components: {
 									Field: "@/components/payload/IconPicker#IconPicker",
 								},
-								width: "30%",
+								condition: (data, _siblingData, { blockData }) => {
+									// blockData is the data of the block that this field is in
+									const layout = blockData?.layout;
+									return layout !== "pills";
+								},
+								width: "50%",
 							},
 						},
 						{
@@ -33,7 +51,7 @@ export const FeatureListBlock: Block = {
 							label: "Text",
 							required: true,
 							admin: {
-								width: "70%",
+								width: "50%",
 							},
 						},
 					],

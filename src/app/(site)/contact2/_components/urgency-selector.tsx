@@ -51,9 +51,6 @@ export function UrgencySelector({
 }: UrgencySelectorProps) {
 	return (
 		<div className="space-y-3">
-			<Label className="text-base font-semibold">
-				How urgent is your request? *
-			</Label>
 			<RadioGroup
 				value={value}
 				onValueChange={onValueChange}

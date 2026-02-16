@@ -3,9 +3,11 @@
 import type {
 	DefaultNodeTypes,
 	SerializedBlockNode,
+	DefaultTypedEditorState as SerializedEditorState,
+	SerializedTextNode,
 } from "@payloadcms/richtext-lexical";
 import type { JSXConvertersFunction } from "@payloadcms/richtext-lexical/react";
-import type { Media } from "@/payload-types";
+import type { Media, Form } from "@/payload-types";
 import { cn } from "@/lib/utils";
 
 import { BeforeAfter } from "@/components/blocks/before-after";
@@ -36,6 +38,7 @@ import {
 } from "@/components/ui/typography";
 import { Separator } from "@/components/ui/separator";
 import { Checkbox } from "@/components/ui/checkbox";
+import { FormBlock } from "@/components/blocks/form-block";
 
 // Block field types based on your block definitions
 interface CalloutBlock {
@@ -179,6 +182,7 @@ interface TableBlock {
 
 interface FeatureListBlockType {
 	blockType: "featureList";
+	layout?: "default" | "pills";
 	features: { icon?: string; text: string }[];
 }
 
@@ -192,6 +196,13 @@ interface WorkflowStepBlockType {
 interface SimpleStatsBlockType {
 	blockType: "simpleStats";
 	stats: { value: string; label: string }[];
+}
+
+interface FormBlockType {
+	blockType: "formBlock";
+	form: Form | number;
+	enableIntro?: boolean;
+	introContent?: SerializedEditorState;
 }
 
 type CustomBlocks =
@@ -210,7 +221,8 @@ type CustomBlocks =
 	| TableBlock
 	| FeatureListBlockType
 	| WorkflowStepBlockType
-	| SimpleStatsBlockType;
+	| SimpleStatsBlockType
+	| FormBlockType;
 
 type NodeTypes = DefaultNodeTypes | SerializedBlockNode<CustomBlocks>;
 
@@ -537,8 +549,7 @@ const formatStyle = (style: string): React.CSSProperties => {
 			const camelKey = key
 				.trim()
 				.replace(/-([a-z])/g, (g) => g[1].toUpperCase());
-			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			(acc as any)[camelKey] = value.trim();
+			(acc as Record<string, string>)[camelKey] = value.trim();
 		}
 		return acc;
 	}, {});
@@ -550,9 +561,8 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 }) => ({
 	...defaultConverters,
 	text: ({ node }) => {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		const anyNode = node as any;
-		const style = anyNode.style;
+		const textNode = node as SerializedTextNode & { style?: string };
+		const style = textNode.style;
 
 		let combinedStyle: React.CSSProperties = {};
 
@@ -700,12 +710,33 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 		table: ({ node }) => (
 			<TableRenderer node={node as SerializedBlockNode<TableBlock>} />
 		),
-		featureList: ({ node }) => (
-			<FeatureListBlock features={(node.fields as any).features} />
-		),
-		workflowStep: ({ node }) => <WorkflowStepBlock {...(node.fields as any)} />,
-		simpleStats: ({ node }) => (
-			<SimpleStatsBlock stats={(node.fields as any).stats} />
-		),
+		featureList: ({ node }) => {
+			const { features, layout } = (
+				node as SerializedBlockNode<FeatureListBlockType>
+			).fields;
+			return <FeatureListBlock features={features} layout={layout} />;
+		},
+		workflowStep: ({ node }) => {
+			const fields = (node as SerializedBlockNode<WorkflowStepBlockType>)
+				.fields;
+			return <WorkflowStepBlock {...fields} />;
+		},
+		simpleStats: ({ node }) => {
+			const { stats } = (node as SerializedBlockNode<SimpleStatsBlockType>)
+				.fields;
+			return <SimpleStatsBlock stats={stats} />;
+		},
+		formBlock: ({ node }) => {
+			const { form, enableIntro, introContent } = (
+				node as SerializedBlockNode<FormBlockType>
+			).fields;
+			return (
+				<FormBlock
+					form={form}
+					enableIntro={enableIntro}
+					introContent={introContent}
+				/>
+			);
+		},
 	},
 });

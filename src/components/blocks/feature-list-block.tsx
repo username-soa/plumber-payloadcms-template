@@ -1,5 +1,7 @@
 import * as LucideIcons from "lucide-react";
+import { CheckCircle2 } from "lucide-react";
 import type React from "react";
+import { Badge } from "@/components/ui/badge";
 
 // Helper to convert kebab-case to PascalCase for icon lookup
 const kebabToPascal = (str: string) =>
@@ -21,6 +23,7 @@ const getLucideIcon = (name: string) => {
 };
 
 type Props = {
+	layout?: "default" | "pills";
 	features: {
 		id?: string;
 		icon?: string;
@@ -28,8 +31,29 @@ type Props = {
 	}[];
 };
 
-export const FeatureListBlock: React.FC<Props> = ({ features }) => {
+export const FeatureListBlock: React.FC<Props> = ({
+	features,
+	layout = "default",
+}) => {
 	if (!features || features.length === 0) return null;
+	if (layout === "pills") {
+		return (
+			<div className="flex flex-wrap gap-3 my-4">
+				{features.map((feature, index) => {
+					return (
+						<Badge
+							key={feature.id || index}
+							variant="outline"
+							className="gap-1.5"
+						>
+							<CheckCircle2 className="w-3.5 h-3.5 text-green-500" />
+							{feature.text}
+						</Badge>
+					);
+				})}
+			</div>
+		);
+	}
 
 	return (
 		<ul className="flex flex-wrap gap-x-8 gap-y-4 my-6 list-none p-0">

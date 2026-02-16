@@ -19,15 +19,23 @@ interface FileUploaderProps {
 	onFilesSelected: (files: File[]) => void;
 	onRemoveFile: (index: number) => void;
 	error: string | null;
+	label?: string;
+	required?: boolean;
+	accept?: string;
+	maxSize?: number;
 }
 
-export const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB
+export const MAX_TOTAL_SIZE = 10 * 1024 * 1024; // 10MB default
 
 export function FileUploader({
 	filePreviews,
 	onFilesSelected,
 	onRemoveFile,
 	error,
+	label = "Attach Photos or Videos (Optional)",
+	required,
+	accept = "image/*,video/*,application/pdf",
+	maxSize = MAX_TOTAL_SIZE,
 }: FileUploaderProps) {
 	const totalSize = filePreviews.reduce((acc, f) => acc + f.size, 0);
 
@@ -39,8 +47,10 @@ export function FileUploader({
 	};
 
 	return (
-		<div className="space-y-2">
-			<Label htmlFor="attachment">Attach Photos or Videos (Optional)</Label>
+		<div className="space-y-3">
+			<Label htmlFor="attachment">
+				{label} {required && <span className="text-red-500">*</span>}
+			</Label>
 			<div className="space-y-3">
 				<div className="relative group cursor-pointer">
 					<div className="border-2 border-dashed border-muted-foreground/25 rounded-xl p-8 transition-colors group-hover:border-primary/50 group-hover:bg-muted/50 text-center">
@@ -53,7 +63,7 @@ export function FileUploader({
 									Click to upload or drag & drop
 								</p>
 								<p className="text-xs text-muted-foreground mt-1">
-									Photos, Videos, or PDF (Max 10MB)
+									Max {(maxSize / (1024 * 1024)).toFixed(0)}MB
 								</p>
 							</div>
 						</div>
@@ -62,7 +72,7 @@ export function FileUploader({
 						id="attachment"
 						name="attachment"
 						type="file"
-						accept="image/*,video/*,application/pdf"
+						accept={accept}
 						multiple
 						className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
 						onChange={handleFileChange}
@@ -86,7 +96,7 @@ export function FileUploader({
 								{preview.type === "image" && preview.url ? (
 									<div className="relative h-12 w-12 shrink-0 overflow-hidden rounded-lg border bg-background">
 										{/* eslint-disable-next-line @next/next/no-img-element */}
-										{/** biome-ignore lint/performance/noImgElement: <explanation> */}
+										{/* biome-ignore lint/performance/noImgElement: Preview of user-uploaded file */}
 										<img
 											src={preview.url}
 											alt="Preview"
@@ -122,24 +132,23 @@ export function FileUploader({
 						))}
 						<div className="space-y-1 pt-2">
 							<div className="flex justify-between text-xs text-muted-foreground">
-								<span>{(totalSize / (1024 * 1024)).toFixed(2)} MB used</span>
-								<span>10 MB limit</span>
+								<span>
+									{Number(totalSize / (1024 * 1024)).toFixed(2)} MB used
+								</span>
+								<span>{(maxSize / (1024 * 1024)).toFixed(0)} MB limit</span>
 							</div>
 							<div className="h-2 w-full bg-secondary rounded-full overflow-hidden">
 								<div
 									className={cn(
 										"h-full transition-all duration-300 ease-in-out",
-										totalSize / MAX_TOTAL_SIZE > 0.8
+										totalSize / maxSize > 0.8
 											? "bg-red-500"
-											: totalSize / MAX_TOTAL_SIZE > 0.5
+											: totalSize / maxSize > 0.5
 												? "bg-yellow-500"
 												: "bg-green-500",
 									)}
 									style={{
-										width: `${Math.min(
-											(totalSize / MAX_TOTAL_SIZE) * 100,
-											100,
-										)}%`,
+										width: `${Math.min((totalSize / maxSize) * 100, 100)}%`,
 									}}
 								/>
 							</div>

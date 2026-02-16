@@ -12,7 +12,7 @@ export const WorkflowStepBlock: React.FC<Props> = ({
 	description,
 }) => {
 	return (
-		<div className="flex gap-5 mb-6 last:mb-0">
+		<div className="flex gap-5 my-6 last:mb-0">
 			<div className="shrink-0 flex items-center justify-center w-10 h-10 rounded-full bg-primary/10 text-primary font-bold text-lg">
 				{stepNumber}
 			</div>

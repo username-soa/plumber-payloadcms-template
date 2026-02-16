@@ -40,7 +40,7 @@ export const DualColumnBlock: React.FC<Props> = ({
 						return (
 							<div
 								key={col.id || index}
-								className="relative w-full h-full min-h-[300px] rounded-2xl overflow-hidden shadow-xl"
+								className="relative w-full h-full min-h-[300px] max-md:aspect-2/3 rounded-2xl overflow-hidden shadow-xl"
 							>
 								<Image
 									src={imageUrl}

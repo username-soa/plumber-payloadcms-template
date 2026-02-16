@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
 	Select,
 	SelectContent,
@@ -29,6 +28,7 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { UrgencySelector } from "./urgency-selector";
+import { PropertyTypeSelector } from "@/components/ui/property-type-selector";
 import { useRef } from "react";
 import { toast } from "sonner";
 
@@ -36,12 +36,9 @@ import {
 	FileUploader,
 	type FilePreview,
 	MAX_TOTAL_SIZE,
-} from "./file-uploader";
+} from "@/components/ui/file-uploader";
 
-const PROPERTY_TYPES = [
-	{ id: "residential", label: "Residential" },
-	{ id: "commercial", label: "Commercial" },
-];
+// Removed PROPERTY_TYPES constant as it is now internal to PropertyTypeSelector
 
 const CONTACT_TIMES = [
 	{ id: "anytime", label: "Anytime" },
@@ -229,7 +226,12 @@ ${previewData.message}
 					</div>
 
 					<form ref={formRef} onSubmit={onFormSubmit} className="space-y-6">
-						<UrgencySelector value={urgency} onValueChange={setUrgency} />
+						<div className="space-y-3">
+							<Label className="text-base text-card-foreground">
+								Urgency of Issue <span className="text-red-500">*</span>
+							</Label>
+							<UrgencySelector value={urgency} onValueChange={setUrgency} />
+						</div>
 
 						{/* Emergency Alert */}
 						{urgency === "emergency" && (
@@ -329,33 +331,12 @@ ${previewData.message}
 						</div>
 
 						{/* Property Type */}
-						<div className="space-y-3">
-							<Label className="text-base">Property Type</Label>
-							<RadioGroup
-								value={propertyType}
-								onValueChange={setPropertyType}
-								className="grid grid-cols-2 gap-4"
-							>
-								{PROPERTY_TYPES.map((type) => (
-									<Label
-										key={type.id}
-										htmlFor={`property-${type.id}`}
-										className={cn(
-											"flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 cursor-pointer transition-all w-full",
-											propertyType === type.id
-												? "bg-primary/10 border-primary"
-												: "bg-muted/50 border-transparent hover:border-border",
-										)}
-									>
-										<RadioGroupItem
-											value={type.id}
-											id={`property-${type.id}`}
-										/>
-										<span className="font-medium">{type.label}</span>
-									</Label>
-								))}
-							</RadioGroup>
-						</div>
+						<PropertyTypeSelector
+							value={propertyType}
+							onChange={setPropertyType}
+							label="Property Type"
+							required
+						/>
 
 						{/* Message */}
 						<div className="space-y-2">

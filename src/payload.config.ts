@@ -1,15 +1,23 @@
 import { buildConfig } from "payload";
 import { postgresAdapter } from "@payloadcms/db-postgres";
+import { formBuilderPlugin } from "@payloadcms/plugin-form-builder";
 import { sqliteAdapter } from "@payloadcms/db-sqlite";
-import { lexicalEditor } from "@payloadcms/richtext-lexical";
+import { BlocksFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { Users } from "./collections/Users";
+import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { Media } from "./collections/Media";
 import { Authors } from "./collections/Authors";
+import { FormBlock } from "./blocks/FormBlock";
+import { FeatureListBlock } from "./blocks/FeatureListBlock";
+import { UrgencyBlock } from "./blocks/UrgencyBlock";
+import { PropertyTypeBlock } from "./blocks/PropertyTypeBlock";
+import { FileBlock } from "./blocks/FileBlock";
+import { CheckboxGroupBlock } from "./blocks/CheckboxGroupBlock";
 
 import { BlogPosts } from "./collections/BlogPosts";
 import { CaseStudies } from "./collections/CaseStudies";
@@ -63,11 +71,30 @@ export default buildConfig({
 		},
 	},
 
+	email: nodemailerAdapter({
+		defaultFromAddress: process.env.SMTP_USER || "info@flowmasters.com",
+		defaultFromName: "FlowMasters Website",
+		transportOptions: {
+			host: process.env.SMTP_HOST,
+			port: Number(process.env.SMTP_PORT) || 587,
+			auth: {
+				user: process.env.SMTP_USER,
+				pass: process.env.SMTP_PASS,
+			},
+		},
+	}),
+
 	// Rich text editor configuration
 	editor: lexicalEditor({
 		features: ({ defaultFeatures }) => {
-			const features = [...defaultFeatures, CustomColorFeature()];
-			return features;
+			return [
+				...defaultFeatures,
+				CustomColorFeature(),
+				CustomColorFeature(),
+				BlocksFeature({
+					blocks: [FormBlock, FeatureListBlock],
+				}),
+			];
 		},
 	}),
 
@@ -77,12 +104,13 @@ export default buildConfig({
 				pool: {
 					connectionString: process.env.DATABASE_URL,
 				},
-				push: false,
+				push: true,
 			})
 		: sqliteAdapter({
 				client: {
-					url: "file:" + path.resolve(dirname, "../payload.db"),
+					url: process.env.DATABASE_URI || "file:payload.db",
 				},
+				push: true,
 			}),
 
 	// TypeScript type generation
@@ -115,6 +143,52 @@ export default buildConfig({
 			generateTitle: ({ doc }) => `FlowMasters | ${doc.title}`,
 			generateDescription: ({ doc }) => doc.description || doc.excerpt,
 			tabbedUI: false,
+		}),
+		formBuilderPlugin({
+			fields: {
+				payment: false,
+				state: false,
+				country: false,
+			},
+			formOverrides: {
+				fields: ({ defaultFields }) => {
+					return defaultFields.map((field) => {
+						if ("blocks" in field && field.name === "fields") {
+							return {
+								...field,
+								blocks: [
+									...(field.blocks || []).map((block) => {
+										if (
+											block.slug === "text" ||
+											block.slug === "textarea" ||
+											block.slug === "email" ||
+											block.slug === "number"
+										) {
+											return {
+												...block,
+												fields: [
+													...block.fields,
+													{
+														name: "placeholder",
+														type: "text" as const,
+														label: "Placeholder",
+													},
+												],
+											};
+										}
+										return block;
+									}),
+									UrgencyBlock,
+									PropertyTypeBlock,
+									FileBlock,
+									CheckboxGroupBlock,
+								],
+							};
+						}
+						return field;
+					});
+				},
+			},
 		}),
 	],
 });

@@ -17,6 +17,7 @@ import { CardsGridBlock } from "@/components/blocks/cards-grid-block";
 import { ServiceAreasBlockComponent } from "@/components/blocks/service-areas-block";
 import { HighlightedServicesBlockComponent } from "@/components/blocks/highlighted-services-block";
 import { DualColumnBlock } from "@/components/blocks/dual-column-block";
+import { FormBlock } from "@/components/blocks/form-block";
 
 interface RenderBlocksProps {
 	layout: Page["layout"];
@@ -104,6 +105,9 @@ export function RenderBlocks({
 					case "dualColumn":
 						// @ts-ignore
 						return <DualColumnBlock key={key} {...block} />;
+					case "formBlock":
+						// @ts-ignore
+						return <FormBlock key={key} {...block} />;
 					default:
 						// Fallback for unknown blocks or standard blocks if needed
 						return null;
