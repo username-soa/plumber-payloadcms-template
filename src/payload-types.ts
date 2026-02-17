@@ -848,10 +848,42 @@ export interface Page {
         paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         cards?:
           | {
+              /**
+               * Small text label like 'Popular' or 'New'
+               */
+              tag?: string | null;
               icon?: string | null;
               title: string;
               description?: string | null;
-              link?: string | null;
+              link: {
+                type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                label: string;
+                url?: string | null;
+                newTab?: boolean | null;
+                email?: string | null;
+                phoneNumber?: string | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'services';
+                      value: number | Service;
+                    } | null);
+                style?:
+                  | (
+                      | 'primary'
+                      | 'secondary'
+                      | 'outline'
+                      | 'ghost'
+                      | 'destructive'
+                      | 'badge'
+                      | 'badge-pulsing'
+                      | 'primary-gradient-dots'
+                    )
+                  | null;
+              };
               id?: string | null;
             }[]
           | null;
@@ -1448,6 +1480,15 @@ export interface Form {
             id?: string | null;
             blockName?: string | null;
             blockType: 'checkboxGroup';
+          }
+        | {
+            name: string;
+            label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'serviceSelect';
           }
       )[]
     | null;
@@ -2163,10 +2204,22 @@ export interface PagesSelect<T extends boolean = true> {
               cards?:
                 | T
                 | {
+                    tag?: T;
                     icon?: T;
                     title?: T;
                     description?: T;
-                    link?: T;
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          label?: T;
+                          url?: T;
+                          newTab?: T;
+                          email?: T;
+                          phoneNumber?: T;
+                          reference?: T;
+                          style?: T;
+                        };
                     id?: T;
                   };
               id?: T;
@@ -2631,6 +2684,16 @@ export interface FormsSelect<T extends boolean = true> {
                     value?: T;
                     id?: T;
                   };
+              width?: T;
+              required?: T;
+              id?: T;
+              blockName?: T;
+            };
+        serviceSelect?:
+          | T
+          | {
+              name?: T;
+              label?: T;
               width?: T;
               required?: T;
               id?: T;

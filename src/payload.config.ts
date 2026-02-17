@@ -19,6 +19,8 @@ import { PropertyTypeBlock } from "./blocks/PropertyTypeBlock";
 import { FileBlock } from "./blocks/FileBlock";
 import { CheckboxGroupBlock } from "./blocks/CheckboxGroupBlock";
 
+import { ServiceSelectBlock } from "./blocks/ServiceSelectBlock";
+
 import { BlogPosts } from "./collections/BlogPosts";
 import { CaseStudies } from "./collections/CaseStudies";
 import { Tags } from "./collections/Tags";
@@ -182,6 +184,7 @@ export default buildConfig({
 									PropertyTypeBlock,
 									FileBlock,
 									CheckboxGroupBlock,
+									ServiceSelectBlock,
 								],
 							};
 						}

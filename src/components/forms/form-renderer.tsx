@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, useMemo } from "react";
+import { useState, useTransition, useMemo, useEffect } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,6 +12,7 @@ import { Loader } from "lucide-react";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 import { blockConverters } from "@/components/richtext/block-converters";
 import { generateFormSchema } from "@/lib/forms/schema";
+import { getServices } from "@/app/(site)/actions/get-services";
 
 // Field Components
 import { TextField } from "./fields/text-field";
@@ -28,13 +29,39 @@ import { uploadMedia } from "@/app/(site)/actions/media-actions";
 type FormRendererProps = {
 	form: Form;
 	customRenderers?: Record<string, React.ComponentType<any>>;
+	// Allow passing services directly if needed (e.g. from server component parents)
+	initialServiceOptions?: { label: string; value: string }[];
 };
 
-export function FormRenderer({ form, customRenderers }: FormRendererProps) {
+export function FormRenderer({
+	form,
+	customRenderers,
+	initialServiceOptions,
+}: FormRendererProps) {
 	const router = useRouter();
 	const [isPending, startTransition] = useTransition();
 	const [serverError, setServerError] = useState<string | null>(null);
-	const [successMessage, setSuccessMessage] = useState<any>(null);
+	const [successMessage, setSuccessMessage] = useState<
+		string | Record<string, unknown> | null
+	>(null);
+	const [serviceOptions, setServiceOptions] = useState<
+		{ label: string; value: string }[]
+	>(initialServiceOptions || []);
+
+	// Fetch services if not provided and form has serviceSelect field
+	useEffect(() => {
+		const hasServiceSelect = form.fields?.some(
+			(field) => field.blockType === "serviceSelect",
+		);
+
+		if (hasServiceSelect && serviceOptions.length === 0) {
+			const fetchServices = async () => {
+				const options = await getServices();
+				setServiceOptions(options);
+			};
+			fetchServices();
+		}
+	}, [form.fields, serviceOptions.length]);
 
 	// Generate schema based on form fields
 	const schema = useMemo(() => generateFormSchema(form.fields), [form.fields]);
@@ -153,7 +180,7 @@ export function FormRenderer({ form, customRenderers }: FormRendererProps) {
 						const CustomRenderer = customRenderers?.[fieldName];
 						if (CustomRenderer) {
 							return (
-								<div key={fieldName} className={colSpanClass}>
+								<div key={(field as any).id || index} className={colSpanClass}>
 									<Controller
 										control={methods.control}
 										name={fieldName}
@@ -170,7 +197,7 @@ export function FormRenderer({ form, customRenderers }: FormRendererProps) {
 						}
 
 						return (
-							<div key={fieldName} className={colSpanClass}>
+							<div key={(field as any).id || index} className={colSpanClass}>
 								{field.blockType === "text" && (
 									<TextField
 										name={field.name}
@@ -252,6 +279,15 @@ export function FormRenderer({ form, customRenderers }: FormRendererProps) {
 										label={field.label || ""}
 										required={Boolean(field.required)}
 										options={field.options || []}
+									/>
+								)}
+								{field.blockType === "serviceSelect" && (
+									<SelectField
+										name={field.name}
+										label={field.label || ""}
+										placeholder={field.label || "Select a service"}
+										required={Boolean(field.required)}
+										options={serviceOptions || []}
 									/>
 								)}
 							</div>

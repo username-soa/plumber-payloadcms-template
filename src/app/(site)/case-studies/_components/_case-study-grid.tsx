@@ -2,7 +2,7 @@ import { SearchX } from "lucide-react";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import type { CaseStudy } from "@/payload-types";
-import { CaseStudyCard } from "./case-study-card";
+import { CaseStudyCard } from "./_case-study-card";
 
 async function getCaseStudies(): Promise<CaseStudy[]> {
 	const payload = await getPayload({ config });

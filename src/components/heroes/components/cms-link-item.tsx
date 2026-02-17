@@ -9,23 +9,8 @@ type Reference = {
 	value: string | Page | Service;
 };
 
-export type CMSLinkType = {
-	type: "reference" | "custom" | "email" | "phone" | "badge";
-	label: string;
-	url?: string | null;
-	newTab?: boolean | null;
-	email?: string | null;
-	phoneNumber?: string | null;
-	reference?: Reference | null;
-	style?:
-		| "primary"
-		| "secondary"
-		| "outline"
-		| "ghost"
-		| "destructive"
-		| "badge"
-		| "badge-pulsing";
-};
+import { type CMSLinkType } from "@/lib/cms-link";
+export type { CMSLinkType };
 
 export function CMSLinkItem({
 	link,

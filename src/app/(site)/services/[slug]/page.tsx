@@ -133,11 +133,11 @@ export default async function ServicePage({ params }: ServicePageProps) {
 			.filter((s) => s !== null);
 	}
 
-	const faqs =
-		payloadService.faqs?.map((faq) => ({
-			question: faq.question,
-			answer: faq.answer,
-		})) || [];
+	const faqs: { question: string; answer: string }[] = [];
+	// 	payloadService.faqs?.map((faq) => ({
+	// 		question: faq.question,
+	// 		answer: faq.answer,
+	// 	})) || [];
 
 	// Use the explicit short description for now as longDescription is RichText
 	// and components expect string.
@@ -158,14 +158,14 @@ export default async function ServicePage({ params }: ServicePageProps) {
 		subServices: subServices,
 		faqs: faqs,
 		// Prefer Payload process data, fallback to static if empty
-		process:
-			payloadService.process && payloadService.process.length > 0
-				? payloadService.process.map((step) => ({
-						title: step.title,
-						description: step.description || "",
-						icon: "CheckCircle",
-					}))
-				: staticService?.process,
+		process: staticService?.process,
+		// 	payloadService.process && payloadService.process.length > 0
+		// 		? payloadService.process.map((step) => ({
+		// 				title: step.title,
+		// 				description: step.description || "",
+		// 				icon: "CheckCircle",
+		// 			}))
+		// 		: staticService?.process,
 		isEmergency: payloadService.isEmergency || false,
 		availability: payloadService.availability || undefined,
 	};

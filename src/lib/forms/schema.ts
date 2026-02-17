@@ -137,6 +137,18 @@ export function generateFormSchema(fields: Field[] | undefined | null) {
 				}
 				break;
 
+			case "serviceSelect":
+				fieldSchema = z.string();
+				if (required) {
+					fieldSchema = (fieldSchema as z.ZodString).min(
+						1,
+						"Please select a service",
+					);
+				} else {
+					fieldSchema = (fieldSchema as z.ZodString).optional();
+				}
+				break;
+
 			default:
 				// Fallback for unknown fields
 				fieldSchema = z.any();

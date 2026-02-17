@@ -1,5 +1,6 @@
 import type { Block } from "payload";
 import { background } from "@/fields/background";
+import { link } from "@/fields/link";
 
 export const CardsGridBlock: Block = {
 	slug: "cardsGrid",
@@ -100,6 +101,15 @@ export const CardsGridBlock: Block = {
 					type: "row",
 					fields: [
 						{
+							name: "tag",
+							type: "text",
+							label: "Tag (Optional)",
+							admin: {
+								width: "50%",
+								description: "Small text label like 'Popular' or 'New'",
+							},
+						},
+						{
 							name: "icon",
 							type: "text",
 							label: "Icon",
@@ -126,11 +136,10 @@ export const CardsGridBlock: Block = {
 					type: "textarea",
 					label: "Description",
 				},
-				{
+				link({
 					name: "link",
-					type: "text",
-					label: "Link (Optional URL)",
-				},
+					label: "Link",
+				}),
 			],
 		},
 	],

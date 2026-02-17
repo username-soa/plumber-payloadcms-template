@@ -53,7 +53,7 @@ const checkDb = async () => {
 		console.log("Output written to db_inspection.txt");
 	} catch (e) {
 		console.error(e);
-		fs.writeFileSync("db_inspection.txt", `Error: ${e.message}`);
+		fs.writeFileSync("db_inspection.txt", `Error: ${(e as any).message}`);
 	}
 	process.exit(0);
 };

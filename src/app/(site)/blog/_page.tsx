@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { BlogHero } from "./_components/blog-hero";
-import { BlogGrid } from "./_components/blog-grid";
+import { BlogHero } from "./_components/_blog-hero";
+import { BlogGrid } from "./_components/_blog-grid";
 import { SITE_CONFIG } from "@/lib/site-config";
 
 export const metadata: Metadata = {

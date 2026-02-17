@@ -27,7 +27,10 @@ type Props = {
 
 const customRenderers = {};
 
-export const FormBlock = ({
+// ... imports
+import { getServices } from "@/app/(site)/actions/get-services";
+
+export const FormBlock = async ({
 	form,
 	enableIntro,
 	introContent,
@@ -45,6 +48,8 @@ export const FormBlock = ({
 		return null;
 	}
 
+	const serviceOptions = await getServices();
+
 	return (
 		<SectionWrapper
 			paddingTop={paddingTopOption as PaddingOption}
@@ -52,37 +57,36 @@ export const FormBlock = ({
 			className={`form-block ${className || ""}`}
 			background={background}
 		>
-			<div className="container mx-auto px-4">
-				<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-					{/* Left Column: Intro Content */}
-					{enableIntro && introContent ? (
-						<div className="prose dark:prose-invert max-w-none">
-							<RichText data={introContent} converters={blockConverters} />
-						</div>
-					) : (
-						// Empty div to maintain grid structure if no intro
-						<div className="hidden lg:block"></div>
-					)}
-
-					{/* Right Column: Form */}
-					<div
-						className={`bg-card rounded-xl p-6 md:p-8 ${enableBorder ? "border border-border shadow-sm" : ""}`}
-					>
-						{enableHeader && headerContent && (
-							<div className="prose dark:prose-invert max-w-none mb-6">
-								<RichText data={headerContent} converters={blockConverters} />
-							</div>
-						)}
-						<FormRenderer
-							form={form as Form}
-							customRenderers={customRenderers}
-						/>
-						{enableFooter && footerContent && (
-							<div className="prose dark:prose-invert max-w-none mt-6">
-								<RichText data={footerContent} converters={blockConverters} />
-							</div>
-						)}
+			<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
+				{/* Left Column: Intro Content */}
+				{enableIntro && introContent ? (
+					<div className="prose dark:prose-invert max-w-none">
+						<RichText data={introContent} converters={blockConverters} />
 					</div>
+				) : (
+					// Empty div to maintain grid structure if no intro
+					<div className="hidden lg:block"></div>
+				)}
+
+				{/* Right Column: Form */}
+				<div
+					className={`bg-card rounded-xl p-6 md:p-8 ${enableBorder ? "border border-border shadow-sm" : ""}`}
+				>
+					{enableHeader && headerContent && (
+						<div className="prose dark:prose-invert max-w-none mb-6">
+							<RichText data={headerContent} converters={blockConverters} />
+						</div>
+					)}
+					<FormRenderer
+						form={form as Form}
+						customRenderers={customRenderers}
+						initialServiceOptions={serviceOptions}
+					/>
+					{enableFooter && footerContent && (
+						<div className="prose dark:prose-invert max-w-none mt-6">
+							<RichText data={footerContent} converters={blockConverters} />
+						</div>
+					)}
 				</div>
 			</div>
 		</SectionWrapper>

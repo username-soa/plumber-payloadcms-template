@@ -17,8 +17,8 @@ type LegalContactProps = NonNullable<Page["layout"]>[number] & {
 		brandName?: string;
 	};
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
-		decoration?: "none" | "dots";
+		bg?: "transparent" | "muted" | "primary" | null;
+		decoration?: "none" | "dots" | null;
 	};
 };
 

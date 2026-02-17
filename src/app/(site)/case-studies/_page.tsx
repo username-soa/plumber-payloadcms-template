@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { CaseStudiesHero } from "./_components/case-studies-hero";
-import { CaseStudyGrid } from "./_components/case-study-grid";
+import { CaseStudiesHero } from "./_components/_case-studies-hero";
+import { CaseStudyGrid } from "./_components/_case-study-grid";
 import { SITE_CONFIG } from "@/lib/site-config";
 
 export const metadata: Metadata = {
