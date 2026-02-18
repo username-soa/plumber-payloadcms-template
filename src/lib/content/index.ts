@@ -3,7 +3,7 @@
  * Central export for content fetching utilities
  */
 
-// Types
+// Types & type guards
 export * from "./types";
 
 // Fetchers
@@ -24,3 +24,9 @@ export {
 	calculatePagination,
 	calculateTotalPages,
 } from "./queries/build-query";
+
+// Search plugin mapping (single source of truth)
+export {
+	CONTENT_TYPE_TO_SEARCH_FILTER,
+	type SearchFilterType,
+} from "./search-type-map";

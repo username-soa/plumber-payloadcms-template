@@ -1,10 +1,16 @@
 /**
  * ContentFetcher Component
- * Server component for fetching and displaying content from Payload CMS
  *
- * This is a thin orchestration layer that composes:
- * - Data layer: lib/content (types, fetchers, queries)
- * - UI components: ContentHeader, ContentGrid, FilterSection, Pagination
+ * Async Server Component that orchestrates content fetching and rendering for
+ * listing pages (blogs, case-studies, services). It composes:
+ *
+ * - Data layer  : `lib/content` (types, fetchers, query builders)
+ * - Filter UI   : `FilterSection` (desktop bar + mobile sheet)
+ * - Grid UI     : `ContentGrid` (pure presentational grid)
+ * - Pagination  : `PaginationNumbered` | `LoadMoreButton` | `InfiniteScroll`
+ *
+ * Being a Server Component means all data fetching happens on the server —
+ * no client-side loading states or waterfalls for the initial render.
  */
 
 import { getPayload } from "payload";
@@ -19,7 +25,7 @@ import {
 } from "@/components/cards";
 import { TypographyMuted } from "@/components/ui/typography";
 
-// Data layer imports
+// Data layer
 import {
 	type ContentType,
 	type ContentItem,
@@ -27,22 +33,21 @@ import {
 	type PaginationStyle,
 	type GridColumns,
 	type SearchParams,
+	isBlogPost,
+	isCaseStudy,
+	isService,
 	getFilterOptions,
 	fetchContent,
 } from "@/lib/content";
 
 // Sub-components
-
 import { ContentGrid } from "./ContentGrid";
 import { FilterSection } from "./FilterSection";
 import { PaginationNumbered } from "./pagination-numbered";
 import { LoadMoreButton } from "./load-more-button";
 import { InfiniteScroll } from "./infinite-scroll";
 import { cn } from "@/lib/utils";
-import {
-	SectionWrapper,
-	type PaddingOption,
-} from "@/components/ui/section-wrapper";
+import { SectionWrapper, type PaddingOption } from "@/components/ui/section-wrapper";
 
 // Re-export for backwards compatibility
 export type { CategoryOption, TagOption } from "@/lib/content";
@@ -72,22 +77,8 @@ interface ContentFetcherProps {
 	};
 }
 
-// ... Type Guards and Error Component are unchanged ...
-
-function isBlogPost(item: ContentItem): item is BlogPost {
-	return "publishedAt" in item && "status" in item;
-}
-
-function isCaseStudy(item: ContentItem): item is CaseStudy {
-	return "completedAt" in item && "client" in item;
-}
-
-function isService(item: ContentItem): item is Service {
-	return "isEmergency" in item || "parentService" in item;
-}
-
 // =============================================================================
-// Error Component
+// Error fallback
 // =============================================================================
 
 function ContentFetcherError() {
@@ -103,17 +94,21 @@ function ContentFetcherError() {
 }
 
 // =============================================================================
-// Card Renderer Factory
+// Card renderer factory
 // =============================================================================
 
+/**
+ * Returns a render function for a single content item.
+ * Defined at module scope (not inside the component) so it is never recreated
+ * across renders — the factory itself is pure and has no closure over state.
+ */
 function createCardRenderer(contentType: ContentType) {
 	return (item: ContentItem, index: number) => {
+		// Featured items span the full grid width
 		const isFeatured =
-			(isBlogPost(item) || isCaseStudy(item)) &&
-			"featured" in item &&
-			item.featured;
+			(isBlogPost(item) || isCaseStudy(item)) && "featured" in item && item.featured;
 
-		const cardContent = (() => {
+		const card = (() => {
 			if (isBlogPost(item)) {
 				return isFeatured ? (
 					<FeaturedBlogCard post={item} priority={index < 3} />
@@ -136,14 +131,14 @@ function createCardRenderer(contentType: ContentType) {
 
 		return (
 			<div key={item.id} className={isFeatured ? "col-span-full" : ""}>
-				{cardContent}
+				{card}
 			</div>
 		);
 	};
 }
 
 // =============================================================================
-// Main Component
+// Main component
 // =============================================================================
 
 export async function ContentFetcher({
@@ -165,7 +160,7 @@ export async function ContentFetcher({
 		const page = Number.parseInt(searchParams.page || "1", 10);
 		const itemsPerPage = limit || 6;
 
-		// Fetch filter options and content in parallel
+		// Fetch filter options and content in parallel — no sequential waterfall
 		const [filterOptions, contentResult] = await Promise.all([
 			getFilterOptions(payload, contentType),
 			fetchContent(payload, {
@@ -182,17 +177,19 @@ export async function ContentFetcher({
 		const { categoryOptions, tagOptions } = filterOptions;
 		const { items, totalPages, totalDocs } = contentResult;
 
-		// Sort items to ensure featured content comes first to prevent grid layout issues
+		// Sort so featured items always appear first, preventing grid layout gaps
 		const sortedItems = [...items].sort((a, b) => {
 			const aFeatured =
 				(isBlogPost(a) || isCaseStudy(a)) && "featured" in a && !!a.featured;
 			const bFeatured =
 				(isBlogPost(b) || isCaseStudy(b)) && "featured" in b && !!b.featured;
-
 			if (aFeatured && !bFeatured) return -1;
 			if (!aFeatured && bFeatured) return 1;
 			return 0;
 		});
+
+		// Stable card renderer — created once per contentType, not per render
+		const renderCard = createCardRenderer(contentType);
 
 		return (
 			<SectionWrapper
@@ -201,21 +198,24 @@ export async function ContentFetcher({
 				paddingBottom={paddingBottomOption as PaddingOption}
 				background={background}
 			>
-				<div className="container mx-auto px-6">
+					{/* Filter bar / mobile sheet */}
 					<FilterSection
 						categoryOptions={categoryOptions}
 						tagOptions={tagOptions}
 						showSearch={showSearch || false}
 						showFilters={showFilters || false}
+						contentType={contentType}
 					/>
 
+					{/* Content grid */}
 					<ContentGrid
 						items={sortedItems}
 						contentType={contentType}
 						itemsPerRow={itemsPerRow}
-						renderCard={createCardRenderer(contentType)}
+						renderCard={renderCard}
 					/>
 
+					{/* Pagination */}
 					{paginationStyle === "numbered" && (
 						<PaginationNumbered totalPages={totalPages} />
 					)}
@@ -225,7 +225,6 @@ export async function ContentFetcher({
 					{paginationStyle === "infiniteScroll" && (
 						<InfiniteScroll totalPages={totalPages} totalItems={totalDocs} />
 					)}
-				</div>
 			</SectionWrapper>
 		);
 	} catch (error) {

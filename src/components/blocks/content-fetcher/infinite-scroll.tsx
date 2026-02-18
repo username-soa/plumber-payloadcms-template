@@ -1,81 +1,92 @@
+/**
+ * InfiniteScroll Component
+ *
+ * Uses an `IntersectionObserver` to detect when the sentinel element at the
+ * bottom of the list enters the viewport, then increments the `page` URL
+ * query param to trigger a server re-fetch of the next page.
+ *
+ * Uses `useTransition` for the page update so React can keep the current
+ * content visible while the next page is loading (no layout flash).
+ *
+ * This is a Client Component because it uses browser APIs and URL state.
+ */
+
 "use client";
 
-import { useEffect, useRef, useCallback, useTransition, useState } from "react";
+import { useEffect, useRef, useCallback, useTransition } from "react";
 import { useQueryState, parseAsInteger } from "nuqs";
 import { Loader, ChevronDown } from "lucide-react";
-import EndMessage from "./end-message";
+import { EndMessage } from "./end-message";
+
+// ---------------------------------------------------------------------------
+// Props
+// ---------------------------------------------------------------------------
 
 interface InfiniteScrollProps {
 	totalPages: number;
 	totalItems: number;
 }
 
-export function InfiniteScroll({
-	totalPages,
-	totalItems,
-}: InfiniteScrollProps) {
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
+export function InfiniteScroll({ totalPages, totalItems }: InfiniteScrollProps) {
 	const [page, setPage] = useQueryState(
 		"page",
 		parseAsInteger.withDefault(1).withOptions({ shallow: false }),
 	);
+	// `isPending` is true while the page transition (URL update + server fetch) is in flight
 	const [isPending, startTransition] = useTransition();
-	const [isLoading, setIsLoading] = useState(false);
-	const observerRef = useRef<HTMLDivElement>(null);
 
+	const observerRef = useRef<HTMLDivElement>(null);
 	const hasMore = page < totalPages;
 
+	/** Increment the page inside a transition so the UI stays responsive */
 	const loadMore = useCallback(() => {
-		if (isPending || isLoading || !hasMore) return;
-		setIsLoading(true);
+		if (isPending || !hasMore) return;
 		startTransition(() => {
 			setPage(page + 1);
 		});
-	}, [page, setPage, isPending, isLoading, hasMore]);
+	}, [page, setPage, isPending, hasMore]);
 
-	// Reset loading state when page changes (after navigation completes)
-	// biome-ignore lint/correctness/useExhaustiveDependencies: intentional - page triggers effect, not read inside
-	useEffect(() => {
-		setIsLoading(false);
-	}, [page]);
-
+	// Observe the sentinel element; trigger loadMore when it enters the viewport
 	useEffect(() => {
 		const observer = new IntersectionObserver(
 			(entries) => {
-				if (entries[0].isIntersecting && hasMore && !isPending && !isLoading) {
+				if (entries[0].isIntersecting && hasMore && !isPending) {
 					loadMore();
 				}
 			},
 			{ threshold: 0.1 },
 		);
 
-		const currentRef = observerRef.current;
-		if (currentRef) {
-			observer.observe(currentRef);
-		}
-
+		const sentinel = observerRef.current;
+		if (sentinel) observer.observe(sentinel);
 		return () => {
-			if (currentRef) {
-				observer.unobserve(currentRef);
-			}
+			if (sentinel) observer.unobserve(sentinel);
 		};
-	}, [loadMore, hasMore, isPending, isLoading]);
+	}, [loadMore, hasMore, isPending]);
 
-	// Only show if loading, has more, or we've loaded additional pages (to show "end" message)
+	// Show the "end" message only after the user has scrolled past the first page
 	const showEndMessage = !hasMore && page > 1;
 
-	if (!hasMore && !isLoading && !showEndMessage) return null;
+	// Nothing to render when there are no more pages and no end message to show
+	if (!hasMore && !isPending && !showEndMessage) return null;
 
 	return (
 		<div
 			ref={observerRef}
 			className="flex flex-col justify-center items-center py-8 min-h-[80px]"
 		>
-			{isLoading || isPending ? (
+			{isPending ? (
+				// Loading indicator while the next page is being fetched
 				<div className="flex items-center gap-2 text-muted-foreground">
 					<Loader className="w-6 h-6 animate-spin text-primary" />
 					<span className="text-sm font-medium">Loading more...</span>
 				</div>
 			) : hasMore ? (
+				// Scroll hint shown when the sentinel is visible but not yet loading
 				<div className="flex flex-col items-center gap-1 text-muted-foreground animate-bounce">
 					<ChevronDown className="w-5 h-5" />
 					<span className="text-xs">Scroll for more</span>

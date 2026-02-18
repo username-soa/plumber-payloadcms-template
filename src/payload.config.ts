@@ -8,6 +8,8 @@ import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 import { s3Storage } from "@payloadcms/storage-s3";
 import { seoPlugin } from "@payloadcms/plugin-seo";
+import { redirectsPlugin } from "@payloadcms/plugin-redirects";
+import { searchPlugin } from "@payloadcms/plugin-search";
 import { Users } from "./collections/Users";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { Media } from "./collections/Media";
@@ -92,7 +94,6 @@ export default buildConfig({
 			return [
 				...defaultFeatures,
 				CustomColorFeature(),
-				CustomColorFeature(),
 				BlocksFeature({
 					blocks: [FormBlock, FeatureListBlock],
 				}),
@@ -145,6 +146,76 @@ export default buildConfig({
 			generateTitle: ({ doc }) => `FlowMasters | ${doc.title}`,
 			generateDescription: ({ doc }) => doc.description || doc.excerpt,
 			tabbedUI: false,
+		}),
+		redirectsPlugin({
+			collections: ["pages", "blog-posts", "case-studies", "services"],
+			overrides: {
+				admin: {
+					group: "SEO & Content",
+				},
+			},
+		}),
+		searchPlugin({
+			collections: ["blog-posts", "case-studies", "services", "faqs"],
+			beforeSync: ({ originalDoc, searchDoc }) => {
+				const collectionSlug = searchDoc.doc?.relationTo;
+				// FAQs use 'question' as their title field
+				if (collectionSlug === "faqs") {
+					return {
+						...searchDoc,
+						title: originalDoc.question || searchDoc.title,
+						excerpt: originalDoc.answer || "",
+						slug: originalDoc.slug || "",
+					};
+				}
+				// For blog-posts and case-studies, use the summary field as excerpt
+				if (
+					collectionSlug === "blog-posts" ||
+					collectionSlug === "case-studies"
+				) {
+					return {
+						...searchDoc,
+						excerpt: originalDoc.summary || "",
+						slug: originalDoc.slug || "",
+					};
+				}
+				// For services, use the description field as excerpt
+				if (collectionSlug === "services") {
+					return {
+						...searchDoc,
+						excerpt: originalDoc.description || "",
+						slug: originalDoc.slug || "",
+					};
+				}
+				// Fallback: copy slug for any other collection
+				return { ...searchDoc, slug: originalDoc.slug || "" };
+			},
+			searchOverrides: {
+				admin: {
+					group: "SEO & Content",
+				},
+				fields: ({ defaultFields }) => [
+					...defaultFields,
+					{
+						name: "slug",
+						type: "text" as const,
+						label: "Slug",
+						admin: {
+							readOnly: true,
+							description: "Auto-populated from the source document slug",
+						},
+					},
+					{
+						name: "excerpt",
+						type: "textarea" as const,
+						label: "Excerpt",
+						admin: {
+							readOnly: true,
+							description: "Auto-populated from the source document",
+						},
+					},
+				],
+			},
 		}),
 		formBuilderPlugin({
 			fields: {

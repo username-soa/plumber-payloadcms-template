@@ -1,9 +1,17 @@
+/**
+ * ContentFilters Component
+ *
+ * Desktop filter bar rendered above the content grid. Provides category and tag
+ * dropdowns (backed by URL query params via `nuqs`) and an optional SearchBar.
+ *
+ * This is a Client Component because it reads and writes URL search params.
+ */
+
 "use client";
 
 import { useCallback } from "react";
 import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
-import { Search, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
 	Select,
@@ -12,19 +20,32 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { CategoryOption, TagOption } from "@/lib/content";
+import type { CategoryOption, TagOption, ContentType } from "@/lib/content";
+import { CONTENT_TYPE_TO_SEARCH_FILTER } from "@/lib/content";
+import { SearchBar } from "@/components/ui/SearchBar";
+
+// ---------------------------------------------------------------------------
+// Props
+// ---------------------------------------------------------------------------
 
 interface ContentFiltersProps {
 	categoryOptions: CategoryOption[];
 	tagOptions: TagOption[];
 	showSearch?: boolean;
+	contentType: ContentType;
 }
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
 
 export function ContentFilters({
 	categoryOptions,
 	tagOptions,
 	showSearch = true,
+	contentType,
 }: ContentFiltersProps) {
+	// Sync filter state with URL query params (triggers server re-fetch via nuqs)
 	const [category, setCategory] = useQueryState(
 		"category",
 		parseAsString.withDefault("").withOptions({ shallow: false }),
@@ -33,52 +54,47 @@ export function ContentFilters({
 		"tag",
 		parseAsString.withDefault("").withOptions({ shallow: false }),
 	);
-	const [search, setSearch] = useQueryState(
-		"search",
-		parseAsString.withDefault("").withOptions({ shallow: false }),
-	);
+	// We only write to `page` (reset to 1 on filter change) — we don't read it here
 	const [, setPage] = useQueryState(
 		"page",
 		parseAsInteger.withDefault(1).withOptions({ shallow: false }),
 	);
 
+	/** Select a category and reset to page 1 */
 	const handleCategoryChange = useCallback(
 		(value: string) => {
 			setCategory(value === "all" ? null : value);
-			setPage(1); // Reset to first page
+			setPage(1);
 		},
 		[setCategory, setPage],
 	);
 
+	/** Select a tag and reset to page 1 */
 	const handleTagChange = useCallback(
 		(value: string) => {
 			setTag(value === "all" ? null : value);
-			setPage(1); // Reset to first page
+			setPage(1);
 		},
 		[setTag, setPage],
 	);
 
-	const handleSearchChange = useCallback(
-		(value: string) => {
-			setSearch(value || null);
-			setPage(1);
-		},
-		[setSearch, setPage],
-	);
-
+	/** Clear all active filters and reset to page 1 */
 	const clearFilters = useCallback(() => {
 		setCategory(null);
 		setTag(null);
-		setSearch(null);
 		setPage(1);
-	}, [setCategory, setTag, setSearch, setPage]);
+	}, [setCategory, setTag, setPage]);
 
-	const hasActiveFilters = category || tag || search;
+	const hasActiveFilters = Boolean(category || tag);
+	// Map the ContentFetcher type to the search plugin's collection slug
+	const filterType = CONTENT_TYPE_TO_SEARCH_FILTER[contentType];
+	const searchPlaceholder = `Search ${contentType === "blogs" ? "blog posts" : contentType}…`;
 
 	return (
 		<div className="flex justify-between gap-3 md:mb-14 mb-8">
+			{/* ── Filter dropdowns ──────────────────────────────────────────────── */}
 			<div className="flex gap-3">
-				{/* Category Filter */}
+				{/* Category */}
 				<Select value={category || "all"} onValueChange={handleCategoryChange}>
 					<SelectTrigger className="w-full sm:w-[180px]">
 						<SelectValue placeholder="Category" />
@@ -92,7 +108,7 @@ export function ContentFilters({
 					</SelectContent>
 				</Select>
 
-				{/* Tag Filter - only show if there are tag options */}
+				{/* Tag — only shown when there are actual tag options beyond "All" */}
 				{tagOptions.length > 1 && (
 					<Select value={tag || "all"} onValueChange={handleTagChange}>
 						<SelectTrigger className="w-full sm:w-[180px]">
@@ -107,11 +123,11 @@ export function ContentFilters({
 						</SelectContent>
 					</Select>
 				)}
-				{/* Clear Filters */}
+
+				{/* Clear button — only shown when at least one filter is active */}
 				{hasActiveFilters && (
 					<Button
-						variant="ghost"
-						size="sm"
+						variant="secondary"
 						onClick={clearFilters}
 						className="text-muted-foreground hover:text-foreground"
 					>
@@ -120,18 +136,14 @@ export function ContentFilters({
 					</Button>
 				)}
 			</div>
-			{/* Search Input */}
-			{showSearch && (
-				<div className="relative flex-1 max-w-sm">
-					<Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-					<Input
-						type="text"
-						placeholder="Search..."
-						value={search}
-						onChange={(e) => handleSearchChange(e.target.value)}
-						className="pl-9"
-					/>
-				</div>
+
+			{/* ── Search bar ────────────────────────────────────────────────────── */}
+			{showSearch && filterType && (
+				<SearchBar
+					filterType={filterType}
+					placeholder={searchPlaceholder}
+					className="max-w-xs"
+				/>
 			)}
 		</div>
 	);

@@ -102,3 +102,31 @@ export const SERVICE_CATEGORY_OPTIONS: CategoryOption[] = [
 	{ label: "Emergency Only", value: "emergency" },
 	{ label: "Main Services", value: "main" },
 ];
+
+// =============================================================================
+// Content Item Type Guards
+// =============================================================================
+
+/**
+ * Narrows a `ContentItem` to `BlogPost`.
+ * Checks for fields that are exclusive to the BlogPost collection.
+ */
+export function isBlogPost(item: ContentItem): item is BlogPost {
+	return "publishedAt" in item && "status" in item;
+}
+
+/**
+ * Narrows a `ContentItem` to `CaseStudy`.
+ * Checks for fields that are exclusive to the CaseStudy collection.
+ */
+export function isCaseStudy(item: ContentItem): item is CaseStudy {
+	return "completedAt" in item && "client" in item;
+}
+
+/**
+ * Narrows a `ContentItem` to `Service`.
+ * Checks for fields that are exclusive to the Service collection.
+ */
+export function isService(item: ContentItem): item is Service {
+	return "isEmergency" in item || "parentService" in item;
+}
