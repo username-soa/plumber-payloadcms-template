@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { SITE_CONFIG } from "@/lib/site-config";
@@ -6,9 +7,7 @@ import { JsonLd } from "@/components/json-ld";
 import { generateArticleSchema, generateBlogBreadcrumbs } from "@/lib/json-ld";
 import type { BlogPost, Author } from "@/payload-types";
 import { getMediaUrl } from "@/lib/payload-utils";
-import { PostHero } from "../_components/post-hero";
-import { PostContent } from "../_components/post-content";
-import { PostSidebar } from "../_components/post-sidebar";
+import { BlogPostLivePreview } from "@/components/payload/live-preview/BlogPostLivePreview";
 
 const { seo } = SITE_CONFIG;
 
@@ -16,14 +15,17 @@ interface PageProps {
 	params: Promise<{ slug: string }>;
 }
 
-async function getBlogPostBySlug(slug: string): Promise<BlogPost | null> {
+async function getBlogPostBySlug(
+	slug: string,
+	draft = false,
+): Promise<BlogPost | null> {
 	const payload = await getPayload({ config });
 	const result = await payload.find({
 		collection: "blog-posts",
-		where: {
-			slug: { equals: slug },
-			status: { equals: "published" },
-		},
+		where: draft
+			? { slug: { equals: slug } }
+			: { slug: { equals: slug }, status: { equals: "published" } },
+		draft,
 		limit: 1,
 		depth: 2,
 	});
@@ -116,7 +118,8 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function BlogPostPage({ params }: PageProps) {
 	const { slug } = await params;
-	const post = await getBlogPostBySlug(slug);
+	const { isEnabled: isDraftMode } = await draftMode();
+	const post = await getBlogPostBySlug(slug, isDraftMode);
 
 	if (!post) {
 		notFound();
@@ -164,23 +167,11 @@ export default async function BlogPostPage({ params }: PageProps) {
 		<>
 			<JsonLd data={jsonLd} />
 
-			<article className="min-h-screen pb-20">
-				<PostHero post={post} readTime={readTime} />
-
-				<div className="container px-6 mx-auto mt-12 md:mt-16">
-					<div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
-						<PostContent post={post} />
-
-						<PostSidebar
-							post={post}
-							author={author}
-							readTime={readTime}
-							relatedPosts={relatedPosts}
-							city={seo.location.city}
-						/>
-					</div>
-				</div>
-			</article>
+			<BlogPostLivePreview
+				initialData={post}
+				relatedPosts={relatedPosts}
+				city={seo.location.city}
+			/>
 		</>
 	);
 }

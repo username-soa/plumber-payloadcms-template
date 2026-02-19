@@ -1,21 +1,23 @@
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { SITE_CONFIG } from "@/lib/site-config";
 import type { Page as PayloadPage } from "@/payload-types";
 import { getMediaUrl } from "@/lib/payload-utils";
+import { PageLivePreview } from "@/components/payload/live-preview/PageLivePreview";
 import { RenderBlocks } from "@/components/payload/RenderBlocks";
-import { Hero } from "@/components/heroes";
 
-async function getPageData(slug: string) {
+async function getPageData(slug: string, draft = false) {
 	const payload = await getPayload({ config });
 	const result = await payload.find({
 		collection: "pages",
-		where: {
-			slug: { equals: slug },
-			status: { equals: "published" },
-		},
+		where: draft
+			? { slug: { equals: slug } }
+			: { slug: { equals: slug }, status: { equals: "published" } },
+		draft,
 		limit: 1,
+		depth: 3,
 	});
 	return result.docs[0] || null;
 }
@@ -29,9 +31,7 @@ export async function generateMetadata({
 	const page = await getPageData(slug);
 
 	if (!page) {
-		return {
-			title: "Page Not Found",
-		};
+		return { title: "Page Not Found" };
 	}
 
 	const metaTitle =
@@ -60,7 +60,9 @@ export default async function DynamicPage({
 }) {
 	const { slug } = await params;
 	const resolvedSearchParams = await searchParams;
-	const page = (await getPageData(slug)) as PayloadPage | null;
+	const { isEnabled: isDraftMode } = await draftMode();
+
+	const page = (await getPageData(slug, isDraftMode)) as PayloadPage | null;
 
 	if (!page) {
 		notFound();
@@ -68,7 +70,10 @@ export default async function DynamicPage({
 
 	return (
 		<main className="min-h-screen bg-background">
-			<Hero page={page} />
+			{/* Hero — reacts to live preview changes via useLivePreview (client) */}
+			<PageLivePreview initialData={page} />
+
+			{/* Blocks — server-rendered; ContentFetcher must stay server-side */}
 			<RenderBlocks
 				layout={page.layout}
 				pageTitle={page.title}

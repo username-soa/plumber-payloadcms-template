@@ -1,16 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
+import { draftMode } from "next/headers";
 
 import { SITE_CONFIG } from "@/lib/site-config";
-import { Hero } from "@/components/heroes";
-
-import { ServiceDetails } from "../_components/service-details";
-import { WhyChooseUs } from "../_components/why-choose-us";
-import { ProcessSteps } from "../_components/process-steps";
-import { QuoteFormCTA } from "../_components/quote-form";
-import { ServiceFAQ } from "../_components/service-faq";
-import { RelatedServices } from "../_components/related-services";
-import { ReviewSection } from "@/components/sections/review";
 import { JsonLd } from "@/components/json-ld";
 import type { Service } from "@/payload-types";
 import {
@@ -20,6 +12,13 @@ import {
 } from "@/lib/json-ld";
 import { getServiceBySlug, getServices } from "@/app/(site)/actions/services";
 import { getMediaUrl } from "@/lib/payload-utils";
+import { ServiceLivePreview } from "@/components/payload/live-preview/ServiceLivePreview";
+import { WhyChooseUs } from "../_components/why-choose-us";
+import { ProcessSteps } from "../_components/process-steps";
+import { QuoteFormCTA } from "../_components/quote-form";
+import { ServiceFAQ } from "../_components/service-faq";
+import { RelatedServices } from "../_components/related-services";
+import { ReviewSection } from "@/components/sections/review";
 
 const { brand, seo } = SITE_CONFIG;
 
@@ -100,9 +99,10 @@ export async function generateMetadata({
 // 3. Main Page Component
 export default async function ServicePage({ params }: ServicePageProps) {
 	const { slug } = await params;
+	const { isEnabled: isDraftMode } = await draftMode();
 
 	// Fetch from Payload
-	const payloadService = await getServiceBySlug(slug);
+	const payloadService = await getServiceBySlug(slug, isDraftMode);
 	const allServices = await getServices();
 
 	if (!payloadService) {
@@ -205,39 +205,26 @@ export default async function ServicePage({ params }: ServicePageProps) {
 		<>
 			<JsonLd data={jsonLd} />
 
-			<Hero hero={payloadService.hero} title={payloadService.title} />
-
-			{/* Service Details with Sub-services (SEO-rich content) */}
-			<ServiceDetails
-				title={service.title}
-				longDescription={service.longDescription || service.description}
-				subServices={service.subServices}
-				process={service.process} // Static process steps
-				image={
+			{/* Data-driven sections — react to live preview changes */}
+			<ServiceLivePreview
+				initialData={payloadService}
+				subServices={subServices || []}
+				serviceImage={
 					getMediaUrl(payloadService.image) ||
 					"/images/service/service-details-plumber.png"
 				}
+				staticProcess={staticService?.process}
 			/>
 
-			{/* Why Choose Us + Stats */}
-			<WhyChooseUs stats={service.stats} />
-
-			{/* How It Works - Dynamic or Global Process */}
+			{/* Static sections — rendered server-side, no live preview needed */}
+			<WhyChooseUs stats={staticService?.stats} />
 			<ProcessSteps />
-
-			{/* Quote Form CTA */}
-			<QuoteFormCTA serviceName={service.title} />
-
-			{/* Reviews Section */}
+			<QuoteFormCTA serviceName={payloadService.title} />
 			<ReviewSection />
-
-			{/* Service-specific FAQs */}
-			<ServiceFAQ faqs={service.faqs || []} />
-
-			{/* Related Services */}
+			<ServiceFAQ faqs={faqs} />
 			<RelatedServices
 				services={allServices
-					.filter((s) => s.slug !== service.slug)
+					.filter((s: Service) => s.slug !== payloadService.slug)
 					.slice(0, 3)}
 			/>
 		</>

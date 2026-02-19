@@ -1,4 +1,5 @@
 import { notFound } from "next/navigation";
+import { draftMode } from "next/headers";
 import { getPayload } from "payload";
 import config from "@payload-config";
 import { SITE_CONFIG } from "@/lib/site-config";
@@ -8,10 +9,8 @@ import {
 	generateCaseStudyBreadcrumbs,
 } from "@/lib/json-ld";
 import type { CaseStudy } from "@/payload-types";
-import { SingleCaseStudyHero } from "../_components/single-case-study-hero";
-import { CaseStudyContent } from "../_components/case-study-content";
-import { CaseStudySidebar } from "../_components/case-study-sidebar";
 import { getMediaUrl, getCategoryName } from "@/lib/payload-utils";
+import { CaseStudyLivePreview } from "@/components/payload/live-preview/CaseStudyLivePreview";
 
 const { seo } = SITE_CONFIG;
 
@@ -19,14 +18,17 @@ interface PageProps {
 	params: Promise<{ slug: string }>;
 }
 
-async function getCaseStudyBySlug(slug: string): Promise<CaseStudy | null> {
+async function getCaseStudyBySlug(
+	slug: string,
+	draft = false,
+): Promise<CaseStudy | null> {
 	const payload = await getPayload({ config });
 	const result = await payload.find({
 		collection: "case-studies",
-		where: {
-			slug: { equals: slug },
-			_status: { equals: "published" },
-		},
+		where: draft
+			? { slug: { equals: slug } }
+			: { slug: { equals: slug }, _status: { equals: "published" } },
+		draft,
 		limit: 1,
 		depth: 2,
 	});
@@ -86,7 +88,8 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function CaseStudyPage({ params }: PageProps) {
 	const { slug } = await params;
-	const study = await getCaseStudyBySlug(slug);
+	const { isEnabled: isDraftMode } = await draftMode();
+	const study = await getCaseStudyBySlug(slug, isDraftMode);
 
 	if (!study) {
 		notFound();
@@ -119,17 +122,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
 		<>
 			<JsonLd data={jsonLd} />
 
-			<article className="min-h-screen pb-20">
-				<SingleCaseStudyHero study={study} />
-
-				{/* Content Section */}
-				<div className="container px-6 mx-auto mt-12 md:mt-16">
-					<div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
-						<CaseStudyContent study={study} />
-						<CaseStudySidebar study={study} />
-					</div>
-				</div>
-			</article>
+			<CaseStudyLivePreview initialData={study} />
 		</>
 	);
 }

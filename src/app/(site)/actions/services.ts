@@ -4,7 +4,10 @@ import config from "@payload-config";
 import { getPayload } from "payload";
 import type { Service } from "@/payload-types";
 
-export async function getServiceBySlug(slug: string): Promise<Service | null> {
+export async function getServiceBySlug(
+	slug: string,
+	draft = false,
+): Promise<Service | null> {
 	const payload = await getPayload({ config });
 
 	try {
@@ -15,6 +18,7 @@ export async function getServiceBySlug(slug: string): Promise<Service | null> {
 					equals: slug,
 				},
 			},
+			draft,
 			limit: 1,
 			depth: 2, // Ensure we get related media/data if needed
 		});
