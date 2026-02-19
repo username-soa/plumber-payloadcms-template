@@ -6,10 +6,7 @@ import {
 	OverviewField,
 	PreviewField,
 } from "@payloadcms/plugin-seo/fields";
-import {
-	cleanupServiceRelations,
-	syncServiceRelations,
-} from "./hooks/sync-service-relations";
+
 import { hero } from "../fields/hero";
 
 export const Services: CollectionConfig = {
@@ -18,10 +15,7 @@ export const Services: CollectionConfig = {
 		useAsTitle: "title",
 		defaultColumns: ["title", "slug", "updatedAt"],
 	},
-	hooks: {
-		afterChange: [syncServiceRelations],
-		afterDelete: [cleanupServiceRelations],
-	},
+
 	fields: [
 		hero,
 		{
@@ -89,24 +83,6 @@ export const Services: CollectionConfig = {
 							label: 'Availability (e.g., "24/7")',
 							admin: {
 								position: "sidebar",
-							},
-						},
-						{
-							name: "subServices",
-							type: "relationship",
-							relationTo: "services",
-							hasMany: true,
-							label: "Sub Services",
-							filterOptions: ({ id }) => {
-								return {
-									id: {
-										not_equals: id,
-									},
-								};
-							},
-							admin: {
-								description:
-									"Select services that belong to this category. The selected services will automatically have their 'Parent Service' field updated to point to this service.",
 							},
 						},
 						{

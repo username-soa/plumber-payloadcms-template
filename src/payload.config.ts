@@ -10,6 +10,7 @@ import { s3Storage } from "@payloadcms/storage-s3";
 import { seoPlugin } from "@payloadcms/plugin-seo";
 import { redirectsPlugin } from "@payloadcms/plugin-redirects";
 import { searchPlugin } from "@payloadcms/plugin-search";
+import { nestedDocsPlugin } from "@payloadcms/plugin-nested-docs";
 import { Users } from "./collections/Users";
 import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { Media } from "./collections/Media";
@@ -263,6 +264,14 @@ export default buildConfig({
 					});
 				},
 			},
+		}),
+		nestedDocsPlugin({
+			collections: ["services"],
+			parentFieldSlug: "parentService",
+			breadcrumbsFieldSlug: "breadcrumbs",
+			generateLabel: (_, doc) => doc.title as string,
+			generateURL: (docs) =>
+				docs.reduce((url, doc) => `${url}/${doc.slug}`, "/services"),
 		}),
 	],
 });

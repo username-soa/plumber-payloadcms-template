@@ -500,10 +500,6 @@ export interface Service {
   image: number | Media;
   isEmergency?: boolean | null;
   availability?: string | null;
-  /**
-   * Select services that belong to this category. The selected services will automatically have their 'Parent Service' field updated to point to this service.
-   */
-  subServices?: (number | Service)[] | null;
   parentService?: (number | null) | Service;
   meta?: {
     title?: string | null;
@@ -1987,7 +1983,6 @@ export interface ServicesSelect<T extends boolean = true> {
   image?: T;
   isEmergency?: T;
   availability?: T;
-  subServices?: T;
   parentService?: T;
   meta?:
     | T
