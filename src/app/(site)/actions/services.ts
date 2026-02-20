@@ -30,6 +30,28 @@ export async function getServiceBySlug(
 	}
 }
 
+export async function getSubServices(parentId: number): Promise<Service[]> {
+	const payload = await getPayload({ config });
+
+	try {
+		const result = await payload.find({
+			collection: "services",
+			where: {
+				parentService: {
+					equals: parentId,
+				},
+			},
+			limit: 50,
+			sort: "title",
+		});
+
+		return result.docs;
+	} catch (error) {
+		console.error(`Error fetching sub-services for parent ${parentId}:`, error);
+		return [];
+	}
+}
+
 export async function getServices(): Promise<Service[]> {
 	const payload = await getPayload({ config });
 
@@ -43,6 +65,34 @@ export async function getServices(): Promise<Service[]> {
 		return result.docs;
 	} catch (error) {
 		console.error("Error fetching services:", error);
+		return [];
+	}
+}
+
+export async function getRelatedServices(
+	currentSlug: string,
+	limit = 3,
+): Promise<Service[]> {
+	const payload = await getPayload({ config });
+
+	try {
+		const result = await payload.find({
+			collection: "services",
+			where: {
+				slug: {
+					not_equals: currentSlug,
+				},
+			},
+			limit,
+			sort: "-updatedAt", // Get most recently updated services
+		});
+
+		return result.docs;
+	} catch (error) {
+		console.error(
+			`Error fetching related services for slug ${currentSlug}:`,
+			error,
+		);
 		return [];
 	}
 }

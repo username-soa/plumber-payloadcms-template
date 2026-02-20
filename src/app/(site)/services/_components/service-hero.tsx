@@ -9,7 +9,6 @@ interface ServiceHeroProps {
 	description: string;
 	icon: string;
 	isEmergency?: boolean;
-	availability?: string;
 	breadcrumbItems?: { label: string; href?: string }[];
 }
 
@@ -18,7 +17,6 @@ export function ServiceHero({
 	description,
 	icon,
 	isEmergency,
-	availability,
 	breadcrumbItems,
 }: ServiceHeroProps) {
 	return (
@@ -40,20 +38,20 @@ export function ServiceHero({
 								Professional Plumbing Services
 							</Badge>
 							{isEmergency && (
-								<Badge
-									variant="outline"
-									className="px-4 py-1 text-sm text-red-900 border-red-600/20 bg-red-500/20"
-								>
-									Emergency Service
-								</Badge>
-							)}
-							{availability && (
-								<Badge
-									variant="outline"
-									className="px-4 py-1 text-sm text-green-900 border-green-600/20 bg-green-500/20"
-								>
-									Available: {availability}
-								</Badge>
+								<>
+									<Badge
+										variant="outline"
+										className="px-4 py-1 text-sm text-red-900 border-red-600/20 bg-red-500/20"
+									>
+										Emergency Service
+									</Badge>
+									<Badge
+										variant="outline"
+										className="px-4 py-1 text-sm text-green-900 border-green-600/20 bg-green-500/20"
+									>
+										Available: 24/7
+									</Badge>
+								</>
 							)}
 						</div>
 						<TypographyH1 className="mb-6">{title}</TypographyH1>

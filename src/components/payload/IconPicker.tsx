@@ -1,6 +1,6 @@
 "use client";
 
-import type { TextFieldClientComponent } from "payload";
+import type { TextFieldClientProps } from "payload";
 import { useField, FieldLabel } from "@payloadcms/ui";
 import { useState, useMemo, useEffect, useRef } from "react";
 import { Search, X, ChevronDown } from "lucide-react";
@@ -40,7 +40,15 @@ const iconList = Object.keys(LucideIcons).filter(
 		!key.endsWith("Icon"),
 );
 
-export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
+type IconPickerProps = TextFieldClientProps & {
+	className?: string;
+};
+
+export const IconPicker: React.FC<IconPickerProps> = ({
+	path,
+	field,
+	className,
+}) => {
 	const { value, setValue } = useField<string>({ path }); // value should be kebab-case now
 	const [isOpen, setIsOpen] = useState(false);
 	const [searchTerm, setSearchTerm] = useState("");
@@ -92,20 +100,16 @@ export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
 	}, [value]);
 
 	return (
-		<div className="field-type text" ref={containerRef}>
+		<div
+			className={[className, "field-type text"].filter(Boolean).join(" ")}
+			ref={containerRef}
+			style={
+				{
+					"--field-width": field.admin?.width || "100%",
+				} as React.CSSProperties
+			}
+		>
 			<FieldLabel label={field.label} path={path} required={field.required} />
-
-			<div
-				style={{
-					marginBottom: "10px",
-					fontSize: "12px",
-					color: "var(--theme-elevation-500)",
-					lineHeight: "1.5",
-				}}
-			>
-				Search for an icon by name (e.g., "Home", "User", "Wrench"). The
-				selected icon will be displayed next to the text on the website.
-			</div>
 
 			<div className="relative">
 				{SelectedIcon ? (
@@ -114,55 +118,44 @@ export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
 							display: "flex",
 							alignItems: "center",
 							justifyContent: "space-between",
-							background: "#09090b", // zinc-950
-							border: "1px solid #27272a", // zinc-800
-							borderRadius: "12px",
-							padding: "12px 16px",
+							border: "1px solid var(--theme-elevation-200)",
+							background: "var(--theme-elevation-50)",
+							borderRadius: "var(--style-radius-s)",
 							color: "white",
 							width: "100%",
-							marginBottom: "8px",
 						}}
+						className="upload-field-card--size-medium"
 					>
 						<div style={{ display: "flex", alignItems: "center", gap: "16px" }}>
 							<div
 								style={{
-									width: "48px",
-									height: "48px",
 									background: "#18181b", // zinc-900
-									borderRadius: "8px",
 									display: "flex",
 									alignItems: "center",
 									justifyContent: "center",
 									border: "1px solid #27272a", // zinc-800
 								}}
+								className="upload-field-card--size-medium thumbnail"
 							>
-								<SelectedIcon size={24} color="white" />
+								<SelectedIcon size={18} color="white" />
 							</div>
 							<div
 								style={{
 									display: "flex",
-									flexDirection: "row",
 									alignItems: "baseline",
-									paddingTop: "12px",
-									gap: "8px",
 								}}
+								className="upload-relationship-details__details"
 							>
-								<span
-									style={{
-										fontSize: "15px",
-										fontWeight: 500,
-										color: "#e4e4e7",
-									}}
-								>
+								<span className="upload-relationship-details__filename">
 									{value}
 								</span>
-								<span style={{ fontSize: "13px", color: "#71717a" }}>
+								<span className="upload-relationship-details__meta">
 									.svg | 24KB
 								</span>
 							</div>
 						</div>
 
-						<div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+						<div>
 							<button
 								type="button"
 								onClick={() => setIsOpen(true)}
@@ -170,12 +163,13 @@ export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
 									background: "#27272a",
 									border: "1px solid #3f3f46",
 									color: "#e4e4e7",
-									padding: "8px 16px",
-									borderRadius: "6px",
-									fontSize: "13px",
+									padding: "3px 10px",
+									borderRadius: "3px",
+									fontSize: "12px",
 									cursor: "pointer",
 									transition: "all 0.2s",
 									fontWeight: 500,
+									marginRight: "5px",
 								}}
 								onMouseEnter={(e) => {
 									e.currentTarget.style.background = "#3f3f46";
@@ -194,17 +188,8 @@ export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
 									e.stopPropagation();
 									setValue("");
 								}}
-								style={{
-									background: "transparent",
-									border: "none",
-									color: "#71717a",
-									cursor: "pointer",
-									display: "flex",
-									alignItems: "center",
-									justifyContent: "center",
-									padding: "4px",
-									transition: "color 0.2s",
-								}}
+								className="btn upload-relationship-details__remove btn--icon btn--icon-style-none btn--icon-only btn--size-medium btn--icon-position-right btn--withoutPopup btn--style-icon-label btn--withoutPopup"
+								style={{ margin: 0, color: "white" }}
 								onMouseEnter={(e) => {
 									e.currentTarget.style.color = "#ffffff";
 								}}
@@ -213,7 +198,7 @@ export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
 								}}
 								aria-label="Clear icon"
 							>
-								<X size={20} />
+								<X size={23} />
 							</button>
 						</div>
 					</div>
@@ -234,6 +219,7 @@ export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
 							cursor: "pointer",
 							width: "100%",
 							textAlign: "left",
+							marginTop: "auto",
 						}}
 					>
 						<span
@@ -242,7 +228,7 @@ export const IconPicker: TextFieldClientComponent = ({ path, field }) => {
 								fontSize: "14px",
 							}}
 						>
-							Select an icon...
+							Search for an icon by name (e.g., "Home", "User", "Wrench").
 						</span>
 						<ChevronDown
 							size={14}

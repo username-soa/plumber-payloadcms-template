@@ -10,9 +10,14 @@ import {
 	generateServiceBreadcrumbs,
 	generateServiceFAQSchema,
 } from "@/lib/json-ld";
-import { getServiceBySlug, getServices } from "@/app/(site)/actions/services";
-import { getMediaUrl } from "@/lib/payload-utils";
+import {
+	getServiceBySlug,
+	getServices,
+	getSubServices,
+	getRelatedServices,
+} from "@/app/(site)/actions/services";
 import { ServiceLivePreview } from "@/components/payload/live-preview/ServiceLivePreview";
+import { RenderBlocks } from "@/components/payload/RenderBlocks";
 import { WhyChooseUs } from "../_components/why-choose-us";
 import { ProcessSteps } from "../_components/process-steps";
 import { QuoteFormCTA } from "../_components/quote-form";
@@ -33,7 +38,6 @@ interface ExtendedService {
 	title: string;
 	slug: string;
 	description: string;
-	longDescription?: any;
 	icon: string;
 	metaTitle?: string;
 	metaDescription?: string;
@@ -48,7 +52,6 @@ interface ExtendedService {
 	stats?: { value: string; label: string }[];
 	process?: { title: string; description: string; icon: string }[];
 	isEmergency?: boolean;
-	availability?: string;
 }
 
 // 1. Generate Static Params from Payload
@@ -101,37 +104,28 @@ export default async function ServicePage({ params }: ServicePageProps) {
 	const { slug } = await params;
 	const { isEnabled: isDraftMode } = await draftMode();
 
-	// Fetch from Payload
+	// Fetch service first so we can 404 early, then fetch children in parallel
 	const payloadService = await getServiceBySlug(slug, isDraftMode);
-	const allServices = await getServices();
 
 	if (!payloadService) {
 		notFound();
 	}
 
+	const childServices = await getSubServices(payloadService.id);
+	const relatedServices = await getRelatedServices(slug);
+
 	// Fetch static config fallback for missing fields (stats, process)
 	const staticService = SITE_CONFIG.services.find((s) => s.slug === slug);
 
-	// Map Payload data + Static fallbacks to component Props
-	// Ensure types match what components expect
-	let subServices: ExtendedService["subServices"] = [];
-	if (payloadService.subServices && Array.isArray(payloadService.subServices)) {
-		subServices = payloadService.subServices
-			.map((sub) => {
-				if (typeof sub === "object" && sub !== null) {
-					// It's a populated Service object
-					const subService = sub as Service;
-					return {
-						title: subService.title,
-						description: subService.description || "",
-						icon: subService.icon || "Wrench",
-						slug: subService.slug,
-					};
-				}
-				return null;
-			})
-			.filter((s) => s !== null);
-	}
+	// Map child services fetched via parentService relationship
+	const subServices: ExtendedService["subServices"] = childServices.map(
+		(sub) => ({
+			title: sub.title,
+			description: sub.description || "",
+			icon: sub.icon || "Wrench",
+			slug: sub.slug ?? "",
+		}),
+	);
 
 	const faqs: { question: string; answer: string }[] = [];
 	// 	payloadService.faqs?.map((faq) => ({
@@ -139,9 +133,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
 	// 		answer: faq.answer,
 	// 	})) || [];
 
-	// Use the explicit short description for now as longDescription is RichText
-	// and components expect string.
-	// TODO: Implement Rich Text renderer for longDescription if needed.
 	const description = payloadService.description;
 
 	// Hybrid Service Object
@@ -149,7 +140,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
 		title: payloadService.title,
 		slug: payloadService.slug,
 		description: description,
-		longDescription: payloadService.longDescription || description, // Pass rich text or fallback to short description
 		icon: payloadService.icon,
 		// Static fallbacks
 		stats: staticService?.stats,
@@ -167,7 +157,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
 		// 			}))
 		// 		: staticService?.process,
 		isEmergency: payloadService.isEmergency || false,
-		availability: payloadService.availability || undefined,
 	};
 
 	// Extract parent service if available (for breadcrumbs)
@@ -209,24 +198,38 @@ export default async function ServicePage({ params }: ServicePageProps) {
 			<ServiceLivePreview
 				initialData={payloadService}
 				subServices={subServices || []}
-				serviceImage={
-					getMediaUrl(payloadService.image) ||
-					"/images/service/service-details-plumber.png"
-				}
-				staticProcess={staticService?.process}
+				breadcrumbItems={[
+					{ label: "Home", href: "/" },
+					{ label: "Services", href: "/services" },
+					// Optional: Add parent service if exists
+					...(parentServiceInfo
+						? [
+								{
+									label: parentServiceInfo.title,
+									href: `/services/${parentServiceInfo.slug}`,
+								},
+							]
+						: []),
+					{ label: payloadService.title },
+				]}
+			/>
+
+			<RenderBlocks
+				layout={payloadService.layout as any}
+				pageTitle={payloadService.title}
+				updatedAt={payloadService.updatedAt}
+				// Services might not have lastUpdated, preserve fail-safe
+				lastUpdated={payloadService.updatedAt}
 			/>
 
 			{/* Static sections — rendered server-side, no live preview needed */}
-			<WhyChooseUs stats={staticService?.stats} />
+			{/* <WhyChooseUs stats={staticService?.stats} />
 			<ProcessSteps />
 			<QuoteFormCTA serviceName={payloadService.title} />
 			<ReviewSection />
 			<ServiceFAQ faqs={faqs} />
-			<RelatedServices
-				services={allServices
-					.filter((s: Service) => s.slug !== payloadService.slug)
-					.slice(0, 3)}
-			/>
+			*/}
+			<RelatedServices services={relatedServices} />
 		</>
 	);
 }

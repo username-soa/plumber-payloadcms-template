@@ -413,94 +413,625 @@ export interface CaseStudy {
  */
 export interface Service {
   id: number;
-  hero: {
-    type: 'default' | 'highImpact' | 'servicesHero' | 'minimal' | 'none';
-    title?: string | null;
-    /**
-     * Text to highlight in primary color (case-insensitive)
-     */
-    titleHighlight?: string | null;
-    description?: string | null;
-    floatingText?: string | null;
-    badge?: {
-      content: string;
-      variant?: ('default' | 'secondary' | 'destructive' | 'outline') | null;
-      size?: ('sm' | 'default' | 'lg') | null;
-      icon?: string | null;
-    };
-    bgImage?: (number | null) | Media;
-    fgImage?: (number | null) | Media;
-    heroTheme?: ('muted' | 'primary-gradient') | null;
-    links?:
-      | {
-          link: {
-            type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
-            label: string;
-            url?: string | null;
-            newTab?: boolean | null;
-            email?: string | null;
-            phoneNumber?: string | null;
-            reference?:
-              | ({
-                  relationTo: 'pages';
-                  value: number | Page;
-                } | null)
-              | ({
-                  relationTo: 'services';
-                  value: number | Service;
-                } | null);
-            style?:
-              | (
-                  | 'primary'
-                  | 'secondary'
-                  | 'outline'
-                  | 'ghost'
-                  | 'destructive'
-                  | 'badge'
-                  | 'badge-pulsing'
-                  | 'primary-gradient-dots'
-                )
-              | null;
-          };
-          id?: string | null;
-        }[]
-      | null;
-    /**
-     * Add up to 4 trust indicators (icons with text)
-     */
-    trustIndicators?:
-      | {
-          icon: string;
-          title: string;
-          description: string;
-          id?: string | null;
-        }[]
-      | null;
-    showDate?: boolean | null;
-  };
   title: string;
   slug: string;
-  description: string;
-  longDescription?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
-  icon: string;
-  image: number | Media;
-  isEmergency?: boolean | null;
-  availability?: string | null;
   parentService?: (number | null) | Service;
+  /**
+   * Check this box if this service offers 24/7 emergency availability.
+   */
+  isEmergency?: boolean | null;
+  image: number | Media;
+  icon: string;
+  description: string;
+  layout?:
+    | (
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            content: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'legalContent';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            title?: string | null;
+            description?: string | null;
+            /**
+             * Leave blank to use email from Company Info global
+             */
+            email?: string | null;
+            /**
+             * Leave blank to use phone from Company Info global
+             */
+            phone?: string | null;
+            /**
+             * Leave blank to use address from Company Info global
+             */
+            address?: string | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'legalContact';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            label?: string | null;
+            href?: string | null;
+            centered?: boolean | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'backLink';
+          }
+        | {
+            title?: string | null;
+            /**
+             * Text to highlight in primary color (case-insensitive)
+             */
+            titleHighlight?: string | null;
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            description?: string | null;
+            faqs?: (number | Faq)[] | null;
+            cta: {
+              showCta?: boolean | null;
+              headline?: string | null;
+              text?: string | null;
+              ctaLink: {
+                type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                label: string;
+                url?: string | null;
+                newTab?: boolean | null;
+                email?: string | null;
+                phoneNumber?: string | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'services';
+                      value: number | Service;
+                    } | null);
+                style?:
+                  | (
+                      | 'primary'
+                      | 'secondary'
+                      | 'outline'
+                      | 'ghost'
+                      | 'destructive'
+                      | 'badge'
+                      | 'badge-pulsing'
+                      | 'primary-gradient-dots'
+                    )
+                  | null;
+              };
+            };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'faq';
+          }
+        | ReviewBlock
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            subtitle?: string | null;
+            title?: string | null;
+            /**
+             * Text to highlight in primary color
+             */
+            titleHighlight?: string | null;
+            description?: string | null;
+            certifications?:
+              | {
+                  name: string;
+                  description?: string | null;
+                  icon?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'certifications';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            title?: string | null;
+            /**
+             * Text to highlight in the title (e.g. 'Water City Plumbing Experts')
+             */
+            titleHighlight?: string | null;
+            description?: string | null;
+            selectedMembers: (number | TeamMember)[];
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'team';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            /**
+             * The full main heading
+             */
+            title: string;
+            /**
+             * Text to highlight (must match exactly)
+             */
+            titleHighlight?: string | null;
+            /**
+             * Optional tagline like 'BY THE NUMBERS'
+             */
+            bottomText?: string | null;
+            cols?: ('3' | '4' | '6') | null;
+            backgroundColor?: ('transparent' | 'muted') | null;
+            stats?:
+              | {
+                  /**
+                   * e.g., '500+' or '99%'
+                   */
+                  value: string;
+                  /**
+                   * e.g., 'Projects Completed'
+                   */
+                  label: string;
+                  id?: string | null;
+                }[]
+              | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'trustStats';
+          }
+        | TimelineBlock
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            contentType: 'blogs' | 'case-studies' | 'services';
+            limit?: number | null;
+            itemsPerRow?: ('1' | '2' | '3' | '4') | null;
+            sortBy?: ('newest' | 'oldest' | 'titleAsc' | 'titleDesc') | null;
+            /**
+             * Only display items marked as featured
+             */
+            featuredOnly?: boolean | null;
+            /**
+             * Allow visitors to filter content by category, search, etc.
+             */
+            showFilters?: boolean | null;
+            /**
+             * Show a search input to filter by text
+             */
+            showSearch?: boolean | null;
+            paginationStyle?: ('none' | 'numbered' | 'loadMore' | 'infiniteScroll') | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'contentFetcher';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            /**
+             * Small tag text displayed above the main title
+             */
+            tagTitle?: string | null;
+            mainTitle: string;
+            /**
+             * Text segment from the Main Title to highlight in primary color (case-sensitive)
+             */
+            highlightedText?: string | null;
+            description?: string | null;
+            links?:
+              | {
+                  link: {
+                    type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                    label: string;
+                    url?: string | null;
+                    newTab?: boolean | null;
+                    email?: string | null;
+                    phoneNumber?: string | null;
+                    reference?:
+                      | ({
+                          relationTo: 'pages';
+                          value: number | Page;
+                        } | null)
+                      | ({
+                          relationTo: 'services';
+                          value: number | Service;
+                        } | null);
+                    style?:
+                      | (
+                          | 'primary'
+                          | 'secondary'
+                          | 'outline'
+                          | 'ghost'
+                          | 'destructive'
+                          | 'badge'
+                          | 'badge-pulsing'
+                          | 'primary-gradient-dots'
+                        )
+                      | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            buttonsAlign?: ('left' | 'center' | 'right') | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'titleContent';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            textAlign?: ('left' | 'center' | 'right') | null;
+            columns?: ('1' | '2' | '3' | '4' | '5' | '6') | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            items?:
+              | {
+                  image: number | Media;
+                  title: string;
+                  link?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'imagesGrid';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            columns?: ('1' | '2' | '3' | '4' | '5' | '6') | null;
+            cardLayout?: ('stacked' | 'sideBySide') | null;
+            /**
+             * If enabled, cards will show a shadow and primary color border on hover, and icons will turn primary color.
+             */
+            enableHighlight?: boolean | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            cards?:
+              | {
+                  /**
+                   * Small text label like 'Popular' or 'New'
+                   */
+                  tag?: string | null;
+                  icon?: string | null;
+                  title: string;
+                  description?: string | null;
+                  link: {
+                    type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                    label: string;
+                    url?: string | null;
+                    newTab?: boolean | null;
+                    email?: string | null;
+                    phoneNumber?: string | null;
+                    reference?:
+                      | ({
+                          relationTo: 'pages';
+                          value: number | Page;
+                        } | null)
+                      | ({
+                          relationTo: 'services';
+                          value: number | Service;
+                        } | null);
+                    style?:
+                      | (
+                          | 'primary'
+                          | 'secondary'
+                          | 'outline'
+                          | 'ghost'
+                          | 'destructive'
+                          | 'badge'
+                          | 'badge-pulsing'
+                          | 'primary-gradient-dots'
+                        )
+                      | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'cardsGrid';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            title?: string | null;
+            headline?: string | null;
+            /**
+             * Text to be highlighted with primary color within the headline (if applicable)
+             */
+            highlightedHeadlineText?: string | null;
+            description?: string | null;
+            useGlobalServiceAreas?: boolean | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            customServiceAreas?:
+              | {
+                  name: string;
+                  id?: string | null;
+                }[]
+              | null;
+            /**
+             * Text displayed below the service areas grid.
+             */
+            bottomText?: string | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'serviceAreasBlock';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            tag?: string | null;
+            title: string;
+            /**
+             * Text to highlight within the Title. Case-sensitive.
+             */
+            highlightedText?: string | null;
+            description?: string | null;
+            /**
+             * Select a service to highlight as the emergency service (e.g. 24/7). This will appear first.
+             */
+            emergencyService?: (number | null) | Service;
+            selectedServices: (number | Service)[];
+            layout?: ('grid' | 'carousel') | null;
+            cta: {
+              type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+              label: string;
+              url?: string | null;
+              newTab?: boolean | null;
+              email?: string | null;
+              phoneNumber?: string | null;
+              reference?:
+                | ({
+                    relationTo: 'pages';
+                    value: number | Page;
+                  } | null)
+                | ({
+                    relationTo: 'services';
+                    value: number | Service;
+                  } | null);
+              style?:
+                | (
+                    | 'primary'
+                    | 'secondary'
+                    | 'outline'
+                    | 'ghost'
+                    | 'destructive'
+                    | 'badge'
+                    | 'badge-pulsing'
+                    | 'primary-gradient-dots'
+                  )
+                | null;
+            };
+            /**
+             * Legacy option. Prefer using the Call to Action field above.
+             */
+            linkToAllServices?: boolean | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'highlightedServices';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            textAlign?: ('left' | 'center' | 'right') | null;
+            textColor?: ('regular' | 'primary') | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            columns?: ('1' | '2' | '3' | '4' | '5' | '6') | null;
+            /**
+             * Show vertical and horizontal separators between items.
+             */
+            showSeparators?: boolean | null;
+            numberItems?:
+              | {
+                  title: string;
+                  subTitle?: string | null;
+                  description?: string | null;
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'numbers';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            columns?:
+              | {
+                  type?: ('content' | 'image') | null;
+                  image?: (number | null) | Media;
+                  richText?: {
+                    root: {
+                      type: string;
+                      children: {
+                        type: any;
+                        version: number;
+                        [k: string]: unknown;
+                      }[];
+                      direction: ('ltr' | 'rtl') | null;
+                      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                      indent: number;
+                      version: number;
+                    };
+                    [k: string]: unknown;
+                  } | null;
+                  links?:
+                    | {
+                        link: {
+                          type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                          label: string;
+                          url?: string | null;
+                          newTab?: boolean | null;
+                          email?: string | null;
+                          phoneNumber?: string | null;
+                          reference?:
+                            | ({
+                                relationTo: 'pages';
+                                value: number | Page;
+                              } | null)
+                            | ({
+                                relationTo: 'services';
+                                value: number | Service;
+                              } | null);
+                          style?:
+                            | (
+                                | 'primary'
+                                | 'secondary'
+                                | 'outline'
+                                | 'ghost'
+                                | 'destructive'
+                                | 'badge'
+                                | 'badge-pulsing'
+                                | 'primary-gradient-dots'
+                              )
+                            | null;
+                        };
+                        id?: string | null;
+                      }[]
+                    | null;
+                  id?: string | null;
+                }[]
+              | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'dualColumn';
+          }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            form: number | Form;
+            enableIntro?: boolean | null;
+            introContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            enableHeader?: boolean | null;
+            headerContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            enableFooter?: boolean | null;
+            footerContent?: {
+              root: {
+                type: string;
+                children: {
+                  type: any;
+                  version: number;
+                  [k: string]: unknown;
+                }[];
+                direction: ('ltr' | 'rtl') | null;
+                format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+                indent: number;
+                version: number;
+              };
+              [k: string]: unknown;
+            } | null;
+            enableBorder?: boolean | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'formBlock';
+          }
+      )[]
+    | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -509,6 +1040,17 @@ export interface Service {
      */
     image?: (number | null) | Media;
   };
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "faqs".
+ */
+export interface Faq {
+  id: number;
+  question: string;
+  answer: string;
   updatedAt: string;
   createdAt: string;
 }
@@ -1208,17 +1750,6 @@ export interface Page {
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "faqs".
- */
-export interface Faq {
-  id: number;
-  question: string;
-  answer: string;
-  updatedAt: string;
-  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1929,29 +2460,340 @@ export interface TagsSelect<T extends boolean = true> {
  * via the `definition` "services_select".
  */
 export interface ServicesSelect<T extends boolean = true> {
-  hero?:
+  title?: T;
+  slug?: T;
+  parentService?: T;
+  isEmergency?: T;
+  image?: T;
+  icon?: T;
+  description?: T;
+  layout?:
     | T
     | {
-        type?: T;
-        title?: T;
-        titleHighlight?: T;
-        description?: T;
-        floatingText?: T;
-        badge?:
+        legalContent?:
           | T
           | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
               content?: T;
-              variant?: T;
-              size?: T;
-              icon?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
             };
-        bgImage?: T;
-        fgImage?: T;
-        heroTheme?: T;
-        links?:
+        legalContact?:
           | T
           | {
-              link?:
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              title?: T;
+              description?: T;
+              email?: T;
+              phone?: T;
+              address?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        backLink?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              label?: T;
+              href?: T;
+              centered?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        faq?:
+          | T
+          | {
+              title?: T;
+              titleHighlight?: T;
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              description?: T;
+              faqs?: T;
+              cta?:
+                | T
+                | {
+                    showCta?: T;
+                    headline?: T;
+                    text?: T;
+                    ctaLink?:
+                      | T
+                      | {
+                          type?: T;
+                          label?: T;
+                          url?: T;
+                          newTab?: T;
+                          email?: T;
+                          phoneNumber?: T;
+                          reference?: T;
+                          style?: T;
+                        };
+                  };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        reviewsSection?: T | ReviewBlockSelect<T>;
+        certifications?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              subtitle?: T;
+              title?: T;
+              titleHighlight?: T;
+              description?: T;
+              certifications?:
+                | T
+                | {
+                    name?: T;
+                    description?: T;
+                    icon?: T;
+                    id?: T;
+                  };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        team?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              title?: T;
+              titleHighlight?: T;
+              description?: T;
+              selectedMembers?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        trustStats?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              title?: T;
+              titleHighlight?: T;
+              bottomText?: T;
+              cols?: T;
+              backgroundColor?: T;
+              stats?:
+                | T
+                | {
+                    value?: T;
+                    label?: T;
+                    id?: T;
+                  };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        timeline?: T | TimelineBlockSelect<T>;
+        contentFetcher?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              contentType?: T;
+              limit?: T;
+              itemsPerRow?: T;
+              sortBy?: T;
+              featuredOnly?: T;
+              showFilters?: T;
+              showSearch?: T;
+              paginationStyle?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        titleContent?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              tagTitle?: T;
+              mainTitle?: T;
+              highlightedText?: T;
+              description?: T;
+              links?:
+                | T
+                | {
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          label?: T;
+                          url?: T;
+                          newTab?: T;
+                          email?: T;
+                          phoneNumber?: T;
+                          reference?: T;
+                          style?: T;
+                        };
+                    id?: T;
+                  };
+              textAlign?: T;
+              buttonsAlign?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        imagesGrid?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              textAlign?: T;
+              columns?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              items?:
+                | T
+                | {
+                    image?: T;
+                    title?: T;
+                    link?: T;
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        cardsGrid?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              columns?: T;
+              cardLayout?: T;
+              enableHighlight?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              cards?:
+                | T
+                | {
+                    tag?: T;
+                    icon?: T;
+                    title?: T;
+                    description?: T;
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          label?: T;
+                          url?: T;
+                          newTab?: T;
+                          email?: T;
+                          phoneNumber?: T;
+                          reference?: T;
+                          style?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
+        serviceAreasBlock?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              title?: T;
+              headline?: T;
+              highlightedHeadlineText?: T;
+              description?: T;
+              useGlobalServiceAreas?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              customServiceAreas?:
+                | T
+                | {
+                    name?: T;
+                    id?: T;
+                  };
+              bottomText?: T;
+              id?: T;
+              blockName?: T;
+            };
+        highlightedServices?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              tag?: T;
+              title?: T;
+              highlightedText?: T;
+              description?: T;
+              emergencyService?: T;
+              selectedServices?: T;
+              layout?: T;
+              cta?:
                 | T
                 | {
                     type?: T;
@@ -1963,27 +2805,100 @@ export interface ServicesSelect<T extends boolean = true> {
                     reference?: T;
                     style?: T;
                   };
+              linkToAllServices?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               id?: T;
+              blockName?: T;
             };
-        trustIndicators?:
+        numbers?:
           | T
           | {
-              icon?: T;
-              title?: T;
-              description?: T;
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              textAlign?: T;
+              textColor?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              columns?: T;
+              showSeparators?: T;
+              numberItems?:
+                | T
+                | {
+                    title?: T;
+                    subTitle?: T;
+                    description?: T;
+                    id?: T;
+                  };
               id?: T;
+              blockName?: T;
             };
-        showDate?: T;
+        dualColumn?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              columns?:
+                | T
+                | {
+                    type?: T;
+                    image?: T;
+                    richText?: T;
+                    links?:
+                      | T
+                      | {
+                          link?:
+                            | T
+                            | {
+                                type?: T;
+                                label?: T;
+                                url?: T;
+                                newTab?: T;
+                                email?: T;
+                                phoneNumber?: T;
+                                reference?: T;
+                                style?: T;
+                              };
+                          id?: T;
+                        };
+                    id?: T;
+                  };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        formBlock?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              form?: T;
+              enableIntro?: T;
+              introContent?: T;
+              enableHeader?: T;
+              headerContent?: T;
+              enableFooter?: T;
+              footerContent?: T;
+              enableBorder?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
-  title?: T;
-  slug?: T;
-  description?: T;
-  longDescription?: T;
-  icon?: T;
-  image?: T;
-  isEmergency?: T;
-  availability?: T;
-  parentService?: T;
   meta?:
     | T
     | {
@@ -1993,6 +2908,60 @@ export interface ServicesSelect<T extends boolean = true> {
       };
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ReviewBlock_select".
+ */
+export interface ReviewBlockSelect<T extends boolean = true> {
+  background?:
+    | T
+    | {
+        bg?: T;
+        decoration?: T;
+      };
+  title?: T;
+  subtitle?: T;
+  source?: T;
+  manualReviews?:
+    | T
+    | {
+        author?: T;
+        rating?: T;
+        content?: T;
+        date?: T;
+        id?: T;
+      };
+  selectedReviews?: T;
+  paddingTopOption?: T;
+  paddingBottomOption?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TimelineBlock_select".
+ */
+export interface TimelineBlockSelect<T extends boolean = true> {
+  background?:
+    | T
+    | {
+        bg?: T;
+        decoration?: T;
+      };
+  title?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        date?: T;
+        description?: T;
+        id?: T;
+      };
+  paddingTopOption?: T;
+  paddingBottomOption?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -2505,60 +3474,6 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ReviewBlock_select".
- */
-export interface ReviewBlockSelect<T extends boolean = true> {
-  background?:
-    | T
-    | {
-        bg?: T;
-        decoration?: T;
-      };
-  title?: T;
-  subtitle?: T;
-  source?: T;
-  manualReviews?:
-    | T
-    | {
-        author?: T;
-        rating?: T;
-        content?: T;
-        date?: T;
-        id?: T;
-      };
-  selectedReviews?: T;
-  paddingTopOption?: T;
-  paddingBottomOption?: T;
-  id?: T;
-  blockName?: T;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "TimelineBlock_select".
- */
-export interface TimelineBlockSelect<T extends boolean = true> {
-  background?:
-    | T
-    | {
-        bg?: T;
-        decoration?: T;
-      };
-  title?: T;
-  items?:
-    | T
-    | {
-        title?: T;
-        date?: T;
-        description?: T;
-        id?: T;
-      };
-  paddingTopOption?: T;
-  paddingBottomOption?: T;
-  id?: T;
-  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
