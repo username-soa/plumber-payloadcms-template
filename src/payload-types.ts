@@ -1054,9 +1054,9 @@ export interface Service {
               pauseOnHover?: boolean | null;
             };
             style?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: string | null;
               decoration?: ('none' | 'dots') | null;
-              textColor?: ('regular' | 'primary' | 'white') | null;
+              textColor?: string | null;
               fontWeight?: ('100' | '300' | '400' | '500' | '600' | '700' | '900') | null;
               fontSize?: number | null;
               letterSpacing?: number | null;
@@ -1775,9 +1775,9 @@ export interface Page {
           pauseOnHover?: boolean | null;
         };
         style?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: string | null;
           decoration?: ('none' | 'dots') | null;
-          textColor?: ('regular' | 'primary' | 'white') | null;
+          textColor?: string | null;
           fontWeight?: ('100' | '300' | '400' | '500' | '600' | '700' | '900') | null;
           fontSize?: number | null;
           letterSpacing?: number | null;

@@ -98,16 +98,14 @@ export const MarqueeBlock: Block = {
 					fields: [
 						{
 							name: "bg",
-							type: "select",
+							type: "text",
 							label: "Background Color",
 							defaultValue: "transparent",
-							options: [
-								{ label: "Transparent", value: "transparent" },
-								{ label: "Muted", value: "muted" },
-								{ label: "Primary", value: "primary" },
-							],
 							admin: {
 								width: "50%",
+								components: {
+									Field: "@/components/payload/ColorPicker#ColorPicker",
+								},
 							},
 						},
 						{
@@ -130,16 +128,14 @@ export const MarqueeBlock: Block = {
 					fields: [
 						{
 							name: "textColor",
-							type: "select",
+							type: "text",
 							label: "Text Color",
-							defaultValue: "regular",
-							options: [
-								{ label: "Regular", value: "regular" },
-								{ label: "Primary", value: "primary" },
-								{ label: "White", value: "white" },
-							],
+							defaultValue: "#000000",
 							admin: {
 								width: "50%",
+								components: {
+									Field: "@/components/payload/ColorPicker#ColorPicker",
+								},
 							},
 						},
 						{

@@ -15,6 +15,7 @@ import { ServiceLinkLabel as ServiceLinkLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 }
 import { TestimonialLabel as TestimonialLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { CTALabel as CTALabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { SpacingLabel as SpacingLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
+import { ColorPicker as ColorPicker_78e2240968210678f3f3ce1fd6e57ff1 } from '@/components/payload/ColorPicker'
 import { IconPicker as IconPicker_7cc4ab20ce4622826a55342170d51be7 } from '@/components/payload/IconPicker'
 import { FixedToolbarFeatureClient as FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { InlineToolbarFeatureClient as InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
@@ -66,6 +67,7 @@ export const importMap = {
   "@/components/payload/BlockRowLabel#TestimonialLabel": TestimonialLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#CTALabel": CTALabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#SpacingLabel": SpacingLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
+  "@/components/payload/ColorPicker#ColorPicker": ColorPicker_78e2240968210678f3f3ce1fd6e57ff1,
   "@/components/payload/IconPicker#IconPicker": IconPicker_7cc4ab20ce4622826a55342170d51be7,
   "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#InlineToolbarFeatureClient": InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,

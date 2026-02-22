@@ -1,14 +1,13 @@
 "use client";
 
-import React from "react";
+import type React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 import Marquee from "@/components/ui/marquee";
 import DynamicIcon from "@/components/ui/dynamic-icon";
-import type { Media } from "@/payload-types";
+import type { Media, Page } from "@/payload-types";
 import { getMediaUrl } from "@/lib/payload-utils";
-import type { Page } from "@/payload-types";
 import { getCMSLinkHref } from "@/lib/cms-link";
 
 export type MarqueeBlockProps = Extract<
@@ -34,7 +33,7 @@ export const MarqueeBlockComponent: React.FC<MarqueeBlockProps> = ({
 	const {
 		bg = "transparent",
 		decoration = "none",
-		textColor = "regular",
+		textColor = "#000000",
 		fontWeight = "400",
 		fontSize = 32,
 		letterSpacing = 0,
@@ -45,12 +44,6 @@ export const MarqueeBlockComponent: React.FC<MarqueeBlockProps> = ({
 		size: sepSize = 24,
 		icon: sepIcon,
 	} = separator || {};
-
-	const textColorClass = {
-		regular: "text-zinc-900 dark:text-zinc-100",
-		primary: "text-primary",
-		white: "text-white",
-	}[textColor || "regular"];
 
 	const fontWeightClass = {
 		"100": "font-thin",
@@ -65,6 +58,7 @@ export const MarqueeBlockComponent: React.FC<MarqueeBlockProps> = ({
 	const textStyle: React.CSSProperties = {
 		fontSize: `${fontSize}px`,
 		letterSpacing: `${letterSpacing}px`,
+		color: textColor || undefined,
 	};
 
 	const renderSeparator = () => {
@@ -83,13 +77,11 @@ export const MarqueeBlockComponent: React.FC<MarqueeBlockProps> = ({
 		<section
 			className={cn(
 				"relative w-full overflow-hidden flex flex-col items-center justify-center",
-				bg === "transparent" && "bg-transparent",
-				bg === "muted" && "bg-zinc-50 dark:bg-zinc-900",
-				bg === "primary" && "bg-primary text-primary-foreground",
 			)}
 			style={{
 				paddingTop: `${verticalPadding}px`,
 				paddingBottom: `${verticalPadding}px`,
+				backgroundColor: bg || undefined,
 			}}
 		>
 			{decoration === "dots" && (
@@ -112,7 +104,6 @@ export const MarqueeBlockComponent: React.FC<MarqueeBlockProps> = ({
 					}
 				>
 					{items?.map((item, index) => {
-						const isLast = index === (items?.length || 0) - 1;
 						const content = (
 							<div
 								key={item.id || index}
@@ -122,11 +113,7 @@ export const MarqueeBlockComponent: React.FC<MarqueeBlockProps> = ({
 								<div className="flex items-center shrink-0">
 									{item.type === "text" && item.text && (
 										<span
-											className={cn(
-												"whitespace-nowrap",
-												textColorClass,
-												fontWeightClass,
-											)}
+											className={cn("whitespace-nowrap", fontWeightClass)}
 											style={textStyle}
 										>
 											{item.text}
