@@ -7,7 +7,10 @@ import { JsonLd } from "@/components/json-ld";
 import { generateArticleSchema, generateBlogBreadcrumbs } from "@/lib/json-ld";
 import type { BlogPost, Author } from "@/payload-types";
 import { getMediaUrl } from "@/lib/payload-utils";
-import { BlogPostLivePreview } from "@/components/payload/live-preview/BlogPostLivePreview";
+import { PostHero } from "@/app/(site)/blog/_components/post-hero";
+import { PostContent } from "@/app/(site)/blog/_components/post-content";
+import { PostSidebar } from "@/app/(site)/blog/_components/post-sidebar";
+import { RenderBlocks } from "@/components/payload/RenderBlocks";
 
 const { seo } = SITE_CONFIG;
 
@@ -167,11 +170,31 @@ export default async function BlogPostPage({ params }: PageProps) {
 		<>
 			<JsonLd data={jsonLd} />
 
-			<BlogPostLivePreview
-				initialData={post}
-				relatedPosts={relatedPosts}
-				city={seo.location.city}
-			/>
+			<article className="min-h-screen pb-20">
+				<PostHero post={post} readTime={readTime} />
+
+				<div className="container px-6 mx-auto mt-12 md:mt-16">
+					<div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
+						<PostContent post={post} />
+
+						<PostSidebar
+							post={post}
+							author={author}
+							readTime={readTime}
+							relatedPosts={relatedPosts}
+							city={seo.location.city}
+						/>
+					</div>
+				</div>
+
+				{post.layout && (
+					<RenderBlocks
+						layout={post.layout}
+						pageTitle={post.title}
+						updatedAt={post.updatedAt}
+					/>
+				)}
+			</article>
 		</>
 	);
 }

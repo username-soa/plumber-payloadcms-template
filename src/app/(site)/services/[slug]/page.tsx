@@ -16,7 +16,11 @@ import {
 	getSubServices,
 	getRelatedServices,
 } from "@/app/(site)/actions/services";
-import { ServiceLivePreview } from "@/components/payload/live-preview/ServiceLivePreview";
+import { ServiceHero } from "@/app/(site)/services/_components/service-hero";
+import Link from "next/link";
+import { TypographyH2, TypographyMuted } from "@/components/ui/typography";
+import DynamicIcon from "@/components/ui/dynamic-icon";
+import { SectionWrapper } from "@/components/ui/section-wrapper";
 import { RenderBlocks } from "@/components/payload/RenderBlocks";
 import { WhyChooseUs } from "../_components/why-choose-us";
 import { ProcessSteps } from "../_components/process-steps";
@@ -194,14 +198,15 @@ export default async function ServicePage({ params }: ServicePageProps) {
 		<>
 			<JsonLd data={jsonLd} />
 
-			{/* Data-driven sections — react to live preview changes */}
-			<ServiceLivePreview
-				initialData={payloadService}
-				subServices={subServices || []}
+			{/* Service Hero */}
+			<ServiceHero
+				title={payloadService.title}
+				description={payloadService.description}
+				icon={payloadService.icon}
+				isEmergency={payloadService.isEmergency || false}
 				breadcrumbItems={[
 					{ label: "Home", href: "/" },
 					{ label: "Services", href: "/services" },
-					// Optional: Add parent service if exists
 					...(parentServiceInfo
 						? [
 								{
@@ -213,6 +218,43 @@ export default async function ServicePage({ params }: ServicePageProps) {
 					{ label: payloadService.title },
 				]}
 			/>
+
+			{/* Sub-services Grid */}
+			{subServices && subServices.length > 0 && (
+				<SectionWrapper>
+					<div className="space-y-6">
+						<div>
+							<span className="text-primary font-semibold text-sm uppercase tracking-wider">
+								What&apos;s Included
+							</span>
+							<h3 className="text-2xl font-bold mt-2">Our {payloadService.title} Services</h3>
+						</div>
+
+						<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+							{subServices.map((subService) => (
+								<Link
+									key={subService.title}
+									href={`/services/${subService.slug}`}
+									className="group flex flex-col h-full p-8 rounded-2xl border bg-card transition-all duration-300 hover:shadow-lg hover:border-primary/50"
+								>
+									<div className="mb-3">
+										<div className="md:size-10 size-8 rounded-full border border-primary/10 flex items-center justify-center text-primary group-hover:scale-110 group-hover:border-primary/50 transition-all duration-300 bg-background">
+											<DynamicIcon name={subService.icon} className="md:size-5 size-4" />
+										</div>
+									</div>
+
+									<TypographyH2 className="text-xl font-semibold mb-2 text-foreground border-none">
+										{subService.title}
+									</TypographyH2>
+									<TypographyMuted className="text-base line-clamp-3">
+										{subService.description}
+									</TypographyMuted>
+								</Link>
+							))}
+						</div>
+					</div>
+				</SectionWrapper>
+			)}
 
 			<RenderBlocks
 				layout={payloadService.layout as any}

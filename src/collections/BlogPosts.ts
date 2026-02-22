@@ -8,7 +8,6 @@ import {
 	OverviewField,
 	PreviewField,
 } from "@payloadcms/plugin-seo/fields";
-
 export const BlogPosts: CollectionConfig = {
 	slug: "blog-posts",
 	admin: {

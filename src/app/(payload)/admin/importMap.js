@@ -15,6 +15,8 @@ import { ServiceLinkLabel as ServiceLinkLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 }
 import { TestimonialLabel as TestimonialLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { CTALabel as CTALabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { SpacingLabel as SpacingLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
+import { IconPicker as IconPicker_7cc4ab20ce4622826a55342170d51be7 } from '@/components/payload/IconPicker'
+import { FixedToolbarFeatureClient as FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { InlineToolbarFeatureClient as InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { HorizontalRuleFeatureClient as HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
 import { UploadFeatureClient as UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864 } from '@payloadcms/richtext-lexical/client'
@@ -40,7 +42,6 @@ import { MetaTitleComponent as MetaTitleComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
-import { IconPicker as IconPicker_7cc4ab20ce4622826a55342170d51be7 } from '@/components/payload/IconPicker'
 import { CustomColorFeatureClient as CustomColorFeatureClient_b83ad90ea9134ea5eaa80a2a49485dd9 } from '@/components/richtext/features/custom-color/CustomColorFeatureClient'
 import { LinkToDoc as LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
 import { ReindexButton as ReindexButton_aead06e4cbf6b2620c5c51c9ab283634 } from '@payloadcms/plugin-search/client'
@@ -65,6 +66,8 @@ export const importMap = {
   "@/components/payload/BlockRowLabel#TestimonialLabel": TestimonialLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#CTALabel": CTALabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#SpacingLabel": SpacingLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
+  "@/components/payload/IconPicker#IconPicker": IconPicker_7cc4ab20ce4622826a55342170d51be7,
+  "@payloadcms/richtext-lexical/client#FixedToolbarFeatureClient": FixedToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#InlineToolbarFeatureClient": InlineToolbarFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#HorizontalRuleFeatureClient": HorizontalRuleFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
   "@payloadcms/richtext-lexical/client#UploadFeatureClient": UploadFeatureClient_e70f5e05f09f93e00b997edb1ef0c864,
@@ -90,7 +93,6 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#MetaImageComponent": MetaImageComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
-  "@/components/payload/IconPicker#IconPicker": IconPicker_7cc4ab20ce4622826a55342170d51be7,
   "@/components/richtext/features/custom-color/CustomColorFeatureClient#CustomColorFeatureClient": CustomColorFeatureClient_b83ad90ea9134ea5eaa80a2a49485dd9,
   "@payloadcms/plugin-search/client#LinkToDoc": LinkToDoc_aead06e4cbf6b2620c5c51c9ab283634,
   "@payloadcms/plugin-search/client#ReindexButton": ReindexButton_aead06e4cbf6b2620c5c51c9ab283634,

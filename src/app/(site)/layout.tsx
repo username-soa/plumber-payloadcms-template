@@ -39,7 +39,7 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const [headerData, footerData, companyInfo] = await getCommonGlobals();
+	const [headerData, footerData, companyInfo, announcementBarData] = await getCommonGlobals();
 
 	return (
 		<html lang="en" suppressHydrationWarning>
@@ -51,6 +51,7 @@ export default async function RootLayout({
 						headerData={headerData}
 						footerData={footerData}
 						companyInfo={companyInfo}
+						announcementBarData={announcementBarData}
 					>
 						{children}
 					</LayoutBody>

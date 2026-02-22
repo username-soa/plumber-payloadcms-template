@@ -5,7 +5,7 @@ import config from "@payload-config";
 import { SITE_CONFIG } from "@/lib/site-config";
 import type { Page as PayloadPage } from "@/payload-types";
 import { getMediaUrl } from "@/lib/payload-utils";
-import { PageLivePreview } from "@/components/payload/live-preview/PageLivePreview";
+import { Hero } from "@/components/heroes";
 import { RenderBlocks } from "@/components/payload/RenderBlocks";
 
 async function getPageData(slug: string, draft = false) {
@@ -70,8 +70,8 @@ export default async function DynamicPage({
 
 	return (
 		<main className="min-h-screen bg-background">
-			{/* Hero — reacts to live preview changes via useLivePreview (client) */}
-			<PageLivePreview initialData={page} />
+			{/* Hero section */}
+			<Hero page={page} />
 
 			{/* Blocks — server-rendered; ContentFetcher must stay server-side */}
 			<RenderBlocks

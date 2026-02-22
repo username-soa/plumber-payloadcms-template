@@ -1,4 +1,8 @@
-import { BlocksFeature, lexicalEditor } from "@payloadcms/richtext-lexical";
+import {
+	BlocksFeature,
+	FixedToolbarFeature,
+	lexicalEditor,
+} from "@payloadcms/richtext-lexical";
 import { CalloutBlock } from "@/blocks/CalloutBlock";
 import { StepTimelineBlock } from "@/blocks/StepTimelineBlock";
 import { StatsRowBlock } from "@/blocks/StatsRowBlock";
@@ -12,10 +16,12 @@ import { ServiceLinkBlock } from "@/blocks/ServiceLinkBlock";
 import { TestimonialBlock } from "@/blocks/TestimonialBlock";
 import { CTABlock } from "@/blocks/CTABlock";
 import { SpacingBlock } from "@/blocks/SpacingBlock";
+import { MarqueeBlock } from "@/blocks/MarqueeBlock";
 
 export const customLexical = lexicalEditor({
 	features: ({ defaultFeatures }) => [
 		...defaultFeatures,
+		FixedToolbarFeature(),
 		BlocksFeature({
 			blocks: [
 				CalloutBlock,
@@ -31,6 +37,7 @@ export const customLexical = lexicalEditor({
 				TestimonialBlock,
 				CTABlock,
 				SpacingBlock,
+				MarqueeBlock,
 			],
 		}),
 	],

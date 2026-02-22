@@ -3,10 +3,12 @@ import type { Field, GroupField } from "payload";
 export const link = ({
 	name = "link",
 	label = "Link",
+	required = true,
 	overrides = {},
 }: {
 	name?: string;
 	label?: string;
+	required?: boolean;
 	overrides?: Partial<GroupField>;
 } = {}): Field => {
 	const linkResult: Field = {
@@ -32,13 +34,13 @@ export const link = ({
 			{
 				name: "label",
 				type: "text",
-				required: true,
+				required,
 			},
 			{
 				name: "url",
 				type: "text",
 				label: "Custom URL",
-				required: true,
+				required,
 				admin: {
 					condition: (_, siblingData) => siblingData?.type === "custom",
 				},
@@ -55,7 +57,7 @@ export const link = ({
 				name: "email",
 				type: "text",
 				label: "Email Address",
-				required: true,
+				required,
 				admin: {
 					condition: (_, siblingData) => siblingData?.type === "email",
 				},
@@ -64,7 +66,7 @@ export const link = ({
 				name: "phoneNumber",
 				type: "text",
 				label: "Phone Number",
-				required: true,
+				required,
 				admin: {
 					condition: (_, siblingData) => siblingData?.type === "phone",
 				},

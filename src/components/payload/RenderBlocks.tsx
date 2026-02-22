@@ -18,6 +18,7 @@ import { ServiceAreasBlockComponent } from "@/components/blocks/service-areas-bl
 import { HighlightedServicesBlockComponent } from "@/components/blocks/highlighted-services-block";
 import { DualColumnBlock } from "@/components/blocks/dual-column-block";
 import { FormBlock } from "@/components/blocks/form-block";
+import { MarqueeBlockComponent } from "@/components/blocks/marquee-block";
 
 interface RenderBlocksProps {
 	layout: Page["layout"];
@@ -108,6 +109,10 @@ export function RenderBlocks({
 					case "formBlock":
 						// @ts-ignore
 						return <FormBlock key={key} {...block} />;
+					// @ts-ignore
+					case "marquee":
+						// @ts-ignore
+						return <MarqueeBlockComponent key={key} {...block} />;
 					default:
 						// Fallback for unknown blocks or standard blocks if needed
 						return null;

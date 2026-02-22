@@ -119,11 +119,13 @@ export interface Config {
     header: Header;
     footer: Footer;
     'company-info': CompanyInfo;
+    'announcement-bar': AnnouncementBar;
   };
   globalsSelect: {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
     'company-info': CompanyInfoSelect<false> | CompanyInfoSelect<true>;
+    'announcement-bar': AnnouncementBarSelect<false> | AnnouncementBarSelect<true>;
   };
   locale: null;
   user: User & {
@@ -1030,6 +1032,84 @@ export interface Service {
             blockName?: string | null;
             blockType: 'formBlock';
           }
+        | {
+            animation?: {
+              direction?: ('left' | 'right') | null;
+              /**
+               * Speed in seconds (lower is faster)
+               */
+              speed?: number | null;
+              /**
+               * Spacing between items in pixels
+               */
+              gap?: number | null;
+              verticalPadding?: number | null;
+              /**
+               * Add a soft fade effect to the edges
+               */
+              fadeEdges?: boolean | null;
+              /**
+               * Stop animation when mouse is over
+               */
+              pauseOnHover?: boolean | null;
+            };
+            style?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+              textColor?: ('regular' | 'primary' | 'white') | null;
+              fontWeight?: ('100' | '300' | '400' | '500' | '600' | '700' | '900') | null;
+              fontSize?: number | null;
+              letterSpacing?: number | null;
+            };
+            separator?: {
+              type?: ('none' | 'icon') | null;
+              size?: number | null;
+              icon?: string | null;
+            };
+            items?:
+              | {
+                  type?: ('text' | 'image') | null;
+                  text?: string | null;
+                  image?: (number | null) | Media;
+                  /**
+                   * Optional link for the marquee item
+                   */
+                  link?: {
+                    type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                    label?: string | null;
+                    url?: string | null;
+                    newTab?: boolean | null;
+                    email?: string | null;
+                    phoneNumber?: string | null;
+                    reference?:
+                      | ({
+                          relationTo: 'pages';
+                          value: number | Page;
+                        } | null)
+                      | ({
+                          relationTo: 'services';
+                          value: number | Service;
+                        } | null);
+                    style?:
+                      | (
+                          | 'primary'
+                          | 'secondary'
+                          | 'outline'
+                          | 'ghost'
+                          | 'destructive'
+                          | 'badge'
+                          | 'badge-pulsing'
+                          | 'primary-gradient-dots'
+                        )
+                      | null;
+                  };
+                  id?: string | null;
+                }[]
+              | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'marquee';
+          }
       )[]
     | null;
   meta?: {
@@ -1672,6 +1752,84 @@ export interface Page {
         id?: string | null;
         blockName?: string | null;
         blockType: 'formBlock';
+      }
+    | {
+        animation?: {
+          direction?: ('left' | 'right') | null;
+          /**
+           * Speed in seconds (lower is faster)
+           */
+          speed?: number | null;
+          /**
+           * Spacing between items in pixels
+           */
+          gap?: number | null;
+          verticalPadding?: number | null;
+          /**
+           * Add a soft fade effect to the edges
+           */
+          fadeEdges?: boolean | null;
+          /**
+           * Stop animation when mouse is over
+           */
+          pauseOnHover?: boolean | null;
+        };
+        style?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+          textColor?: ('regular' | 'primary' | 'white') | null;
+          fontWeight?: ('100' | '300' | '400' | '500' | '600' | '700' | '900') | null;
+          fontSize?: number | null;
+          letterSpacing?: number | null;
+        };
+        separator?: {
+          type?: ('none' | 'icon') | null;
+          size?: number | null;
+          icon?: string | null;
+        };
+        items?:
+          | {
+              type?: ('text' | 'image') | null;
+              text?: string | null;
+              image?: (number | null) | Media;
+              /**
+               * Optional link for the marquee item
+               */
+              link?: {
+                type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                label?: string | null;
+                url?: string | null;
+                newTab?: boolean | null;
+                email?: string | null;
+                phoneNumber?: string | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'services';
+                      value: number | Service;
+                    } | null);
+                style?:
+                  | (
+                      | 'primary'
+                      | 'secondary'
+                      | 'outline'
+                      | 'ghost'
+                      | 'destructive'
+                      | 'badge'
+                      | 'badge-pulsing'
+                      | 'primary-gradient-dots'
+                    )
+                  | null;
+              };
+              id?: string | null;
+            }[]
+          | null;
+        id?: string | null;
+        blockName?: string | null;
+        blockType: 'marquee';
       }
   )[];
   hero: {
@@ -2898,6 +3056,59 @@ export interface ServicesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        marquee?:
+          | T
+          | {
+              animation?:
+                | T
+                | {
+                    direction?: T;
+                    speed?: T;
+                    gap?: T;
+                    verticalPadding?: T;
+                    fadeEdges?: T;
+                    pauseOnHover?: T;
+                  };
+              style?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                    textColor?: T;
+                    fontWeight?: T;
+                    fontSize?: T;
+                    letterSpacing?: T;
+                  };
+              separator?:
+                | T
+                | {
+                    type?: T;
+                    size?: T;
+                    icon?: T;
+                  };
+              items?:
+                | T
+                | {
+                    type?: T;
+                    text?: T;
+                    image?: T;
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          label?: T;
+                          url?: T;
+                          newTab?: T;
+                          email?: T;
+                          phoneNumber?: T;
+                          reference?: T;
+                          style?: T;
+                        };
+                    id?: T;
+                  };
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -3414,6 +3625,59 @@ export interface PagesSelect<T extends boolean = true> {
               enableBorder?: T;
               paddingTopOption?: T;
               paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
+        marquee?:
+          | T
+          | {
+              animation?:
+                | T
+                | {
+                    direction?: T;
+                    speed?: T;
+                    gap?: T;
+                    verticalPadding?: T;
+                    fadeEdges?: T;
+                    pauseOnHover?: T;
+                  };
+              style?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                    textColor?: T;
+                    fontWeight?: T;
+                    fontSize?: T;
+                    letterSpacing?: T;
+                  };
+              separator?:
+                | T
+                | {
+                    type?: T;
+                    size?: T;
+                    icon?: T;
+                  };
+              items?:
+                | T
+                | {
+                    type?: T;
+                    text?: T;
+                    image?: T;
+                    link?:
+                      | T
+                      | {
+                          type?: T;
+                          label?: T;
+                          url?: T;
+                          newTab?: T;
+                          email?: T;
+                          phoneNumber?: T;
+                          reference?: T;
+                          style?: T;
+                        };
+                    id?: T;
+                  };
               id?: T;
               blockName?: T;
             };
@@ -4057,6 +4321,63 @@ export interface CompanyInfo {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcement-bar".
+ */
+export interface AnnouncementBar {
+  id: number;
+  backgroundColor?: ('primary' | 'emergency' | 'alert' | 'dark' | 'subtle') | null;
+  textColor?: ('white' | 'black') | null;
+  /**
+   * Time between message rotations
+   */
+  interval?: number | null;
+  orientation?: ('horizontal' | 'vertical') | null;
+  /**
+   * Show or hide the announcement bar across the site.
+   */
+  enabled?: boolean | null;
+  /**
+   * Allow users to close the announcement bar.
+   */
+  isDismissible?: boolean | null;
+  messages: {
+    text: string;
+    link?: {
+      type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+      label?: string | null;
+      url?: string | null;
+      newTab?: boolean | null;
+      email?: string | null;
+      phoneNumber?: string | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: number | Page;
+          } | null)
+        | ({
+            relationTo: 'services';
+            value: number | Service;
+          } | null);
+      style?:
+        | (
+            | 'primary'
+            | 'secondary'
+            | 'outline'
+            | 'ghost'
+            | 'destructive'
+            | 'badge'
+            | 'badge-pulsing'
+            | 'primary-gradient-dots'
+          )
+        | null;
+    };
+    id?: string | null;
+  }[];
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
@@ -4218,6 +4539,39 @@ export interface CompanyInfoSelect<T extends boolean = true> {
               mapsUrl?: T;
               placeId?: T;
             };
+      };
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "announcement-bar_select".
+ */
+export interface AnnouncementBarSelect<T extends boolean = true> {
+  backgroundColor?: T;
+  textColor?: T;
+  interval?: T;
+  orientation?: T;
+  enabled?: T;
+  isDismissible?: T;
+  messages?:
+    | T
+    | {
+        text?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              label?: T;
+              url?: T;
+              newTab?: T;
+              email?: T;
+              phoneNumber?: T;
+              reference?: T;
+              style?: T;
+            };
+        id?: T;
       };
   updatedAt?: T;
   createdAt?: T;

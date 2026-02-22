@@ -37,15 +37,17 @@ export function Header({ navItems, phone }: HeaderProps) {
 	return (
 		<header
 			className={cn(
-				"fixed top-0 left-0 w-full flex items-center justify-between",
+				"fixed left-0 w-full flex items-center justify-between",
 				"px-6 md:px-12 xl:h-24 sm:h-20 h-16",
 				"transition-transform",
 				isVisible ? "translate-y-0" : "-translate-y-full",
 			)}
 			style={{
+				top: "var(--announcement-bar-height, 0px)",
+				"--header-height": "var(--h-header)", // We will define this in CSS or just use the class
 				zIndex: HEADER_Z_INDEX,
 				transitionDuration: `${TRANSITION_DURATION}ms`,
-			}}
+			} as React.CSSProperties}
 		>
 			<Logo />
 			<DesktopNav navItems={navItems} />

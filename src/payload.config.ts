@@ -37,6 +37,7 @@ import { Categories } from "./collections/Categories";
 import { Header } from "./globals/Header";
 import { Footer } from "./globals/Footer";
 import { CompanyInfo } from "./globals/CompanyInfo";
+import { AnnouncementBar } from "./globals/AnnouncementBar";
 import { CustomColorFeature } from "./components/richtext/features/custom-color/CustomColorFeature";
 
 const filename = fileURLToPath(import.meta.url);
@@ -64,7 +65,7 @@ export default buildConfig({
 		Categories,
 	],
 
-	globals: [Header, Footer, CompanyInfo],
+	globals: [Header, Footer, CompanyInfo, AnnouncementBar],
 
 	// Admin panel configuration
 	admin: {
@@ -73,31 +74,6 @@ export default buildConfig({
 		},
 		importMap: {
 			baseDir: path.resolve(dirname),
-		},
-		livePreview: {
-			url: ({ data, collectionConfig }) => {
-				const baseUrl =
-					process.env.NEXT_PUBLIC_SERVER_URL || "http://localhost:3000";
-				const slug = data?.slug || "";
-				switch (collectionConfig?.slug) {
-					case "pages":
-						return `${baseUrl}/${slug}`;
-					case "blog-posts":
-						return `${baseUrl}/blog/${slug}`;
-					case "case-studies":
-						return `${baseUrl}/case-studies/${slug}`;
-					case "services":
-						return `${baseUrl}/services/${slug}`;
-					default:
-						return baseUrl;
-				}
-			},
-			collections: ["pages", "blog-posts", "case-studies", "services"],
-			breakpoints: [
-				{ label: "Mobile", name: "mobile", width: 375, height: 667 },
-				{ label: "Tablet", name: "tablet", width: 768, height: 1024 },
-				{ label: "Desktop", name: "desktop", width: 1440, height: 900 },
-			],
 		},
 	},
 

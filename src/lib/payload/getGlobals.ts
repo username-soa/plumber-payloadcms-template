@@ -5,6 +5,7 @@ import type {
 	Header as HeaderType,
 	Footer as FooterType,
 	CompanyInfo as CompanyInfoType,
+	AnnouncementBar as AnnouncementBarType,
 } from "@/payload-types";
 
 // Cached fetch for Header
@@ -47,15 +48,29 @@ export const getCompanyInfo = unstable_cache(
 	{ tags: ["company-info"] },
 );
 
+// Cached fetch for Announcement Bar
+export const getAnnouncementBar = unstable_cache(
+	async (): Promise<AnnouncementBarType> => {
+		const payload = await getPayload({ config: configPromise });
+		const announcementBar = await payload.findGlobal({
+			slug: "announcement-bar",
+		});
+		return announcementBar;
+	},
+	["payload-announcement-bar"],
+	{ tags: ["announcement-bar"] },
+);
+
 // Cached fetch for all Common Globals (Parallel Execution)
 export const getCommonGlobals = async (): Promise<
-	[HeaderType, FooterType, CompanyInfoType]
+	[HeaderType, FooterType, CompanyInfoType, AnnouncementBarType]
 > => {
-	const [header, footer, companyInfo] = await Promise.all([
+	const [header, footer, companyInfo, announcementBar] = await Promise.all([
 		getHeader(),
 		getFooter(),
 		getCompanyInfo(),
+		getAnnouncementBar(),
 	]);
 
-	return [header, footer, companyInfo];
+	return [header, footer, companyInfo, announcementBar];
 };

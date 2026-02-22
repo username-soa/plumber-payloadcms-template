@@ -49,6 +49,14 @@
 
 :root {
 	--radius: 0.625rem;
+	--h-header: 4rem; /* h-16 */
+
+	@media (min-width: 640px) {
+		--h-header: 5rem; /* sm:h-20 */
+	}
+	@media (min-width: 1280px) {
+		--h-header: 6rem; /* xl:h-24 */
+	}
 
 	/* DEFAULT THEME: System (Blue) */
 	--background: #ffffff;

@@ -10,7 +10,10 @@ import {
 } from "@/lib/json-ld";
 import type { CaseStudy } from "@/payload-types";
 import { getMediaUrl, getCategoryName } from "@/lib/payload-utils";
-import { CaseStudyLivePreview } from "@/components/payload/live-preview/CaseStudyLivePreview";
+import { SingleCaseStudyHero } from "@/app/(site)/case-studies/_components/single-case-study-hero";
+import { CaseStudyContent } from "@/app/(site)/case-studies/_components/case-study-content";
+import { CaseStudySidebar } from "@/app/(site)/case-studies/_components/case-study-sidebar";
+import { RenderBlocks } from "@/components/payload/RenderBlocks";
 
 const { seo } = SITE_CONFIG;
 
@@ -122,7 +125,24 @@ export default async function CaseStudyPage({ params }: PageProps) {
 		<>
 			<JsonLd data={jsonLd} />
 
-			<CaseStudyLivePreview initialData={study} />
+			<article className="min-h-screen pb-20">
+				<SingleCaseStudyHero study={study} />
+
+				<div className="container px-6 mx-auto mt-12 md:mt-16">
+					<div className="grid grid-cols-1 lg:grid-cols-[1fr_300px] gap-12">
+						<CaseStudyContent study={study} />
+						<CaseStudySidebar study={study} />
+					</div>
+				</div>
+
+				{study.layout && (
+					<RenderBlocks
+						layout={study.layout}
+						pageTitle={study.title}
+						updatedAt={study.updatedAt}
+					/>
+				)}
+			</article>
 		</>
 	);
 }
