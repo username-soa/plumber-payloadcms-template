@@ -1,8 +1,18 @@
-import Image from "next/image";
 import { Star } from "lucide-react";
+import Image from "next/image";
 import { Card, CardContent } from "@/components/ui/card";
-import type { Review } from "@/lib/google-reviews";
 import { cn } from "@/lib/utils";
+
+export type Review = {
+	id: string;
+	authorName: string;
+	authorImage: string;
+	rating: number;
+	relativeTime: string;
+	text: string;
+	role: string;
+	title: string;
+};
 
 interface ReviewCardProps {
 	review: Review;

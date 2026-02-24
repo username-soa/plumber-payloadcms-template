@@ -3,6 +3,14 @@ import { link } from "@/fields/link";
 
 export const MarqueeBlock: Block = {
 	slug: "marquee",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "MarqueeLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Marquee",
 		plural: "Marquees",

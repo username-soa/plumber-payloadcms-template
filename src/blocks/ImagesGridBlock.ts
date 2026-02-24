@@ -3,6 +3,14 @@ import { background } from "@/fields/background";
 
 export const ImagesGridBlock: Block = {
 	slug: "imagesGrid",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "ImagesGridLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Images Grid",
 		plural: "Images Grids",
@@ -92,15 +100,22 @@ export const ImagesGridBlock: Block = {
 					required: true,
 				},
 				{
-					name: "title",
-					type: "text",
-					label: "Title",
-					required: true,
-				},
-				{
-					name: "link",
-					type: "text",
-					label: "Link (Optional URL)",
+					type: "row",
+					fields: [
+						{
+							name: "title",
+							type: "text",
+							label: "Title",
+							required: true,
+							admin: { width: "50%" },
+						},
+						{
+							name: "link",
+							type: "text",
+							label: "Link (Optional URL)",
+							admin: { width: "50%" },
+						},
+					],
 				},
 			],
 		},

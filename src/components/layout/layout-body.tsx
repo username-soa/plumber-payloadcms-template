@@ -1,11 +1,11 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Header } from "@/components/layout/header";
 import { THEME_CONFIG } from "@/lib/theme-config";
 import { Footer } from "@/components/layout/footer";
 import { AnnouncementBar } from "@/components/layout/announcement-bar";
+import { ThemeProvider } from "@/components/providers/theme-provider";
 import type {
 	Footer as FooterType,
 	CompanyInfo as CompanyInfoType,
@@ -32,7 +32,7 @@ type HeaderLinkItem = {
 interface LayoutBodyProps {
 	children: React.ReactNode;
 	headerData: { navItems: HeaderLinkItem[] };
-	footerData: any; // Using any to bypass stale type issues until regeneration
+	footerData: FooterType;
 	companyInfo: CompanyInfoType;
 	announcementBarData: AnnouncementBarType;
 }
@@ -54,14 +54,7 @@ export function LayoutBody({
 			<AnnouncementBar data={announcementBarData} />
 			<Header navItems={headerData.navItems} phone={companyInfo.phone} />
 			<ThemeSwitcher />
-			<main 
-                className="flex-1"
-                // style={{ 
-                //     paddingTop: "calc(var(--announcement-bar-height, 0px) + var(--header-height, 4rem))" 
-                // }}
-            >
-                {children}
-            </main>
+			<main className="flex-1">{children}</main>
 			<Footer footerData={footerData} companyInfo={companyInfo} />
 		</ThemeProvider>
 	);

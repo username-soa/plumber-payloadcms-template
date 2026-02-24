@@ -8,6 +8,14 @@ import { CustomColorFeature } from "@/components/richtext/features/custom-color/
 
 export const FormBlock: Block = {
 	slug: "formBlock",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "FormLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Form Block",
 		plural: "Form Blocks",
@@ -17,84 +25,6 @@ export const FormBlock: Block = {
 	},
 	fields: [
 		background,
-		{
-			name: "form",
-			type: "relationship",
-			relationTo: "forms",
-			required: true,
-		},
-		{
-			name: "enableIntro",
-			type: "checkbox",
-			label: "Enable Intro Content",
-			defaultValue: false,
-		},
-		{
-			name: "introContent",
-			type: "richText",
-			editor: lexicalEditor({
-				features: ({ defaultFeatures }) => [
-					CustomColorFeature(),
-					...defaultFeatures,
-					BlocksFeature({
-						blocks: [FeatureListBlock, WorkflowStepBlock, SimpleStatsBlock],
-					}),
-				],
-			}),
-			admin: {
-				condition: (_, { enableIntro }) => Boolean(enableIntro),
-			},
-		},
-		{
-			name: "enableHeader",
-			type: "checkbox",
-			label: "Enable Content Above Form",
-			defaultValue: false,
-		},
-		{
-			name: "headerContent",
-			type: "richText",
-			editor: lexicalEditor({
-				features: ({ defaultFeatures }) => [
-					CustomColorFeature(),
-					...defaultFeatures,
-					BlocksFeature({
-						blocks: [FeatureListBlock, WorkflowStepBlock, SimpleStatsBlock],
-					}),
-				],
-			}),
-			admin: {
-				condition: (_, { enableHeader }) => Boolean(enableHeader),
-			},
-		},
-		{
-			name: "enableFooter",
-			type: "checkbox",
-			label: "Enable Content Below Form",
-			defaultValue: false,
-		},
-		{
-			name: "footerContent",
-			type: "richText",
-			editor: lexicalEditor({
-				features: ({ defaultFeatures }) => [
-					CustomColorFeature(),
-					...defaultFeatures,
-					BlocksFeature({
-						blocks: [FeatureListBlock, WorkflowStepBlock, SimpleStatsBlock],
-					}),
-				],
-			}),
-			admin: {
-				condition: (_, { enableFooter }) => Boolean(enableFooter),
-			},
-		},
-		{
-			name: "enableBorder",
-			type: "checkbox",
-			label: "Show Border & Shadow",
-			defaultValue: true,
-		},
 		{
 			type: "row",
 			fields: [
@@ -129,6 +59,101 @@ export const FormBlock: Block = {
 					},
 				},
 			],
+		},
+		{
+			name: "form",
+			type: "relationship",
+			relationTo: "forms",
+			required: true,
+		},
+		{
+			type: "row",
+			fields: [
+				{
+					name: "enableIntro",
+					type: "checkbox",
+					label: "Enable Intro Content",
+					defaultValue: false,
+					admin: { width: "50%" },
+				},
+				{
+					name: "enableHeader",
+					type: "checkbox",
+					label: "Enable Content Above Form",
+					defaultValue: false,
+					admin: { width: "50%" },
+				},
+			],
+		},
+
+		{
+			type: "row",
+			fields: [
+				{
+					name: "enableFooter",
+					type: "checkbox",
+					label: "Enable Content Below Form",
+					defaultValue: false,
+					admin: { width: "50%" },
+				},
+				{
+					name: "enableBorder",
+					type: "checkbox",
+					label: "Show Border & Shadow",
+					defaultValue: true,
+					admin: { width: "50%" },
+				},
+			],
+		},
+		{
+			name: "introContent",
+			type: "richText",
+			editor: lexicalEditor({
+				features: ({ defaultFeatures }) => [
+					CustomColorFeature(),
+					...defaultFeatures,
+					BlocksFeature({
+						blocks: [FeatureListBlock, WorkflowStepBlock, SimpleStatsBlock],
+					}),
+				],
+			}),
+			admin: {
+				condition: (_, { enableIntro }) => Boolean(enableIntro),
+			},
+		},
+
+		{
+			name: "headerContent",
+			type: "richText",
+			editor: lexicalEditor({
+				features: ({ defaultFeatures }) => [
+					CustomColorFeature(),
+					...defaultFeatures,
+					BlocksFeature({
+						blocks: [FeatureListBlock, WorkflowStepBlock, SimpleStatsBlock],
+					}),
+				],
+			}),
+			admin: {
+				condition: (_, { enableHeader }) => Boolean(enableHeader),
+			},
+		},
+
+		{
+			name: "footerContent",
+			type: "richText",
+			editor: lexicalEditor({
+				features: ({ defaultFeatures }) => [
+					CustomColorFeature(),
+					...defaultFeatures,
+					BlocksFeature({
+						blocks: [FeatureListBlock, WorkflowStepBlock, SimpleStatsBlock],
+					}),
+				],
+			}),
+			admin: {
+				condition: (_, { enableFooter }) => Boolean(enableFooter),
+			},
 		},
 	],
 };

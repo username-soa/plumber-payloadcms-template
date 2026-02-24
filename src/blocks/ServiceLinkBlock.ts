@@ -12,7 +12,6 @@ export const ServiceLinkBlock: Block = {
 		},
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -28,6 +27,31 @@ export const ServiceLinkBlock: Block = {
 				},
 			},
 		},
+		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTop",
+					type: "checkbox",
+					label: "Add Top Padding",
+					defaultValue: true,
+					admin: {
+						description: "Add spacing above this block",
+					},
+				},
+				{
+					name: "paddingBottom",
+					type: "checkbox",
+					label: "Add Bottom Padding",
+					defaultValue: true,
+					admin: {
+						description: "Add spacing below this block",
+					},
+				},
+			],
+		},
+
 		{
 			type: "row",
 			fields: [
@@ -49,29 +73,6 @@ export const ServiceLinkBlock: Block = {
 					admin: {
 						width: "50%",
 						description: "Override the default link text (optional)",
-					},
-				},
-			],
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTop",
-					type: "checkbox",
-					label: "Add Top Padding",
-					defaultValue: true,
-					admin: {
-						description: "Add spacing above this block",
-					},
-				},
-				{
-					name: "paddingBottom",
-					type: "checkbox",
-					label: "Add Bottom Padding",
-					defaultValue: true,
-					admin: {
-						description: "Add spacing below this block",
 					},
 				},
 			],

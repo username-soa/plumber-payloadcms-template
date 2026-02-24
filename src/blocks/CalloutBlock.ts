@@ -16,7 +16,6 @@ export const CalloutBlock: Block = {
 		plural: "Callouts",
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -31,6 +30,32 @@ export const CalloutBlock: Block = {
 						"Display a highlighted message box to draw attention to important information, tips, or warnings.",
 				},
 			},
+		},
+		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTop",
+					type: "checkbox",
+					label: "Add Top Padding",
+					defaultValue: true,
+					admin: {
+						description: "Adds extra spacing above the callout",
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottom",
+					type: "checkbox",
+					label: "Add Bottom Padding",
+					defaultValue: true,
+					admin: {
+						description: "Adds extra spacing below the callout",
+						width: "50%",
+					},
+				},
+			],
 		},
 		// Row 1: Title and Type side by side
 		{
@@ -71,32 +96,6 @@ export const CalloutBlock: Block = {
 				description:
 					"The main message or content to display inside the callout",
 			},
-		},
-		// Row 3: Padding options side by side
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTop",
-					type: "checkbox",
-					label: "Add Top Padding",
-					defaultValue: true,
-					admin: {
-						description: "Adds extra spacing above the callout",
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottom",
-					type: "checkbox",
-					label: "Add Bottom Padding",
-					defaultValue: true,
-					admin: {
-						description: "Adds extra spacing below the callout",
-						width: "50%",
-					},
-				},
-			],
 		},
 	],
 };

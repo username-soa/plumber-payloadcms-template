@@ -3,6 +3,14 @@ import { background } from "@/fields/background";
 
 export const SimpleStatsBlock: Block = {
 	slug: "simpleStats",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "SimpleStatsLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Simple Stats Grid",
 		plural: "Simple Stats Grids",

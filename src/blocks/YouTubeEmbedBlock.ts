@@ -16,7 +16,6 @@ export const YouTubeEmbedBlock: Block = {
 		},
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -31,6 +30,30 @@ export const YouTubeEmbedBlock: Block = {
 						"Embed a YouTube video by pasting its URL. The video will be displayed in a responsive player with an optional title.",
 				},
 			},
+		},
+		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTop",
+					type: "checkbox",
+					label: "Add Top Padding",
+					defaultValue: true,
+					admin: {
+						description: "Add extra spacing above this block",
+					},
+				},
+				{
+					name: "paddingBottom",
+					type: "checkbox",
+					label: "Add Bottom Padding",
+					defaultValue: true,
+					admin: {
+						description: "Add extra spacing below this block",
+					},
+				},
+			],
 		},
 		{
 			type: "row",
@@ -54,29 +77,6 @@ export const YouTubeEmbedBlock: Block = {
 					admin: {
 						width: "50%",
 						description: "Optional caption displayed below the video",
-					},
-				},
-			],
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTop",
-					type: "checkbox",
-					label: "Add Top Padding",
-					defaultValue: true,
-					admin: {
-						description: "Add extra spacing above this block",
-					},
-				},
-				{
-					name: "paddingBottom",
-					type: "checkbox",
-					label: "Add Bottom Padding",
-					defaultValue: true,
-					admin: {
-						description: "Add extra spacing below this block",
 					},
 				},
 			],

@@ -1,11 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/site-config";
 import { JsonLd } from "@/components/json-ld";
-import { FAQSection } from "@/components/sections/faq";
-import { ContactHero } from "./_components/contact-hero";
-import { ContactForm } from "./_components/contact-form";
-import { ContactInfo } from "./_components/contact-info";
-import { ContactSEOSection } from "./_components/contact-seo-section";
 import {
 	generateOrganizationSchema,
 	generateWebPageSchema,
@@ -76,29 +71,5 @@ export default async function ContactPage() {
 		],
 	};
 
-	return (
-		<>
-			<JsonLd data={jsonLd} />
-
-			<ContactHero />
-			<ContactInfo />
-
-			{/* Contact Form Section with Local SEO Content */}
-			<section className="py-16 md:py-24 bg-muted/30">
-				<div className="container mx-auto px-6">
-					<div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
-						{/* Left Side - SEO Content */}
-						<ContactSEOSection />
-
-						{/* Right Side - Contact Form */}
-						<div>
-							<ContactForm />
-						</div>
-					</div>
-				</div>
-			</section>
-
-			<FAQSection />
-		</>
-	);
+	return <JsonLd data={jsonLd} />;
 }

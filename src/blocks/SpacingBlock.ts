@@ -12,7 +12,6 @@ export const SpacingBlock: Block = {
 		},
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -28,6 +27,7 @@ export const SpacingBlock: Block = {
 				},
 			},
 		},
+		background,
 		{
 			name: "size",
 			type: "select",

@@ -16,7 +16,6 @@ export const ImageGalleryBlock: Block = {
 		plural: "Image Galleries",
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -32,19 +31,7 @@ export const ImageGalleryBlock: Block = {
 				},
 			},
 		},
-		{
-			name: "style",
-			type: "select",
-			label: "Gallery Style",
-			admin: {
-				description: "Choose how the images will be displayed",
-			},
-			options: [
-				{ label: "Grid", value: "grid" },
-				{ label: "Carousel", value: "carousel" },
-			],
-			defaultValue: "grid",
-		},
+		background,
 		{
 			type: "row",
 			fields: [
@@ -70,6 +57,20 @@ export const ImageGalleryBlock: Block = {
 				},
 			],
 		},
+		{
+			name: "style",
+			type: "select",
+			label: "Gallery Style",
+			admin: {
+				description: "Choose how the images will be displayed",
+			},
+			options: [
+				{ label: "Grid", value: "grid" },
+				{ label: "Carousel", value: "carousel" },
+			],
+			defaultValue: "grid",
+		},
+
 		{
 			name: "images",
 			type: "array",

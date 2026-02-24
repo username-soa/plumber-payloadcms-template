@@ -2,13 +2,56 @@ import { Block } from "payload";
 import { background } from "@/fields/background";
 
 export const ServiceAreasBlock: Block = {
-	slug: "serviceAreasBlock", // camelCase standard for blocks
+	slug: "serviceAreas",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "ServiceAreasLabel",
+			},
+		},
+	},
 	labels: {
-		singular: "Service Areas Block",
-		plural: "Service Areas Blocks",
+		singular: "Service Area",
+		plural: "Service Areas",
 	},
 	fields: [
 		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTopOption",
+					type: "select",
+					label: "Padding Top",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottomOption",
+					type: "select",
+					label: "Padding Bottom",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+			],
+		},
 		{
 			name: "title",
 			type: "text",
@@ -49,41 +92,7 @@ export const ServiceAreasBlock: Block = {
 				},
 			],
 		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTopOption",
-					type: "select",
-					label: "Padding Top",
-					defaultValue: "default",
-					options: [
-						{ label: "None", value: "none" },
-						{ label: "Small", value: "small" },
-						{ label: "Default", value: "default" },
-						{ label: "Big", value: "big" },
-					],
-					admin: {
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottomOption",
-					type: "select",
-					label: "Padding Bottom",
-					defaultValue: "default",
-					options: [
-						{ label: "None", value: "none" },
-						{ label: "Small", value: "small" },
-						{ label: "Default", value: "default" },
-						{ label: "Big", value: "big" },
-					],
-					admin: {
-						width: "50%",
-					},
-				},
-			],
-		},
+
 		{
 			name: "customServiceAreas",
 			type: "array",

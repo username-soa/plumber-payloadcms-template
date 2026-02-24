@@ -17,7 +17,7 @@ type BackLinkProps = NonNullable<Page["layout"]>[number] & {
 export function BackLink({
 	label,
 	href,
-	centered,
+	alignment,
 	paddingTopOption,
 	paddingBottomOption,
 	background,
@@ -31,7 +31,10 @@ export function BackLink({
 			<div
 				className={cn(
 					"max-w-3xl mx-auto",
-					centered ? "text-center" : "text-left",
+					alignment === "center" && "text-center",
+					alignment === "left" && "text-left",
+					alignment === "right" && "text-right",
+					!alignment && "text-center", // Fallback for existing data
 				)}
 			>
 				<Link

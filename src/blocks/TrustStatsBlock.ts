@@ -3,8 +3,16 @@ import { background } from "@/fields/background";
 
 export const TrustStatsBlock: Block = {
 	slug: "trustStats",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "TrustStatsLabel",
+			},
+		},
+	},
 	labels: {
-		singular: "Trust Stats",
+		singular: "Trust Stat",
 		plural: "Trust Stats",
 	},
 	fields: [

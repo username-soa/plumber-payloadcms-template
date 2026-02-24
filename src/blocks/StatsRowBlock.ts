@@ -16,7 +16,6 @@ export const StatsRowBlock: Block = {
 		},
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -31,6 +30,32 @@ export const StatsRowBlock: Block = {
 						"Display key statistics or metrics in a horizontal row layout. Perfect for showcasing achievements and numbers.",
 				},
 			},
+		},
+		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTop",
+					type: "checkbox",
+					label: "Add Top Padding",
+					defaultValue: true,
+					admin: {
+						description: "Add spacing above the stats row",
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottom",
+					type: "checkbox",
+					label: "Add Bottom Padding",
+					defaultValue: true,
+					admin: {
+						description: "Add spacing below the stats row",
+						width: "50%",
+					},
+				},
+			],
 		},
 		{
 			name: "stats",
@@ -70,31 +95,6 @@ export const StatsRowBlock: Block = {
 							},
 						},
 					],
-				},
-			],
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTop",
-					type: "checkbox",
-					label: "Add Top Padding",
-					defaultValue: true,
-					admin: {
-						description: "Add spacing above the stats row",
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottom",
-					type: "checkbox",
-					label: "Add Bottom Padding",
-					defaultValue: true,
-					admin: {
-						description: "Add spacing below the stats row",
-						width: "50%",
-					},
 				},
 			],
 		},

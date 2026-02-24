@@ -3,30 +3,20 @@ import { background } from "@/fields/background";
 
 export const BackLinkBlock: Block = {
 	slug: "backLink",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "BackLinkLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Back Link",
 		plural: "Back Links",
 	},
 	fields: [
 		background,
-		{
-			name: "label",
-			type: "text",
-			label: "Label",
-			defaultValue: "Back to Home",
-		},
-		{
-			name: "href",
-			type: "text",
-			label: "Link URL",
-			defaultValue: "/",
-		},
-		{
-			name: "centered",
-			type: "checkbox",
-			label: "Centered",
-			defaultValue: true,
-		},
 		{
 			type: "row",
 			fields: [
@@ -59,6 +49,37 @@ export const BackLinkBlock: Block = {
 					admin: {
 						width: "50%",
 					},
+				},
+			],
+		},
+		{
+			type: "row",
+			fields: [
+				{
+					name: "label",
+					type: "text",
+					label: "Label",
+					defaultValue: "Back to Home",
+					admin: { width: "33%" },
+				},
+				{
+					name: "href",
+					type: "text",
+					label: "Link URL",
+					defaultValue: "/",
+					admin: { width: "33%" },
+				},
+				{
+					name: "alignment",
+					type: "select",
+					label: "Alignment",
+					defaultValue: "center",
+					options: [
+						{ label: "Left", value: "left" },
+						{ label: "Center", value: "center" },
+						{ label: "Right", value: "right" },
+					],
+					admin: { width: "33%" },
 				},
 			],
 		},

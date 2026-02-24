@@ -1,82 +1,78 @@
 "use client";
 
-import * as React from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Briefcase, CircleDot, Droplets, Waves, Wrench } from "lucide-react";
+import { animate, motion, useMotionValue } from "motion/react";
 import { useTheme } from "next-themes";
-import { motion, useMotionValue, animate } from "motion/react";
-import { cn } from "@/lib/utils";
-import { THEME_CONFIG } from "@/lib/theme-config";
-import { Droplets, Wrench, CircleDot, Waves, Briefcase } from "lucide-react";
+
 import {
 	Popover,
 	PopoverContent,
 	PopoverTrigger,
 } from "@/components/ui/popover";
+import { THEME_CONFIG } from "@/lib/theme-config";
+import { cn } from "@/lib/utils";
+
+const THEMES = [
+	{
+		name: "system",
+		label: "System",
+		icon: Droplets,
+		activeColor: "bg-blue-500 text-white",
+	},
+	{
+		name: "industrial",
+		label: "Industrial",
+		icon: Wrench,
+		activeColor: "bg-orange-600 text-white",
+	},
+	{
+		name: "copper",
+		label: "Copper",
+		icon: CircleDot,
+		activeColor: "bg-orange-700 text-white",
+	},
+	{
+		name: "ocean",
+		label: "Ocean",
+		icon: Waves,
+		activeColor: "bg-teal-600 text-white",
+	},
+	{
+		name: "professional",
+		label: "Professional",
+		icon: Briefcase,
+		activeColor: "bg-[#1e3a5f] text-amber-400",
+	},
+] as const;
+
+const SNAP_PADDING = 24;
+const DRAG_TIMEOUT = 150;
 
 export function ThemeSwitcher() {
 	const { setTheme, theme } = useTheme();
-	const [mounted, setMounted] = React.useState(false);
+	const [mounted, setMounted] = useState(false);
 
 	const x = useMotionValue(0);
 	const y = useMotionValue(0);
-	const ref = React.useRef<HTMLDivElement>(null);
-	const isDraggingRef = React.useRef(false);
+	const dragRef = useRef<HTMLDivElement>(null);
+	const isDraggingRef = useRef(false);
 
-	React.useEffect(() => {
+	useEffect(() => {
 		setMounted(true);
 	}, []);
 
-	const themes = [
-		{
-			name: "system",
-			label: "System",
-			icon: Droplets,
-			activeColor: "bg-blue-500 text-white",
-		},
-		{
-			name: "industrial",
-			label: "Industrial",
-			icon: Wrench,
-			activeColor: "bg-orange-600 text-white",
-		},
-		{
-			name: "copper",
-			label: "Copper",
-			icon: CircleDot,
-			activeColor: "bg-orange-700 text-white",
-		},
-		{
-			name: "ocean",
-			label: "Ocean",
-			icon: Waves,
-			activeColor: "bg-teal-600 text-white",
-		},
-		{
-			name: "professional",
-			label: "Professional",
-			icon: Briefcase,
-			activeColor: "bg-[#1e3a5f] text-amber-400",
-		},
-	];
-
-	// Find current theme object to show its icon
-	const currentTheme = themes.find((t) => t.name === theme) || themes[0];
-	const CurrentIcon = currentTheme.icon;
-
-	if (!mounted || !THEME_CONFIG.showSwitcher) {
-		return null;
-	}
-
-	const handleDragEnd = () => {
+	const handleDragEnd = useCallback(() => {
 		// Reset dragging state after a small delay to prevent click triggering
-		setTimeout(() => {
+		const timer = setTimeout(() => {
 			isDraggingRef.current = false;
-		}, 150);
+		}, DRAG_TIMEOUT);
 
-		if (!ref.current) return;
-		const rect = ref.current.getBoundingClientRect();
+		if (!dragRef.current) return;
+
+		const rect = dragRef.current.getBoundingClientRect();
 		const winW = window.innerWidth;
 		const winH = window.innerHeight;
-		const padding = 24;
 
 		// Calculate distances to edges
 		const distLeft = rect.left;
@@ -89,56 +85,53 @@ export function ThemeSwitcher() {
 		let targetX = x.get();
 		let targetY = y.get();
 
-		// Determine snap target
-		// We adjust the MOTION VALUE (x/y), which is the delta from the CSS origin.
-		// NewVal = CurrentVal + (TargetScreenPos - CurrentScreenPos)
+		// Pre-calculate clamped values to keep within screen bounds
+		const clampedY = Math.max(
+			SNAP_PADDING,
+			Math.min(rect.top, winH - SNAP_PADDING - rect.height),
+		);
+		const clampedX = Math.max(
+			SNAP_PADDING,
+			Math.min(rect.left, winW - SNAP_PADDING - rect.width),
+		);
 
-		if (minDist === distLeft) {
-			// Snap to Left
-			targetX = x.get() + (padding - rect.left);
-			// Clamp Y
-			const clampedTop = Math.max(
-				padding,
-				Math.min(rect.top, winH - padding - rect.height),
-			);
-			targetY = y.get() + (clampedTop - rect.top);
-		} else if (minDist === distRight) {
-			// Snap to Right
-			targetX = x.get() + (winW - padding - rect.width - rect.left);
-			// Clamp Y
-			const clampedTop = Math.max(
-				padding,
-				Math.min(rect.top, winH - padding - rect.height),
-			);
-			targetY = y.get() + (clampedTop - rect.top);
-		} else if (minDist === distTop) {
-			// Snap to Top
-			targetY = y.get() + (padding - rect.top);
-			// Clamp X
-			const clampedLeft = Math.max(
-				padding,
-				Math.min(rect.left, winW - padding - rect.width),
-			);
-			targetX = x.get() + (clampedLeft - rect.left);
-		} else {
-			// Snap to Bottom
-			targetY = y.get() + (winH - padding - rect.height - rect.top);
-			// Clamp X
-			const clampedLeft = Math.max(
-				padding,
-				Math.min(rect.left, winW - padding - rect.width),
-			);
-			targetX = x.get() + (clampedLeft - rect.left);
+		// Determine snap target
+		switch (minDist) {
+			case distLeft:
+				targetX += SNAP_PADDING - rect.left;
+				targetY += clampedY - rect.top;
+				break;
+			case distRight:
+				targetX += winW - SNAP_PADDING - rect.width - rect.left;
+				targetY += clampedY - rect.top;
+				break;
+			case distTop:
+				targetY += SNAP_PADDING - rect.top;
+				targetX += clampedX - rect.left;
+				break;
+			case distBottom:
+				targetY += winH - SNAP_PADDING - rect.height - rect.top;
+				targetX += clampedX - rect.left;
+				break;
 		}
 
 		animate(x, targetX, { type: "spring", stiffness: 300, damping: 30 });
 		animate(y, targetY, { type: "spring", stiffness: 300, damping: 30 });
-	};
+
+		return () => clearTimeout(timer);
+	}, [x, y]);
+
+	if (!mounted || !THEME_CONFIG.showSwitcher) {
+		return null;
+	}
+
+	const currentTheme = THEMES.find((t) => t.name === theme) || THEMES[0];
+	const CurrentIcon = currentTheme.icon;
 
 	return (
 		<div className="fixed bottom-6 right-6 z-9999">
 			<motion.div
-				ref={ref}
+				ref={dragRef}
 				style={{ x, y }}
 				drag
 				dragMomentum={false}
@@ -160,32 +153,33 @@ export function ThemeSwitcher() {
 									e.stopPropagation();
 								}
 							}}
-							className="h-10 w-10 rounded-full text-white shadow-xl border border-gray-500 flex items-center justify-center transition-colors bg-black"
+							className="flex h-10 w-10 items-center justify-center rounded-full border border-gray-500 bg-black text-white shadow-xl transition-colors"
 						>
-							<CurrentIcon className="w-4 h-4" />
+							<CurrentIcon className="h-4 w-4" />
 							<span className="sr-only">Toggle theme</span>
 						</button>
 					</PopoverTrigger>
 					<PopoverContent
 						side="top"
-						className="w-auto p-1 bg-neutral-950 border-neutral-800"
 						align="center"
+						className="w-auto border-neutral-800 bg-neutral-950 p-1"
 					>
 						<div className="flex flex-col gap-1">
-							{themes.map((t) => {
+							{THEMES.map((t) => {
 								const Icon = t.icon;
 								const isActive = t.name === theme;
+
 								return (
 									<button
 										key={t.name}
 										type="button"
 										onClick={() => setTheme(t.name)}
 										className={cn(
-											"flex items-center gap-2 px-3 py-1.5 rounded-sm text-xs transition-colors hover:bg-neutral-800 text-neutral-400 font-medium",
+											"flex items-center gap-2 rounded-sm px-3 py-1.5 text-xs font-medium text-neutral-400 transition-colors hover:bg-neutral-800",
 											isActive && cn("shadow-sm", t.activeColor),
 										)}
 									>
-										<Icon className="w-3.5 h-3.5" />
+										<Icon className="h-3.5 w-3.5" />
 										<span>{t.label}</span>
 									</button>
 								);

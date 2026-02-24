@@ -16,7 +16,6 @@ export const TableBlock: Block = {
 		},
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -32,6 +31,7 @@ export const TableBlock: Block = {
 				},
 			},
 		},
+		background,
 		{
 			name: "caption",
 			type: "text",

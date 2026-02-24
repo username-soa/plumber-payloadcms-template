@@ -4,12 +4,19 @@ import { background } from "@/fields/background";
 export const TimelineBlock: Block = {
 	slug: "timeline",
 	interfaceName: "TimelineBlock",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "TimelineLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Timeline",
 		plural: "Timelines",
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -24,6 +31,42 @@ export const TimelineBlock: Block = {
 						"Display a chronological sequence of events or milestones with dates and descriptions in a visual timeline format.",
 				},
 			},
+		},
+		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTopOption",
+					type: "select",
+					label: "Padding Top",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottomOption",
+					type: "select",
+					label: "Padding Bottom",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+			],
 		},
 		{
 			name: "title",
@@ -75,41 +118,6 @@ export const TimelineBlock: Block = {
 					label: "Description",
 					admin: {
 						description: "Detailed information about this timeline entry",
-					},
-				},
-			],
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTopOption",
-					type: "select",
-					label: "Padding Top",
-					defaultValue: "default",
-					options: [
-						{ label: "None", value: "none" },
-						{ label: "Small", value: "small" },
-						{ label: "Default", value: "default" },
-						{ label: "Big", value: "big" },
-					],
-					admin: {
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottomOption",
-					type: "select",
-					label: "Padding Bottom",
-					defaultValue: "default",
-					options: [
-						{ label: "None", value: "none" },
-						{ label: "Small", value: "small" },
-						{ label: "Default", value: "default" },
-						{ label: "Big", value: "big" },
-					],
-					admin: {
-						width: "50%",
 					},
 				},
 			],

@@ -8,36 +8,49 @@ export const background: Field = {
 	},
 	fields: [
 		{
-			name: "bg",
-			type: "select",
-			defaultValue: "transparent",
-			options: [
+			type: "row",
+			fields: [
 				{
-					label: "Transparent",
-					value: "transparent",
+					name: "bg",
+					label: "Background Color",
+					type: "select",
+					defaultValue: "transparent",
+					options: [
+						{
+							label: "Transparent",
+							value: "transparent",
+						},
+						{
+							label: "Muted",
+							value: "muted",
+						},
+						{
+							label: "Primary",
+							value: "primary",
+						},
+					],
+					admin: {
+						width: "50%",
+					},
 				},
 				{
-					label: "Muted",
-					value: "muted",
-				},
-				{
-					label: "Primary",
-					value: "primary",
-				},
-			],
-		},
-		{
-			name: "decoration",
-			type: "select",
-			defaultValue: "none",
-			options: [
-				{
-					label: "None",
-					value: "none",
-				},
-				{
-					label: "Dots",
-					value: "dots",
+					name: "decoration",
+					label: "Decoration Type",
+					type: "select",
+					defaultValue: "none",
+					options: [
+						{
+							label: "None",
+							value: "none",
+						},
+						{
+							label: "Dots",
+							value: "dots",
+						},
+					],
+					admin: {
+						width: "50%",
+					},
 				},
 			],
 		},

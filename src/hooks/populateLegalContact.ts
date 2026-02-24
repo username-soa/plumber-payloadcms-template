@@ -1,5 +1,5 @@
 import type { CollectionAfterReadHook } from "payload";
-import type { Page, CompanyInfo } from "@/payload-types";
+import type { CompanyInfo, Page } from "@/payload-types";
 
 /**
  * Hook to automatically inject CompanyInfo global data into LegalContact blocks.

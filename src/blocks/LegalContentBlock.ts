@@ -4,18 +4,20 @@ import { customLexical } from "@/lib/lexical-config";
 
 export const LegalContentBlock: Block = {
 	slug: "legalContent",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "LegalContentLabel",
+			},
+		},
+	},
 	labels: {
-		singular: "Content",
-		plural: "Content Blocks",
+		singular: "Legal Content",
+		plural: "Legal Contents",
 	},
 	fields: [
 		background,
-		{
-			name: "content",
-			type: "richText",
-			editor: customLexical,
-			required: true,
-		},
 		{
 			type: "row",
 			fields: [
@@ -50,6 +52,12 @@ export const LegalContentBlock: Block = {
 					},
 				},
 			],
+		},
+		{
+			name: "content",
+			type: "richText",
+			editor: customLexical,
+			required: true,
 		},
 	],
 };

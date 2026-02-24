@@ -10,12 +10,55 @@ import { CustomColorFeature } from "@/components/richtext/features/custom-color/
 
 export const DualColumnBlock: Block = {
 	slug: "dualColumn",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "DualColumnLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Dual Column",
 		plural: "Dual Columns",
 	},
 	fields: [
 		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTopOption",
+					type: "select",
+					label: "Padding Top",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottomOption",
+					type: "select",
+					label: "Padding Bottom",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+			],
+		},
 		{
 			name: "columns",
 			type: "array",
@@ -72,41 +115,6 @@ export const DualColumnBlock: Block = {
 					fields: [link()],
 					admin: {
 						condition: (_, siblingData) => siblingData.type === "content",
-					},
-				},
-			],
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTopOption",
-					type: "select",
-					label: "Padding Top",
-					defaultValue: "default",
-					options: [
-						{ label: "None", value: "none" },
-						{ label: "Small", value: "small" },
-						{ label: "Default", value: "default" },
-						{ label: "Big", value: "big" },
-					],
-					admin: {
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottomOption",
-					type: "select",
-					label: "Padding Bottom",
-					defaultValue: "default",
-					options: [
-						{ label: "None", value: "none" },
-						{ label: "Small", value: "small" },
-						{ label: "Default", value: "default" },
-						{ label: "Big", value: "big" },
-					],
-					admin: {
-						width: "50%",
 					},
 				},
 			],

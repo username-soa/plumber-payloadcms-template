@@ -10,10 +10,9 @@ import {
 } from "@/lib/json-ld";
 import type { CaseStudy } from "@/payload-types";
 import { getMediaUrl, getCategoryName } from "@/lib/payload-utils";
-import { SingleCaseStudyHero } from "@/app/(site)/case-studies/_components/single-case-study-hero";
-import { CaseStudyContent } from "@/app/(site)/case-studies/_components/case-study-content";
-import { CaseStudySidebar } from "@/app/(site)/case-studies/_components/case-study-sidebar";
-import { RenderBlocks } from "@/components/payload/RenderBlocks";
+import { SingleCaseStudyHero } from "@/app/(site)/case-studies/components/single-case-study-hero";
+import { CaseStudyContent } from "@/app/(site)/case-studies/components/case-study-content";
+import { CaseStudySidebar } from "@/app/(site)/case-studies/components/case-study-sidebar";
 
 const { seo } = SITE_CONFIG;
 
@@ -134,14 +133,6 @@ export default async function CaseStudyPage({ params }: PageProps) {
 						<CaseStudySidebar study={study} />
 					</div>
 				</div>
-
-				{study.layout && (
-					<RenderBlocks
-						layout={study.layout}
-						pageTitle={study.title}
-						updatedAt={study.updatedAt}
-					/>
-				)}
 			</article>
 		</>
 	);

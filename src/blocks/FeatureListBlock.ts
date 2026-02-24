@@ -3,6 +3,14 @@ import { background } from "@/fields/background";
 
 export const FeatureListBlock: Block = {
 	slug: "featureList",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "FeatureListLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Feature List",
 		plural: "Feature Lists",

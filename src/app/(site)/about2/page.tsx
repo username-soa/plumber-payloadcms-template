@@ -1,15 +1,6 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/site-config";
 import { JsonLd } from "@/components/json-ld";
-import { FAQSection } from "@/components/sections/faq";
-import { ReviewSection } from "@/components/sections/review";
-import { AboutHero } from "./_components/about-hero";
-import { CompanyStory } from "./_components/company-story";
-import { ServiceAreas } from "./_components/service-areas";
-import { TrustStats } from "./_components/trust-stats";
-import { MeetTheTeam } from "./_components/meet-the-team";
-import { Certifications } from "./_components/certifications";
-import { OurValues } from "./_components/our-values";
 import {
 	generateOrganizationSchema,
 	generateWebPageSchema,
@@ -72,16 +63,6 @@ export default async function AboutPage() {
 	return (
 		<>
 			<JsonLd data={jsonLd} />
-
-			{/* <AboutHero /> */}
-			{/* <CompanyStory />
-			<OurValues />
-			<ServiceAreas companyInfo={companyInfo} />
-			<TrustStats /> */}
-			{/* <MeetTheTeam /> */}
-			{/* <Certifications /> */}
-			{/* <ReviewSection /> */}
-			{/* <FAQSection /> */}
 		</>
 	);
 }

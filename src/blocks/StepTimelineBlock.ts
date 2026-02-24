@@ -4,12 +4,48 @@ import { background } from "@/fields/background";
 export const StepTimelineBlock: Block = {
 	slug: "stepTimeline",
 	interfaceName: "StepTimelineBlock",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "StepTimelineLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Step Timeline",
 		plural: "Step Timelines",
 	},
 	fields: [
 		background,
+		{
+			type: "row",
+			admin: {
+				position: "sidebar",
+			},
+			fields: [
+				{
+					name: "paddingTop",
+					type: "checkbox",
+					label: "Padding Top",
+					defaultValue: true,
+					admin: {
+						width: "50%",
+						description: "Adds padding to the top of the block",
+					},
+				},
+				{
+					name: "paddingBottom",
+					type: "checkbox",
+					label: "Padding Bottom",
+					defaultValue: true,
+					admin: {
+						width: "50%",
+						description: "Adds padding to the bottom of the block",
+					},
+				},
+			],
+		},
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -24,29 +60,6 @@ export const StepTimelineBlock: Block = {
 						"Display a step-by-step guide or process with custom labels, headings, and descriptions.",
 				},
 			},
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTop",
-					type: "checkbox",
-					label: "Padding Top",
-					defaultValue: true,
-					admin: {
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottom",
-					type: "checkbox",
-					label: "Padding Bottom",
-					defaultValue: true,
-					admin: {
-						width: "50%",
-					},
-				},
-			],
 		},
 		{
 			name: "items",

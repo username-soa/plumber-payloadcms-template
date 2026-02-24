@@ -1,4 +1,3 @@
-import { LucideIcon } from "lucide-react";
 import { TypographyH1, TypographyLead } from "@/components/ui/typography";
 import { Badge } from "@/components/ui/badge";
 import DynamicIcon from "@/components/ui/dynamic-icon";

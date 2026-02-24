@@ -1,6 +1,7 @@
 import type { GlobalConfig } from "payload";
-import { revalidateGlobal } from "../hooks/revalidateGlobal";
+
 import { link } from "../fields/link";
+import { revalidateGlobal } from "../hooks/revalidateGlobal";
 
 export const AnnouncementBar: GlobalConfig = {
 	slug: "announcement-bar",

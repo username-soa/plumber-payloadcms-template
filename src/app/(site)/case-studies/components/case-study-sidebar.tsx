@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { TableOfContents } from "../../blog/_components/table-of-contents";
+import { TableOfContents } from "../../blog/components/table-of-contents";
 import { Button } from "@/components/ui/button";
 import type { CaseStudy } from "@/payload-types";
 import { getCategoryName } from "@/lib/payload-utils";

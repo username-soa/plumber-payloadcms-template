@@ -3,48 +3,20 @@ import { background } from "@/fields/background";
 
 export const LegalContactBlock: Block = {
 	slug: "legalContact",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "LegalContactLabel",
+			},
+		},
+	},
 	labels: {
-		singular: "Contact Card",
-		plural: "Contact Cards",
+		singular: "Legal Contact",
+		plural: "Legal Contacts",
 	},
 	fields: [
 		background,
-		{
-			name: "title",
-			type: "text",
-			label: "Title",
-			defaultValue: "Contact Us",
-		},
-		{
-			name: "description",
-			type: "textarea",
-			label: "Description",
-			defaultValue: "For questions about these Terms or to make a complaint:",
-		},
-		{
-			name: "email",
-			type: "text",
-			label: "Contact Email",
-			admin: {
-				description: "Leave blank to use email from Company Info global",
-			},
-		},
-		{
-			name: "phone",
-			type: "text",
-			label: "Contact Phone",
-			admin: {
-				description: "Leave blank to use phone from Company Info global",
-			},
-		},
-		{
-			name: "address",
-			type: "textarea",
-			label: "Contact Address",
-			admin: {
-				description: "Leave blank to use address from Company Info global",
-			},
-		},
 		{
 			type: "row",
 			fields: [
@@ -76,6 +48,63 @@ export const LegalContactBlock: Block = {
 					],
 					admin: {
 						width: "50%",
+					},
+				},
+			],
+		},
+
+		{
+			type: "row",
+			fields: [
+				{
+					name: "title",
+					type: "text",
+					label: "Title",
+					defaultValue: "Contact Us",
+					admin: {
+						width: "33%",
+					},
+				},
+				{
+					name: "description",
+					type: "textarea",
+					label: "Description",
+					defaultValue:
+						"For questions about these Terms or to make a complaint:",
+					admin: {
+						width: "66%",
+					},
+				},
+			],
+		},
+		{
+			type: "row",
+			fields: [
+				{
+					name: "email",
+					type: "text",
+					label: "Contact Email",
+					admin: {
+						width: "33%",
+						description: "Leave blank to use email from Company Info global",
+					},
+				},
+				{
+					name: "phone",
+					type: "text",
+					label: "Contact Phone",
+					admin: {
+						width: "33%",
+						description: "Leave blank to use phone from Company Info global",
+					},
+				},
+				{
+					name: "address",
+					type: "text",
+					label: "Contact Address",
+					admin: {
+						width: "33%",
+						description: "Leave blank to use address from Company Info global",
 					},
 				},
 			],

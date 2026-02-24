@@ -1,31 +1,31 @@
-import type { LucideIcon } from "lucide-react";
+import Link from "next/link";
 import {
 	Facebook,
 	Instagram,
 	Linkedin,
-	Twitter,
-	Phone,
-	MapPin,
 	Mail,
+	MapPin,
+	Phone,
+	Twitter,
 	Youtube,
+	type LucideIcon,
 } from "lucide-react";
-import Link from "next/link";
 
+import { CMSLinkItem } from "@/components/heroes/components/cms-link-item";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import {
+	TypographyH2,
 	TypographyH3,
 	TypographyMuted,
 	TypographySmall,
-	TypographyH2,
 } from "@/components/ui/typography";
-import type {
-	Footer as FooterType,
-	CompanyInfo as CompanyInfoType,
-} from "@/payload-types";
-import { getCMSLinkHref, type CMSLinkType } from "@/lib/cms-link";
-import { CMSLinkItem } from "@/components/heroes/components/cms-link-item";
+import { type CMSLinkType, getCMSLinkHref } from "@/lib/cms-link";
 import { cn } from "@/lib/utils";
+import type {
+	CompanyInfo as CompanyInfoType,
+	Footer as FooterType,
+} from "@/payload-types";
 
 // Define overrides for the new link structure if generated types are stale
 type FooterLinkItem = {
@@ -35,15 +35,15 @@ type FooterLinkItem = {
 
 type ModifiedFooterType = Omit<
 	FooterType,
-	"navLinks" | "bottomLinks" | "cta"
+	"bottomLinks" | "cta" | "navLinks"
 > & {
-	navLinks?: FooterLinkItem[] | null;
 	bottomLinks?: FooterLinkItem[] | null;
 	cta?: {
 		headline: string;
 		subheadline: string;
 		links?: { link: CMSLinkType }[] | null;
 	};
+	navLinks?: FooterLinkItem[] | null;
 };
 
 const SOCIAL_ICONS: Record<string, LucideIcon> = {
@@ -55,49 +55,77 @@ const SOCIAL_ICONS: Record<string, LucideIcon> = {
 };
 
 interface FooterProps {
-	footerData: ModifiedFooterType;
 	companyInfo: CompanyInfoType;
+	footerData: ModifiedFooterType;
 }
 
-export function Footer({ footerData, companyInfo }: FooterProps) {
-	const { cta, navLinks, copyrightText, bottomLinks } = footerData;
-	const { brand, socials, workingHours, phone, email, address } = companyInfo;
-	const contact = { phone, email, address };
+/**
+ * Helper to generate a stable key for CMS links.
+ */
+function getLinkKey(item: FooterLinkItem, index: number): string {
+	if (item.id) return item.id;
+
+	const { link } = item;
+	if (link?.url) return link.url;
+
+	// Handle case where reference's value is expanded object (slug) or simple string
+	if (
+		typeof link?.reference?.value === "object" &&
+		link.reference.value !== null &&
+		"slug" in link.reference.value
+	) {
+		return link.reference.value.slug as string;
+	}
+	if (typeof link?.reference?.value === "string") {
+		return link.reference.value;
+	}
+
+	return String(index);
+}
+
+export function Footer({ companyInfo, footerData }: FooterProps) {
+	const { bottomLinks, copyrightText, cta, navLinks } = footerData;
+	const { address, brand, email, phone, socials, workingHours } = companyInfo;
+
+	const contact = { address, email, phone };
+	const currentYear = new Date().getFullYear();
 
 	return (
-		<footer className="w-full bg-muted/30 pt-16 pb-8 border-t border-border relative overflow-hidden">
-			<div className="container mx-auto px-6 md:px-12 relative z-10">
+		<footer className="relative w-full overflow-hidden border-t border-border bg-muted/30 pb-8 pt-16">
+			<div className="container relative z-10 mx-auto px-6 md:px-12">
 				{/* Integrated CTA Section */}
 				{cta && (
-					<div className="flex flex-col items-center justify-between gap-8 text-center md:text-left mb-16">
-						<TypographyH2 className="text-4xl md:text-5xl font-bold border-none tracking-tight text-center">
+					<div className="mb-16 flex flex-col items-center justify-between gap-8 text-center md:text-left">
+						<TypographyH2 className="border-none text-center text-4xl font-bold tracking-tight md:text-5xl">
 							{cta.headline}
 						</TypographyH2>
-						<TypographyMuted className="text-muted-foreground text-lg md:text-xl font-light text-center">
+						<TypographyMuted className="text-center text-lg font-light text-muted-foreground md:text-xl">
 							{cta.subheadline}
 						</TypographyMuted>
 
-						<div className="shrink-0 flex flex-col sm:flex-row gap-4">
-							{cta.links?.map((item, i) => (
-								<CMSLinkItem
-									key={i.toString()}
-									link={item.link}
-									className={cn(
-										"px-8 py-6 text-lg rounded-full",
-										item.link.style === "outline" ? "text-inherit" : "",
-									)}
-								/>
-							))}
-						</div>
+						{cta.links && cta.links.length > 0 && (
+							<div className="flex shrink-0 flex-col gap-4 sm:flex-row">
+								{cta.links.map((item, i) => (
+									<CMSLinkItem
+										key={i.toString()}
+										className={cn(
+											"rounded-full px-8 py-6 text-lg",
+											item.link.style === "outline" ? "text-inherit" : "",
+										)}
+										link={item.link}
+									/>
+								))}
+							</div>
+						)}
 					</div>
 				)}
 
 				<Separator className="mb-10" />
 
-				<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-12 gap-y-6 mb-10">
+				<div className="mb-10 grid grid-cols-1 gap-x-12 gap-y-6 md:grid-cols-2 lg:grid-cols-4">
 					{/* Column 1: Brand & Socials */}
 					<div className="flex flex-col gap-4">
-						<Link href="/" className="flex items-center gap-2 w-fit">
+						<Link className="flex w-fit items-center gap-2" href="/">
 							<span className="text-xl font-bold tracking-tight text-primary">
 								{brand.name}
 							</span>
@@ -105,71 +133,73 @@ export function Footer({ footerData, companyInfo }: FooterProps) {
 						<TypographyMuted className="text-base">
 							{brand.description}
 						</TypographyMuted>
-						<div className="flex gap-2">
-							{socials?.map((social) => {
-								const Icon = SOCIAL_ICONS[social.platform];
-								if (!Icon) return null;
-								return (
-									<SocialButton
-										key={social.platform}
-										icon={Icon}
-										label={social.label}
-										href={social.href}
-									/>
-								);
-							})}
-						</div>
+						{socials && socials.length > 0 && (
+							<div className="flex gap-2">
+								{socials.map((social) => {
+									const Icon = SOCIAL_ICONS[social.platform];
+									if (!Icon) return null;
+									return (
+										<SocialButton
+											key={social.platform}
+											href={social.href}
+											icon={Icon}
+											label={social.label}
+										/>
+									);
+								})}
+							</div>
+						)}
 					</div>
 
 					{/* Column 2: Top Links */}
 					<div className="lg:pl-8">
-						<TypographyH3 className="mb-4 text-foreground font-semibold">
+						<TypographyH3 className="mb-4 font-semibold text-foreground">
 							Top Links
 						</TypographyH3>
-						<div className="flex flex-col items-start gap-1.5">
-							{navLinks?.map((item, i) => {
-								const href = getCMSLinkHref(item.link);
-								const key =
-									item.link?.url ||
-									(typeof item.link?.reference?.value === "object"
-										? item.link.reference.value.slug
-										: item.link?.reference?.value) ||
-									i;
-								return (
-									<FooterLink key={key.toString()} href={href}>
-										{item.link?.label || "Link"}
-									</FooterLink>
-								);
-							})}
-						</div>
+						<nav aria-label="Footer Navigation">
+							<ul className="flex flex-col items-start gap-1.5">
+								{navLinks?.map((item, i) => {
+									const href = getCMSLinkHref(item.link);
+									return (
+										<li key={getLinkKey(item, i)}>
+											<FooterLink href={href}>
+												{item.link?.label || "Link"}
+											</FooterLink>
+										</li>
+									);
+								})}
+							</ul>
+						</nav>
 					</div>
 
 					{/* Column 3: Contact Us */}
 					<div>
-						<TypographyH3 className="mb-5 text-foreground font-semibold">
+						<TypographyH3 className="mb-5 font-semibold text-foreground">
 							Contact Us
 						</TypographyH3>
-						<ul className="space-y-3 mb-3">
-							<ContactItem
-								icon={Phone}
-								text={contact.phone}
-								href={`tel:${contact.phone}`}
-							/>
-							<ContactItem
-								icon={Mail}
-								text={contact.email}
-								href={`mailto:${contact.email}`}
-							/>
-							<ContactItem icon={MapPin} text={contact.address} />
-						</ul>
+						<address className="not-italic">
+							<ul className="mb-3 space-y-3">
+								<ContactItem
+									href={`tel:${contact.phone}`}
+									icon={Phone}
+									text={contact.phone}
+								/>
+								<ContactItem
+									href={`mailto:${contact.email}`}
+									icon={Mail}
+									text={contact.email}
+								/>
+								<ContactItem icon={MapPin} text={contact.address} />
+							</ul>
+						</address>
 					</div>
 
 					{/* Column 4: Working Hours */}
 					<div>
-						<TypographyH3 className="mb-5 text-foreground font-semibold">
+						<TypographyH3 className="mb-5 font-semibold text-foreground">
 							Working Hours
 						</TypographyH3>
-						<div className="space-y-3">
+						<ul className="space-y-3">
 							{workingHours?.map((schedule) => (
 								<ScheduleRow
 									key={schedule.day}
@@ -177,70 +207,79 @@ export function Footer({ footerData, companyInfo }: FooterProps) {
 									time={schedule.time}
 								/>
 							))}
-						</div>
+						</ul>
 					</div>
 				</div>
 
+				{/* Proudly Serving Section */}
 				{companyInfo.seo?.serviceAreas &&
 					companyInfo.seo.serviceAreas.length > 0 && (
 						<div className="mb-10">
-							<div className="flex items-center md:gap-6 gap-4 mb-4">
+							<div className="mb-4 flex items-center gap-4 md:gap-6">
 								<Separator className="flex-1" />
-								<TypographyH3 className="text-foreground font-semibold shrink-0">
+								<TypographyH3 className="shrink-0 font-semibold text-foreground">
 									Proudly Serving
 								</TypographyH3>
 								<Separator className="flex-1" />
 							</div>
-							<div className="flex items-center justify-center flex-wrap text-center text-muted-foreground text-sm max-w-4xl mx-auto leading-relaxed">
-								{companyInfo.seo.serviceAreas.map((area, index) => (
-									<span key={area.name || index}>
-										{area.name}
-										{index <
-											(companyInfo.seo?.serviceAreas?.length || 0) - 1 && (
-											<span className="mx-2 opacity-30">•</span>
-										)}
-									</span>
-								))}
+							<div className="mx-auto flex max-w-4xl flex-wrap items-center justify-center text-center text-sm leading-relaxed text-muted-foreground">
+								{companyInfo.seo.serviceAreas.map((area, index) => {
+									const isLast =
+										index === (companyInfo.seo?.serviceAreas?.length || 0) - 1;
+									return (
+										<span key={area.name || index.toString()}>
+											{area.name}
+											{!isLast && (
+												<span aria-hidden="true" className="mx-2 opacity-30">
+													&bull;
+												</span>
+											)}
+										</span>
+									);
+								})}
 							</div>
 						</div>
 					)}
+
 				<Separator className="mb-3" />
 
 				{/* Bottom Section: Copyright */}
-				<div className="flex flex-col md:flex-row justify-between items-center text-sm text-muted-foreground">
+				<div className="flex flex-col items-center justify-between text-sm text-muted-foreground md:flex-row">
 					<TypographyMuted>
 						{copyrightText
-							?.replace("{year}", new Date().getFullYear().toString())
+							?.replace("{year}", currentYear.toString())
 							.replace("{brand}", brand.name) ||
-							`© Copyright ${new Date().getFullYear()} ${brand.name}. All Rights Reserved.`}
+							`© Copyright ${currentYear} ${brand.name}. All Rights Reserved.`}
 					</TypographyMuted>
-					<div className="flex gap-4 mt-4 md:mt-0">
-						{bottomLinks?.map((item, i) => {
-							const href = getCMSLinkHref(item.link);
-							const key =
-								item.link?.url ||
-								(typeof item.link?.reference?.value === "object"
-									? item.link.reference.value.slug
-									: item.link?.reference?.value) ||
-								i;
-							return (
-								<Button
-									key={key.toString()}
-									variant="link"
-									className="text-muted-foreground hover:text-primary h-auto p-0 font-normal"
-									asChild
-								>
-									<Link
-										href={href}
-										target={item.link?.newTab ? "_blank" : undefined}
-										rel={item.link?.newTab ? "noopener noreferrer" : undefined}
+
+					{bottomLinks && bottomLinks.length > 0 && (
+						<nav
+							aria-label="Footer Bottom Links"
+							className="mt-4 flex gap-4 md:mt-0"
+						>
+							{bottomLinks.map((item, i) => {
+								const href = getCMSLinkHref(item.link);
+								return (
+									<Button
+										key={getLinkKey(item, i)}
+										asChild
+										className="h-auto p-0 font-normal text-muted-foreground hover:text-primary"
+										variant="link"
 									>
-										{item.link?.label || "Link"}
-									</Link>
-								</Button>
-							);
-						})}
-					</div>
+										<Link
+											href={href}
+											rel={
+												item.link?.newTab ? "noopener noreferrer" : undefined
+											}
+											target={item.link?.newTab ? "_blank" : undefined}
+										>
+											{item.link?.label || "Link"}
+										</Link>
+									</Button>
+								);
+							})}
+						</nav>
+					)}
 				</div>
 			</div>
 		</footer>
@@ -248,28 +287,28 @@ export function Footer({ footerData, companyInfo }: FooterProps) {
 }
 
 function SocialButton({
+	href,
 	icon: Icon,
 	label,
-	href,
 }: {
+	href: string;
 	icon: LucideIcon;
 	label: string;
-	href: string;
 }) {
 	return (
 		<Button
-			variant="ghost"
-			size="icon"
-			className="rounded-full hover:bg-primary hover:text-primary-foreground transition-colors"
 			asChild
+			className="rounded-full transition-colors hover:bg-primary hover:text-primary-foreground"
+			size="icon"
+			variant="ghost"
 		>
 			<a
-				href={href}
 				aria-label={label}
-				target="_blank"
+				href={href}
 				rel="noopener noreferrer"
+				target="_blank"
 			>
-				<Icon className="w-5 h-5" />
+				<Icon className="h-5 w-5" />
 			</a>
 		</Button>
 	);
@@ -277,25 +316,25 @@ function SocialButton({
 
 function ScheduleRow({ day, time }: { day: string; time: string }) {
 	return (
-		<div className="flex justify-between items-center text-muted-foreground md:max-w-xs border-b pb-3">
+		<li className="flex items-center justify-between border-b pb-3 text-muted-foreground md:max-w-xs">
 			<TypographySmall className="font-medium">{day}</TypographySmall>
-			<TypographySmall className={"font-normal"}>{time}</TypographySmall>
-		</div>
+			<TypographySmall className="font-normal">{time}</TypographySmall>
+		</li>
 	);
 }
 
 function FooterLink({
-	href,
 	children,
+	href,
 }: {
-	href: string;
 	children: React.ReactNode;
+	href: string;
 }) {
 	return (
 		<Button
-			variant="link"
-			className="h-auto p-0 text-muted-foreground hover:text-primary justify-start font-normal transition-colors text-base"
 			asChild
+			className="h-auto justify-start p-0 text-base font-normal text-muted-foreground transition-colors hover:text-primary"
+			variant="link"
 		>
 			<Link href={href}>{children}</Link>
 		</Button>
@@ -303,20 +342,20 @@ function FooterLink({
 }
 
 function ContactItem({
+	href,
 	icon: Icon,
 	text,
-	href,
 }: {
+	href?: string;
 	icon: LucideIcon;
 	text: string;
-	href?: string;
 }) {
 	const content = (
 		<>
-			<div className="p-2 rounded-full bg-primary/10 text-primary mt-[-4px] shrink-0">
-				<Icon className="w-3 h-3" />
+			<div className="mt-[-4px] shrink-0 rounded-full bg-primary/10 p-2 text-primary">
+				<Icon className="h-3 w-3" />
 			</div>
-			<span className="text-muted-foreground group-hover:text-primary transition-colors">
+			<span className="text-muted-foreground transition-colors group-hover:text-primary">
 				{text}
 			</span>
 		</>
@@ -326,15 +365,15 @@ function ContactItem({
 		<li>
 			{href ? (
 				<a
+					className="group flex items-start gap-3"
 					href={href}
-					className="flex items-start gap-3 group"
-					target={href.startsWith("http") ? "_blank" : undefined}
 					rel={href.startsWith("http") ? "noopener noreferrer" : undefined}
+					target={href.startsWith("http") ? "_blank" : undefined}
 				>
 					{content}
 				</a>
 			) : (
-				<div className="flex items-start gap-3 group">{content}</div>
+				<div className="group flex items-start gap-3">{content}</div>
 			)}
 		</li>
 	);

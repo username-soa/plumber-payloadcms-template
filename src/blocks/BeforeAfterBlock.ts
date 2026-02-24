@@ -16,7 +16,6 @@ export const BeforeAfterBlock: Block = {
 		},
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -31,6 +30,32 @@ export const BeforeAfterBlock: Block = {
 						"Showcase transformation results with an interactive before/after image slider comparison.",
 				},
 			},
+		},
+		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTop",
+					type: "checkbox",
+					label: "Add Top Padding",
+					defaultValue: true,
+					admin: {
+						description: "Add spacing above this block",
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottom",
+					type: "checkbox",
+					label: "Add Bottom Padding",
+					defaultValue: true,
+					admin: {
+						description: "Add spacing below this block",
+						width: "50%",
+					},
+				},
+			],
 		},
 		{
 			type: "row",
@@ -67,31 +92,6 @@ export const BeforeAfterBlock: Block = {
 				description:
 					"Optional description to display with the before/after comparison",
 			},
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTop",
-					type: "checkbox",
-					label: "Add Top Padding",
-					defaultValue: true,
-					admin: {
-						description: "Add spacing above this block",
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottom",
-					type: "checkbox",
-					label: "Add Bottom Padding",
-					defaultValue: true,
-					admin: {
-						description: "Add spacing below this block",
-						width: "50%",
-					},
-				},
-			],
 		},
 	],
 };

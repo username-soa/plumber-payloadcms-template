@@ -1,11 +1,5 @@
 import type { Metadata } from "next";
 import { SITE_CONFIG } from "@/lib/site-config";
-import { ProcessSteps } from "./_components/process-steps";
-import { ReviewSection } from "@/components/sections/review";
-import { FAQSection } from "@/components/sections/faq";
-import { Hero } from "@/components/heroes";
-// import { ServicesGrid } from "./_components/services-grid";
-import { QuoteFormCTA } from "./_components/quote-form";
 import { JsonLd } from "@/components/json-ld";
 import {
 	generateServicesListingSchema,
@@ -57,16 +51,5 @@ export default async function ServicesPage() {
 		],
 	};
 
-	return (
-		<>
-			<JsonLd data={jsonLd} />
-
-			<Hero page={page} />
-			{/* <ServicesGrid services={services.docs} /> */}
-			<ProcessSteps />
-			<QuoteFormCTA serviceName="General Plumbing" />
-			<ReviewSection />
-			<FAQSection />
-		</>
-	);
+	return <JsonLd data={jsonLd} />;
 }

@@ -432,6 +432,8 @@ export interface Service {
               bg?: ('transparent' | 'muted' | 'primary') | null;
               decoration?: ('none' | 'dots') | null;
             };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             content: {
               root: {
                 type: string;
@@ -447,8 +449,6 @@ export interface Service {
               };
               [k: string]: unknown;
             };
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'legalContent';
@@ -458,6 +458,8 @@ export interface Service {
               bg?: ('transparent' | 'muted' | 'primary') | null;
               decoration?: ('none' | 'dots') | null;
             };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             title?: string | null;
             description?: string | null;
             /**
@@ -472,8 +474,6 @@ export interface Service {
              * Leave blank to use address from Company Info global
              */
             address?: string | null;
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'legalContact';
@@ -483,25 +483,27 @@ export interface Service {
               bg?: ('transparent' | 'muted' | 'primary') | null;
               decoration?: ('none' | 'dots') | null;
             };
-            label?: string | null;
-            href?: string | null;
-            centered?: boolean | null;
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
             paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            label?: string | null;
+            href?: string | null;
+            alignment?: ('left' | 'center' | 'right') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'backLink';
           }
         | {
+            background?: {
+              bg?: ('transparent' | 'muted' | 'primary') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             title?: string | null;
             /**
              * Text to highlight in primary color (case-insensitive)
              */
             titleHighlight?: string | null;
-            background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
-              decoration?: ('none' | 'dots') | null;
-            };
             description?: string | null;
             faqs?: (number | Faq)[] | null;
             cta: {
@@ -538,8 +540,6 @@ export interface Service {
                   | null;
               };
             };
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'faq';
@@ -550,32 +550,8 @@ export interface Service {
               bg?: ('transparent' | 'muted' | 'primary') | null;
               decoration?: ('none' | 'dots') | null;
             };
-            subtitle?: string | null;
-            title?: string | null;
-            /**
-             * Text to highlight in primary color
-             */
-            titleHighlight?: string | null;
-            description?: string | null;
-            certifications?:
-              | {
-                  name: string;
-                  description?: string | null;
-                  icon?: string | null;
-                  id?: string | null;
-                }[]
-              | null;
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
             paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'certifications';
-          }
-        | {
-            background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
-              decoration?: ('none' | 'dots') | null;
-            };
             title?: string | null;
             /**
              * Text to highlight in the title (e.g. 'Water City Plumbing Experts')
@@ -583,49 +559,9 @@ export interface Service {
             titleHighlight?: string | null;
             description?: string | null;
             selectedMembers: (number | TeamMember)[];
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'team';
-          }
-        | {
-            background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
-              decoration?: ('none' | 'dots') | null;
-            };
-            /**
-             * The full main heading
-             */
-            title: string;
-            /**
-             * Text to highlight (must match exactly)
-             */
-            titleHighlight?: string | null;
-            /**
-             * Optional tagline like 'BY THE NUMBERS'
-             */
-            bottomText?: string | null;
-            cols?: ('3' | '4' | '6') | null;
-            backgroundColor?: ('transparent' | 'muted') | null;
-            stats?:
-              | {
-                  /**
-                   * e.g., '500+' or '99%'
-                   */
-                  value: string;
-                  /**
-                   * e.g., 'Projects Completed'
-                   */
-                  label: string;
-                  id?: string | null;
-                }[]
-              | null;
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
-            id?: string | null;
-            blockName?: string | null;
-            blockType: 'trustStats';
           }
         | TimelineBlock
         | {
@@ -633,6 +569,8 @@ export interface Service {
               bg?: ('transparent' | 'muted' | 'primary') | null;
               decoration?: ('none' | 'dots') | null;
             };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             contentType: 'blogs' | 'case-studies' | 'services';
             limit?: number | null;
             itemsPerRow?: ('1' | '2' | '3' | '4') | null;
@@ -650,8 +588,6 @@ export interface Service {
              */
             showSearch?: boolean | null;
             paginationStyle?: ('none' | 'numbered' | 'loadMore' | 'infiniteScroll') | null;
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'contentFetcher';
@@ -661,6 +597,10 @@ export interface Service {
               bg?: ('transparent' | 'muted' | 'primary') | null;
               decoration?: ('none' | 'dots') | null;
             };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            textAlign?: ('left' | 'center' | 'right') | null;
+            buttonsAlign?: ('left' | 'center' | 'right') | null;
             /**
              * Small tag text displayed above the main title
              */
@@ -705,10 +645,6 @@ export interface Service {
                   id?: string | null;
                 }[]
               | null;
-            textAlign?: ('left' | 'center' | 'right') | null;
-            buttonsAlign?: ('left' | 'center' | 'right') | null;
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'titleContent';
@@ -739,22 +675,22 @@ export interface Service {
               bg?: ('transparent' | 'muted' | 'primary') | null;
               decoration?: ('none' | 'dots') | null;
             };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             columns?: ('1' | '2' | '3' | '4' | '5' | '6') | null;
             cardLayout?: ('stacked' | 'sideBySide') | null;
             /**
              * If enabled, cards will show a shadow and primary color border on hover, and icons will turn primary color.
              */
             enableHighlight?: boolean | null;
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             cards?:
               | {
                   /**
                    * Small text label like 'Popular' or 'New'
                    */
                   tag?: string | null;
-                  icon?: string | null;
                   title: string;
+                  icon?: string | null;
                   description?: string | null;
                   link: {
                     type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
@@ -797,6 +733,8 @@ export interface Service {
               bg?: ('transparent' | 'muted' | 'primary') | null;
               decoration?: ('none' | 'dots') | null;
             };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             title?: string | null;
             headline?: string | null;
             /**
@@ -805,8 +743,6 @@ export interface Service {
             highlightedHeadlineText?: string | null;
             description?: string | null;
             useGlobalServiceAreas?: boolean | null;
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             customServiceAreas?:
               | {
                   name: string;
@@ -819,7 +755,7 @@ export interface Service {
             bottomText?: string | null;
             id?: string | null;
             blockName?: string | null;
-            blockType: 'serviceAreasBlock';
+            blockType: 'serviceAreas';
           }
         | {
             background?: {
@@ -827,19 +763,25 @@ export interface Service {
               decoration?: ('none' | 'dots') | null;
             };
             tag?: string | null;
+            /**
+             * Legacy option. Prefer using the Call to Action field above.
+             */
+            linkToAllServices?: boolean | null;
             title: string;
             /**
              * Text to highlight within the Title. Case-sensitive.
              */
             highlightedText?: string | null;
-            description?: string | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            layout?: ('grid' | 'carousel') | null;
             /**
              * Select a service to highlight as the emergency service (e.g. 24/7). This will appear first.
              */
             emergencyService?: (number | null) | Service;
             selectedServices: (number | Service)[];
-            layout?: ('grid' | 'carousel') | null;
-            cta: {
+            description?: string | null;
+            cta?: {
               type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
               label: string;
               url?: string | null;
@@ -868,12 +810,6 @@ export interface Service {
                   )
                 | null;
             };
-            /**
-             * Legacy option. Prefer using the Call to Action field above.
-             */
-            linkToAllServices?: boolean | null;
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'highlightedServices';
@@ -909,6 +845,8 @@ export interface Service {
               bg?: ('transparent' | 'muted' | 'primary') | null;
               decoration?: ('none' | 'dots') | null;
             };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             columns?:
               | {
                   type?: ('content' | 'image') | null;
@@ -965,8 +903,6 @@ export interface Service {
                   id?: string | null;
                 }[]
               | null;
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'dualColumn';
@@ -976,8 +912,13 @@ export interface Service {
               bg?: ('transparent' | 'muted' | 'primary') | null;
               decoration?: ('none' | 'dots') | null;
             };
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             form: number | Form;
             enableIntro?: boolean | null;
+            enableHeader?: boolean | null;
+            enableFooter?: boolean | null;
+            enableBorder?: boolean | null;
             introContent?: {
               root: {
                 type: string;
@@ -993,7 +934,6 @@ export interface Service {
               };
               [k: string]: unknown;
             } | null;
-            enableHeader?: boolean | null;
             headerContent?: {
               root: {
                 type: string;
@@ -1009,7 +949,6 @@ export interface Service {
               };
               [k: string]: unknown;
             } | null;
-            enableFooter?: boolean | null;
             footerContent?: {
               root: {
                 type: string;
@@ -1025,9 +964,6 @@ export interface Service {
               };
               [k: string]: unknown;
             } | null;
-            enableBorder?: boolean | null;
-            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'formBlock';
@@ -1153,6 +1089,8 @@ export interface Page {
           bg?: ('transparent' | 'muted' | 'primary') | null;
           decoration?: ('none' | 'dots') | null;
         };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         content: {
           root: {
             type: string;
@@ -1168,8 +1106,6 @@ export interface Page {
           };
           [k: string]: unknown;
         };
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'legalContent';
@@ -1179,6 +1115,8 @@ export interface Page {
           bg?: ('transparent' | 'muted' | 'primary') | null;
           decoration?: ('none' | 'dots') | null;
         };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         title?: string | null;
         description?: string | null;
         /**
@@ -1193,8 +1131,6 @@ export interface Page {
          * Leave blank to use address from Company Info global
          */
         address?: string | null;
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'legalContact';
@@ -1204,25 +1140,27 @@ export interface Page {
           bg?: ('transparent' | 'muted' | 'primary') | null;
           decoration?: ('none' | 'dots') | null;
         };
-        label?: string | null;
-        href?: string | null;
-        centered?: boolean | null;
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
         paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        label?: string | null;
+        href?: string | null;
+        alignment?: ('left' | 'center' | 'right') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'backLink';
       }
     | {
+        background?: {
+          bg?: ('transparent' | 'muted' | 'primary') | null;
+          decoration?: ('none' | 'dots') | null;
+        };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         title?: string | null;
         /**
          * Text to highlight in primary color (case-insensitive)
          */
         titleHighlight?: string | null;
-        background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
-          decoration?: ('none' | 'dots') | null;
-        };
         description?: string | null;
         faqs?: (number | Faq)[] | null;
         cta: {
@@ -1259,8 +1197,6 @@ export interface Page {
               | null;
           };
         };
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'faq';
@@ -1271,32 +1207,8 @@ export interface Page {
           bg?: ('transparent' | 'muted' | 'primary') | null;
           decoration?: ('none' | 'dots') | null;
         };
-        subtitle?: string | null;
-        title?: string | null;
-        /**
-         * Text to highlight in primary color
-         */
-        titleHighlight?: string | null;
-        description?: string | null;
-        certifications?:
-          | {
-              name: string;
-              description?: string | null;
-              icon?: string | null;
-              id?: string | null;
-            }[]
-          | null;
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
         paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'certifications';
-      }
-    | {
-        background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
-          decoration?: ('none' | 'dots') | null;
-        };
         title?: string | null;
         /**
          * Text to highlight in the title (e.g. 'Water City Plumbing Experts')
@@ -1304,49 +1216,9 @@ export interface Page {
         titleHighlight?: string | null;
         description?: string | null;
         selectedMembers: (number | TeamMember)[];
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'team';
-      }
-    | {
-        background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
-          decoration?: ('none' | 'dots') | null;
-        };
-        /**
-         * The full main heading
-         */
-        title: string;
-        /**
-         * Text to highlight (must match exactly)
-         */
-        titleHighlight?: string | null;
-        /**
-         * Optional tagline like 'BY THE NUMBERS'
-         */
-        bottomText?: string | null;
-        cols?: ('3' | '4' | '6') | null;
-        backgroundColor?: ('transparent' | 'muted') | null;
-        stats?:
-          | {
-              /**
-               * e.g., '500+' or '99%'
-               */
-              value: string;
-              /**
-               * e.g., 'Projects Completed'
-               */
-              label: string;
-              id?: string | null;
-            }[]
-          | null;
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
-        id?: string | null;
-        blockName?: string | null;
-        blockType: 'trustStats';
       }
     | TimelineBlock
     | {
@@ -1354,6 +1226,8 @@ export interface Page {
           bg?: ('transparent' | 'muted' | 'primary') | null;
           decoration?: ('none' | 'dots') | null;
         };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         contentType: 'blogs' | 'case-studies' | 'services';
         limit?: number | null;
         itemsPerRow?: ('1' | '2' | '3' | '4') | null;
@@ -1371,8 +1245,6 @@ export interface Page {
          */
         showSearch?: boolean | null;
         paginationStyle?: ('none' | 'numbered' | 'loadMore' | 'infiniteScroll') | null;
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'contentFetcher';
@@ -1382,6 +1254,10 @@ export interface Page {
           bg?: ('transparent' | 'muted' | 'primary') | null;
           decoration?: ('none' | 'dots') | null;
         };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        textAlign?: ('left' | 'center' | 'right') | null;
+        buttonsAlign?: ('left' | 'center' | 'right') | null;
         /**
          * Small tag text displayed above the main title
          */
@@ -1426,10 +1302,6 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
-        textAlign?: ('left' | 'center' | 'right') | null;
-        buttonsAlign?: ('left' | 'center' | 'right') | null;
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'titleContent';
@@ -1460,22 +1332,22 @@ export interface Page {
           bg?: ('transparent' | 'muted' | 'primary') | null;
           decoration?: ('none' | 'dots') | null;
         };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         columns?: ('1' | '2' | '3' | '4' | '5' | '6') | null;
         cardLayout?: ('stacked' | 'sideBySide') | null;
         /**
          * If enabled, cards will show a shadow and primary color border on hover, and icons will turn primary color.
          */
         enableHighlight?: boolean | null;
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         cards?:
           | {
               /**
                * Small text label like 'Popular' or 'New'
                */
               tag?: string | null;
-              icon?: string | null;
               title: string;
+              icon?: string | null;
               description?: string | null;
               link: {
                 type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
@@ -1518,6 +1390,8 @@ export interface Page {
           bg?: ('transparent' | 'muted' | 'primary') | null;
           decoration?: ('none' | 'dots') | null;
         };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         title?: string | null;
         headline?: string | null;
         /**
@@ -1526,8 +1400,6 @@ export interface Page {
         highlightedHeadlineText?: string | null;
         description?: string | null;
         useGlobalServiceAreas?: boolean | null;
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         customServiceAreas?:
           | {
               name: string;
@@ -1540,7 +1412,7 @@ export interface Page {
         bottomText?: string | null;
         id?: string | null;
         blockName?: string | null;
-        blockType: 'serviceAreasBlock';
+        blockType: 'serviceAreas';
       }
     | {
         background?: {
@@ -1548,19 +1420,25 @@ export interface Page {
           decoration?: ('none' | 'dots') | null;
         };
         tag?: string | null;
+        /**
+         * Legacy option. Prefer using the Call to Action field above.
+         */
+        linkToAllServices?: boolean | null;
         title: string;
         /**
          * Text to highlight within the Title. Case-sensitive.
          */
         highlightedText?: string | null;
-        description?: string | null;
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        layout?: ('grid' | 'carousel') | null;
         /**
          * Select a service to highlight as the emergency service (e.g. 24/7). This will appear first.
          */
         emergencyService?: (number | null) | Service;
         selectedServices: (number | Service)[];
-        layout?: ('grid' | 'carousel') | null;
-        cta: {
+        description?: string | null;
+        cta?: {
           type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
           label: string;
           url?: string | null;
@@ -1589,12 +1467,6 @@ export interface Page {
               )
             | null;
         };
-        /**
-         * Legacy option. Prefer using the Call to Action field above.
-         */
-        linkToAllServices?: boolean | null;
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'highlightedServices';
@@ -1630,6 +1502,8 @@ export interface Page {
           bg?: ('transparent' | 'muted' | 'primary') | null;
           decoration?: ('none' | 'dots') | null;
         };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         columns?:
           | {
               type?: ('content' | 'image') | null;
@@ -1686,8 +1560,6 @@ export interface Page {
               id?: string | null;
             }[]
           | null;
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'dualColumn';
@@ -1697,8 +1569,13 @@ export interface Page {
           bg?: ('transparent' | 'muted' | 'primary') | null;
           decoration?: ('none' | 'dots') | null;
         };
+        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         form: number | Form;
         enableIntro?: boolean | null;
+        enableHeader?: boolean | null;
+        enableFooter?: boolean | null;
+        enableBorder?: boolean | null;
         introContent?: {
           root: {
             type: string;
@@ -1714,7 +1591,6 @@ export interface Page {
           };
           [k: string]: unknown;
         } | null;
-        enableHeader?: boolean | null;
         headerContent?: {
           root: {
             type: string;
@@ -1730,7 +1606,6 @@ export interface Page {
           };
           [k: string]: unknown;
         } | null;
-        enableFooter?: boolean | null;
         footerContent?: {
           root: {
             type: string;
@@ -1746,9 +1621,6 @@ export interface Page {
           };
           [k: string]: unknown;
         } | null;
-        enableBorder?: boolean | null;
-        paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-        paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'formBlock';
@@ -1918,6 +1790,8 @@ export interface ReviewBlock {
     bg?: ('transparent' | 'muted' | 'primary') | null;
     decoration?: ('none' | 'dots') | null;
   };
+  paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+  paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
   title?: string | null;
   subtitle?: string | null;
   /**
@@ -1934,8 +1808,6 @@ export interface ReviewBlock {
       }[]
     | null;
   selectedReviews?: (number | Review)[] | null;
-  paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-  paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'reviewsSection';
@@ -1983,6 +1855,8 @@ export interface TimelineBlock {
     bg?: ('transparent' | 'muted' | 'primary') | null;
     decoration?: ('none' | 'dots') | null;
   };
+  paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+  paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
   /**
    * The main heading for the timeline section
    */
@@ -2004,8 +1878,6 @@ export interface TimelineBlock {
         id?: string | null;
       }[]
     | null;
-  paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
-  paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
   id?: string | null;
   blockName?: string | null;
   blockType: 'timeline';
@@ -2111,10 +1983,6 @@ export interface Form {
             blockType: 'textarea';
           }
         | {
-            background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
-              decoration?: ('none' | 'dots') | null;
-            };
             name: string;
             label?: string | null;
             width?: number | null;
@@ -2124,10 +1992,6 @@ export interface Form {
             blockType: 'urgency';
           }
         | {
-            background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
-              decoration?: ('none' | 'dots') | null;
-            };
             name: string;
             label?: string | null;
             width?: number | null;
@@ -2137,26 +2001,20 @@ export interface Form {
             blockType: 'propertyType';
           }
         | {
-            background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
-              decoration?: ('none' | 'dots') | null;
-            };
             name: string;
             label: string;
             width?: number | null;
-            required?: boolean | null;
             allowedFileTypes?: ('all' | 'image/*' | 'application/pdf' | 'image/*,application/pdf') | null;
+            required?: boolean | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'file';
           }
         | {
-            background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
-              decoration?: ('none' | 'dots') | null;
-            };
             name: string;
             label?: string | null;
+            width?: number | null;
+            required?: boolean | null;
             options?:
               | {
                   label: string;
@@ -2164,8 +2022,6 @@ export interface Form {
                   id?: string | null;
                 }[]
               | null;
-            width?: number | null;
-            required?: boolean | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'checkboxGroup';
@@ -2637,9 +2493,9 @@ export interface ServicesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
-              content?: T;
               paddingTopOption?: T;
               paddingBottomOption?: T;
+              content?: T;
               id?: T;
               blockName?: T;
             };
@@ -2652,13 +2508,13 @@ export interface ServicesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               title?: T;
               description?: T;
               email?: T;
               phone?: T;
               address?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -2671,25 +2527,27 @@ export interface ServicesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
-              label?: T;
-              href?: T;
-              centered?: T;
               paddingTopOption?: T;
               paddingBottomOption?: T;
+              label?: T;
+              href?: T;
+              alignment?: T;
               id?: T;
               blockName?: T;
             };
         faq?:
           | T
           | {
-              title?: T;
-              titleHighlight?: T;
               background?:
                 | T
                 | {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              title?: T;
+              titleHighlight?: T;
               description?: T;
               faqs?: T;
               cta?:
@@ -2711,38 +2569,10 @@ export interface ServicesSelect<T extends boolean = true> {
                           style?: T;
                         };
                   };
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
         reviewsSection?: T | ReviewBlockSelect<T>;
-        certifications?:
-          | T
-          | {
-              background?:
-                | T
-                | {
-                    bg?: T;
-                    decoration?: T;
-                  };
-              subtitle?: T;
-              title?: T;
-              titleHighlight?: T;
-              description?: T;
-              certifications?:
-                | T
-                | {
-                    name?: T;
-                    description?: T;
-                    icon?: T;
-                    id?: T;
-                  };
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
-              id?: T;
-              blockName?: T;
-            };
         team?:
           | T
           | {
@@ -2752,38 +2582,12 @@ export interface ServicesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               title?: T;
               titleHighlight?: T;
               description?: T;
               selectedMembers?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
-              id?: T;
-              blockName?: T;
-            };
-        trustStats?:
-          | T
-          | {
-              background?:
-                | T
-                | {
-                    bg?: T;
-                    decoration?: T;
-                  };
-              title?: T;
-              titleHighlight?: T;
-              bottomText?: T;
-              cols?: T;
-              backgroundColor?: T;
-              stats?:
-                | T
-                | {
-                    value?: T;
-                    label?: T;
-                    id?: T;
-                  };
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -2797,6 +2601,8 @@ export interface ServicesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               contentType?: T;
               limit?: T;
               itemsPerRow?: T;
@@ -2805,8 +2611,6 @@ export interface ServicesSelect<T extends boolean = true> {
               showFilters?: T;
               showSearch?: T;
               paginationStyle?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -2819,6 +2623,10 @@ export interface ServicesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              textAlign?: T;
+              buttonsAlign?: T;
               tagTitle?: T;
               mainTitle?: T;
               highlightedText?: T;
@@ -2840,10 +2648,6 @@ export interface ServicesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
-              textAlign?: T;
-              buttonsAlign?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -2880,17 +2684,17 @@ export interface ServicesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               columns?: T;
               cardLayout?: T;
               enableHighlight?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               cards?:
                 | T
                 | {
                     tag?: T;
-                    icon?: T;
                     title?: T;
+                    icon?: T;
                     description?: T;
                     link?:
                       | T
@@ -2909,7 +2713,7 @@ export interface ServicesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        serviceAreasBlock?:
+        serviceAreas?:
           | T
           | {
               background?:
@@ -2918,13 +2722,13 @@ export interface ServicesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               title?: T;
               headline?: T;
               highlightedHeadlineText?: T;
               description?: T;
               useGlobalServiceAreas?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               customServiceAreas?:
                 | T
                 | {
@@ -2945,12 +2749,15 @@ export interface ServicesSelect<T extends boolean = true> {
                     decoration?: T;
                   };
               tag?: T;
+              linkToAllServices?: T;
               title?: T;
               highlightedText?: T;
-              description?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              layout?: T;
               emergencyService?: T;
               selectedServices?: T;
-              layout?: T;
+              description?: T;
               cta?:
                 | T
                 | {
@@ -2963,9 +2770,6 @@ export interface ServicesSelect<T extends boolean = true> {
                     reference?: T;
                     style?: T;
                   };
-              linkToAllServices?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -3004,6 +2808,8 @@ export interface ServicesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               columns?:
                 | T
                 | {
@@ -3029,8 +2835,6 @@ export interface ServicesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -3043,16 +2847,16 @@ export interface ServicesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
-              form?: T;
-              enableIntro?: T;
-              introContent?: T;
-              enableHeader?: T;
-              headerContent?: T;
-              enableFooter?: T;
-              footerContent?: T;
-              enableBorder?: T;
               paddingTopOption?: T;
               paddingBottomOption?: T;
+              form?: T;
+              enableIntro?: T;
+              enableHeader?: T;
+              enableFooter?: T;
+              enableBorder?: T;
+              introContent?: T;
+              headerContent?: T;
+              footerContent?: T;
               id?: T;
               blockName?: T;
             };
@@ -3131,6 +2935,8 @@ export interface ReviewBlockSelect<T extends boolean = true> {
         bg?: T;
         decoration?: T;
       };
+  paddingTopOption?: T;
+  paddingBottomOption?: T;
   title?: T;
   subtitle?: T;
   source?: T;
@@ -3144,8 +2950,6 @@ export interface ReviewBlockSelect<T extends boolean = true> {
         id?: T;
       };
   selectedReviews?: T;
-  paddingTopOption?: T;
-  paddingBottomOption?: T;
   id?: T;
   blockName?: T;
 }
@@ -3160,6 +2964,8 @@ export interface TimelineBlockSelect<T extends boolean = true> {
         bg?: T;
         decoration?: T;
       };
+  paddingTopOption?: T;
+  paddingBottomOption?: T;
   title?: T;
   items?:
     | T
@@ -3169,8 +2975,6 @@ export interface TimelineBlockSelect<T extends boolean = true> {
         description?: T;
         id?: T;
       };
-  paddingTopOption?: T;
-  paddingBottomOption?: T;
   id?: T;
   blockName?: T;
 }
@@ -3209,9 +3013,9 @@ export interface PagesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
-              content?: T;
               paddingTopOption?: T;
               paddingBottomOption?: T;
+              content?: T;
               id?: T;
               blockName?: T;
             };
@@ -3224,13 +3028,13 @@ export interface PagesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               title?: T;
               description?: T;
               email?: T;
               phone?: T;
               address?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -3243,25 +3047,27 @@ export interface PagesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
-              label?: T;
-              href?: T;
-              centered?: T;
               paddingTopOption?: T;
               paddingBottomOption?: T;
+              label?: T;
+              href?: T;
+              alignment?: T;
               id?: T;
               blockName?: T;
             };
         faq?:
           | T
           | {
-              title?: T;
-              titleHighlight?: T;
               background?:
                 | T
                 | {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              title?: T;
+              titleHighlight?: T;
               description?: T;
               faqs?: T;
               cta?:
@@ -3283,38 +3089,10 @@ export interface PagesSelect<T extends boolean = true> {
                           style?: T;
                         };
                   };
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
         reviewsSection?: T | ReviewBlockSelect<T>;
-        certifications?:
-          | T
-          | {
-              background?:
-                | T
-                | {
-                    bg?: T;
-                    decoration?: T;
-                  };
-              subtitle?: T;
-              title?: T;
-              titleHighlight?: T;
-              description?: T;
-              certifications?:
-                | T
-                | {
-                    name?: T;
-                    description?: T;
-                    icon?: T;
-                    id?: T;
-                  };
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
-              id?: T;
-              blockName?: T;
-            };
         team?:
           | T
           | {
@@ -3324,38 +3102,12 @@ export interface PagesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               title?: T;
               titleHighlight?: T;
               description?: T;
               selectedMembers?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
-              id?: T;
-              blockName?: T;
-            };
-        trustStats?:
-          | T
-          | {
-              background?:
-                | T
-                | {
-                    bg?: T;
-                    decoration?: T;
-                  };
-              title?: T;
-              titleHighlight?: T;
-              bottomText?: T;
-              cols?: T;
-              backgroundColor?: T;
-              stats?:
-                | T
-                | {
-                    value?: T;
-                    label?: T;
-                    id?: T;
-                  };
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -3369,6 +3121,8 @@ export interface PagesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               contentType?: T;
               limit?: T;
               itemsPerRow?: T;
@@ -3377,8 +3131,6 @@ export interface PagesSelect<T extends boolean = true> {
               showFilters?: T;
               showSearch?: T;
               paginationStyle?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -3391,6 +3143,10 @@ export interface PagesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              textAlign?: T;
+              buttonsAlign?: T;
               tagTitle?: T;
               mainTitle?: T;
               highlightedText?: T;
@@ -3412,10 +3168,6 @@ export interface PagesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
-              textAlign?: T;
-              buttonsAlign?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -3452,17 +3204,17 @@ export interface PagesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               columns?: T;
               cardLayout?: T;
               enableHighlight?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               cards?:
                 | T
                 | {
                     tag?: T;
-                    icon?: T;
                     title?: T;
+                    icon?: T;
                     description?: T;
                     link?:
                       | T
@@ -3481,7 +3233,7 @@ export interface PagesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
-        serviceAreasBlock?:
+        serviceAreas?:
           | T
           | {
               background?:
@@ -3490,13 +3242,13 @@ export interface PagesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               title?: T;
               headline?: T;
               highlightedHeadlineText?: T;
               description?: T;
               useGlobalServiceAreas?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               customServiceAreas?:
                 | T
                 | {
@@ -3517,12 +3269,15 @@ export interface PagesSelect<T extends boolean = true> {
                     decoration?: T;
                   };
               tag?: T;
+              linkToAllServices?: T;
               title?: T;
               highlightedText?: T;
-              description?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              layout?: T;
               emergencyService?: T;
               selectedServices?: T;
-              layout?: T;
+              description?: T;
               cta?:
                 | T
                 | {
@@ -3535,9 +3290,6 @@ export interface PagesSelect<T extends boolean = true> {
                     reference?: T;
                     style?: T;
                   };
-              linkToAllServices?: T;
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -3576,6 +3328,8 @@ export interface PagesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
               columns?:
                 | T
                 | {
@@ -3601,8 +3355,6 @@ export interface PagesSelect<T extends boolean = true> {
                         };
                     id?: T;
                   };
-              paddingTopOption?: T;
-              paddingBottomOption?: T;
               id?: T;
               blockName?: T;
             };
@@ -3615,16 +3367,16 @@ export interface PagesSelect<T extends boolean = true> {
                     bg?: T;
                     decoration?: T;
                   };
-              form?: T;
-              enableIntro?: T;
-              introContent?: T;
-              enableHeader?: T;
-              headerContent?: T;
-              enableFooter?: T;
-              footerContent?: T;
-              enableBorder?: T;
               paddingTopOption?: T;
               paddingBottomOption?: T;
+              form?: T;
+              enableIntro?: T;
+              enableHeader?: T;
+              enableFooter?: T;
+              enableBorder?: T;
+              introContent?: T;
+              headerContent?: T;
+              footerContent?: T;
               id?: T;
               blockName?: T;
             };
@@ -3904,12 +3656,6 @@ export interface FormsSelect<T extends boolean = true> {
         urgency?:
           | T
           | {
-              background?:
-                | T
-                | {
-                    bg?: T;
-                    decoration?: T;
-                  };
               name?: T;
               label?: T;
               width?: T;
@@ -3920,12 +3666,6 @@ export interface FormsSelect<T extends boolean = true> {
         propertyType?:
           | T
           | {
-              background?:
-                | T
-                | {
-                    bg?: T;
-                    decoration?: T;
-                  };
               name?: T;
               label?: T;
               width?: T;
@@ -3936,31 +3676,21 @@ export interface FormsSelect<T extends boolean = true> {
         file?:
           | T
           | {
-              background?:
-                | T
-                | {
-                    bg?: T;
-                    decoration?: T;
-                  };
               name?: T;
               label?: T;
               width?: T;
-              required?: T;
               allowedFileTypes?: T;
+              required?: T;
               id?: T;
               blockName?: T;
             };
         checkboxGroup?:
           | T
           | {
-              background?:
-                | T
-                | {
-                    bg?: T;
-                    decoration?: T;
-                  };
               name?: T;
               label?: T;
+              width?: T;
+              required?: T;
               options?:
                 | T
                 | {
@@ -3968,8 +3698,6 @@ export interface FormsSelect<T extends boolean = true> {
                     value?: T;
                     id?: T;
                   };
-              width?: T;
-              required?: T;
               id?: T;
               blockName?: T;
             };
@@ -4586,7 +4314,13 @@ export interface StepTimelineBlock {
     bg?: ('transparent' | 'muted' | 'primary') | null;
     decoration?: ('none' | 'dots') | null;
   };
+  /**
+   * Adds padding to the top of the block
+   */
   paddingTop?: boolean | null;
+  /**
+   * Adds padding to the bottom of the block
+   */
   paddingBottom?: boolean | null;
   items?:
     | {

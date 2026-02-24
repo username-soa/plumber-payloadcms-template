@@ -3,36 +3,16 @@ import { background } from "@/fields/background";
 
 export const TeamBlock: Block = {
 	slug: "team",
-	fields: [
-		background,
-		{
-			name: "title",
-			type: "text",
-			defaultValue: "Meet Your Experts",
-			label: "Title",
-		},
-		{
-			name: "titleHighlight",
-			type: "text",
-			label: "Title Highlight",
-			admin: {
-				description:
-					"Text to highlight in the title (e.g. 'Water City Plumbing Experts')",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "TeamLabel",
 			},
 		},
-		{
-			name: "description",
-			type: "textarea",
-			label: "Description",
-		},
-		{
-			name: "selectedMembers",
-			type: "relationship",
-			relationTo: "team-members",
-			hasMany: true,
-			required: true,
-			label: "Select Team Members",
-		},
+	},
+	fields: [
+		background,
 		{
 			type: "row",
 			fields: [
@@ -62,6 +42,54 @@ export const TeamBlock: Block = {
 						{ label: "Default", value: "default" },
 						{ label: "Big", value: "big" },
 					],
+					admin: {
+						width: "50%",
+					},
+				},
+			],
+		},
+		{
+			type: "row",
+			fields: [
+				{
+					name: "title",
+					type: "text",
+					defaultValue: "Meet Your Experts",
+					label: "Title",
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "titleHighlight",
+					type: "text",
+					label: "Title Highlight",
+					admin: {
+						width: "50%",
+						description:
+							"Text to highlight in the title (e.g. 'Water City Plumbing Experts')",
+					},
+				},
+			],
+		},
+		{
+			type: "row",
+			fields: [
+				{
+					name: "description",
+					type: "textarea",
+					label: "Description",
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "selectedMembers",
+					type: "relationship",
+					relationTo: "team-members",
+					hasMany: true,
+					required: true,
+					label: "Select Team Members",
 					admin: {
 						width: "50%",
 					},

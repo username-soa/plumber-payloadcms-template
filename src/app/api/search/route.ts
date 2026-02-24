@@ -12,10 +12,10 @@
  * { results: Array<{ id, title, excerpt, type, url }> }
  */
 
-import { getPayload } from "payload";
 import config from "@payload-config";
-import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { NextResponse } from "next/server";
+import { getPayload } from "payload";
 
 // ---------------------------------------------------------------------------
 // Constants — defined at module scope so they are not rebuilt per request
@@ -56,10 +56,7 @@ export async function GET(request: NextRequest) {
 			collection: SEARCH_COLLECTION,
 			where: {
 				// Search both title and excerpt fields
-				or: [
-					{ title: { like: query } },
-					{ excerpt: { like: query } },
-				],
+				or: [{ title: { like: query } }, { excerpt: { like: query } }],
 			},
 			limit: 10,
 			// depth: 1 populates the related source document so we can read its
@@ -70,7 +67,9 @@ export async function GET(request: NextRequest) {
 		// Normalise each document into a clean, typed shape for the client
 		const results = result.docs.map((doc: Record<string, unknown>) => {
 			// `doc.doc` is now a populated relationship: { relationTo, value: { slug, ... } }
-			const docRef = doc.doc as { relationTo?: string; value?: Record<string, unknown> } | undefined;
+			const docRef = doc.doc as
+				| { relationTo?: string; value?: Record<string, unknown> }
+				| undefined;
 			const collectionSlug = docRef?.relationTo;
 			// Prefer the top-level slug field (set by beforeSync); fall back to the
 			// populated source document's slug for pre-reindex records
@@ -81,7 +80,8 @@ export async function GET(request: NextRequest) {
 
 			// Build the URL: use the known prefix map, or fall back to `/<slug>`
 			const urlPrefix = collectionSlug ? (URL_MAP[collectionSlug] ?? "") : "";
-			const url = collectionSlug === "faqs" ? urlPrefix : `${urlPrefix}/${slug}`;
+			const url =
+				collectionSlug === "faqs" ? urlPrefix : `${urlPrefix}/${slug}`;
 
 			return {
 				id: doc.id,

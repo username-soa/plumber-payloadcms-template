@@ -16,7 +16,6 @@ export const CTABlock: Block = {
 		},
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -32,7 +31,32 @@ export const CTABlock: Block = {
 				},
 			},
 		},
-		// Row 1: Title
+		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTop",
+					type: "checkbox",
+					label: "Add Top Padding",
+					defaultValue: true,
+					admin: {
+						description: "Adds extra spacing above the CTA section",
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottom",
+					type: "checkbox",
+					label: "Add Bottom Padding",
+					defaultValue: true,
+					admin: {
+						description: "Adds extra spacing below the CTA section",
+						width: "50%",
+					},
+				},
+			],
+		},
 		{
 			name: "heading",
 			type: "text",
@@ -42,16 +66,6 @@ export const CTABlock: Block = {
 				description: "The main heading text for the call to action section",
 			},
 		},
-		// Row 2: Description
-		{
-			name: "description",
-			type: "textarea",
-			label: "CTA Description",
-			admin: {
-				description: "Optional supporting text that appears below the heading",
-			},
-		},
-		// Row 3: Button Text and Button Link side by side
 		{
 			type: "row",
 			fields: [
@@ -77,31 +91,13 @@ export const CTABlock: Block = {
 				},
 			],
 		},
-		// Row 4: Padding options side by side
 		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTop",
-					type: "checkbox",
-					label: "Add Top Padding",
-					defaultValue: true,
-					admin: {
-						description: "Adds extra spacing above the CTA section",
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottom",
-					type: "checkbox",
-					label: "Add Bottom Padding",
-					defaultValue: true,
-					admin: {
-						description: "Adds extra spacing below the CTA section",
-						width: "50%",
-					},
-				},
-			],
+			name: "description",
+			type: "textarea",
+			label: "CTA Description",
+			admin: {
+				description: "Optional supporting text that appears below the heading",
+			},
 		},
 	],
 };

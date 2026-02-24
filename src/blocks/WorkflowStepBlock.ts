@@ -3,6 +3,14 @@ import { background } from "@/fields/background";
 
 export const WorkflowStepBlock: Block = {
 	slug: "workflowStep",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "WorkflowStepLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Workflow Step",
 		plural: "Workflow Steps",

@@ -3,6 +3,14 @@ import { background } from "@/fields/background";
 
 export const ContentFetcherBlock: Block = {
 	slug: "contentFetcher",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "ContentFetcherLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Content Fetcher",
 		plural: "Content Fetchers",
@@ -17,6 +25,41 @@ export const ContentFetcherBlock: Block = {
 			},
 			fields: [
 				background,
+				{
+					type: "row",
+					fields: [
+						{
+							name: "paddingTopOption",
+							type: "select",
+							label: "Padding Top",
+							defaultValue: "default",
+							options: [
+								{ label: "None", value: "none" },
+								{ label: "Small", value: "small" },
+								{ label: "Default", value: "default" },
+								{ label: "Big", value: "big" },
+							],
+							admin: {
+								width: "50%",
+							},
+						},
+						{
+							name: "paddingBottomOption",
+							type: "select",
+							label: "Padding Bottom",
+							defaultValue: "default",
+							options: [
+								{ label: "None", value: "none" },
+								{ label: "Small", value: "small" },
+								{ label: "Default", value: "default" },
+								{ label: "Big", value: "big" },
+							],
+							admin: {
+								width: "50%",
+							},
+						},
+					],
+				},
 				{
 					type: "row",
 					fields: [
@@ -105,25 +148,33 @@ export const ContentFetcherBlock: Block = {
 			},
 			fields: [
 				{
-					name: "showFilters",
-					type: "checkbox",
-					label: "Enable Filters",
-					defaultValue: false,
-					admin: {
-						description:
-							"Allow visitors to filter content by category, search, etc.",
-					},
+					type: "row",
+					fields: [
+						{
+							name: "showFilters",
+							type: "checkbox",
+							label: "Enable Filters",
+							defaultValue: false,
+							admin: {
+								width: "50%",
+								description:
+									"Allow visitors to filter content by category, search, etc.",
+							},
+						},
+						{
+							name: "showSearch",
+							type: "checkbox",
+							label: "Show Search",
+							defaultValue: false,
+							admin: {
+								width: "50%",
+								condition: (_, siblingData) => siblingData?.showFilters,
+								description: "Show a search input to filter by text",
+							},
+						},
+					],
 				},
-				{
-					name: "showSearch",
-					type: "checkbox",
-					label: "Show Search",
-					defaultValue: false,
-					admin: {
-						condition: (_, siblingData) => siblingData?.showFilters,
-						description: "Show a search input to filter by text",
-					},
-				},
+
 				{
 					name: "paginationStyle",
 					type: "select",
@@ -135,41 +186,6 @@ export const ContentFetcherBlock: Block = {
 						{ label: "Load More Button", value: "loadMore" },
 						{ label: "Infinite Scroll", value: "infiniteScroll" },
 					],
-				},
-			],
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTopOption",
-					type: "select",
-					label: "Padding Top",
-					defaultValue: "default",
-					options: [
-						{ label: "None", value: "none" },
-						{ label: "Small", value: "small" },
-						{ label: "Default", value: "default" },
-						{ label: "Big", value: "big" },
-					],
-					admin: {
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottomOption",
-					type: "select",
-					label: "Padding Bottom",
-					defaultValue: "default",
-					options: [
-						{ label: "None", value: "none" },
-						{ label: "Small", value: "small" },
-						{ label: "Default", value: "default" },
-						{ label: "Big", value: "big" },
-					],
-					admin: {
-						width: "50%",
-					},
 				},
 			],
 		},

@@ -7,10 +7,9 @@ import { JsonLd } from "@/components/json-ld";
 import { generateArticleSchema, generateBlogBreadcrumbs } from "@/lib/json-ld";
 import type { BlogPost, Author } from "@/payload-types";
 import { getMediaUrl } from "@/lib/payload-utils";
-import { PostHero } from "@/app/(site)/blog/_components/post-hero";
-import { PostContent } from "@/app/(site)/blog/_components/post-content";
-import { PostSidebar } from "@/app/(site)/blog/_components/post-sidebar";
-import { RenderBlocks } from "@/components/payload/RenderBlocks";
+import { PostHero } from "@/app/(site)/blog/components/post-hero";
+import { PostContent } from "@/app/(site)/blog/components/post-content";
+import { PostSidebar } from "@/app/(site)/blog/components/post-sidebar";
 
 const { seo } = SITE_CONFIG;
 
@@ -186,14 +185,6 @@ export default async function BlogPostPage({ params }: PageProps) {
 						/>
 					</div>
 				</div>
-
-				{post.layout && (
-					<RenderBlocks
-						layout={post.layout}
-						pageTitle={post.title}
-						updatedAt={post.updatedAt}
-					/>
-				)}
 			</article>
 		</>
 	);

@@ -1,5 +1,4 @@
 import { Star } from "lucide-react";
-
 import Marquee from "@/components/ui/marquee";
 import { TypographyH2 } from "@/components/ui/typography";
 import { ReviewCard } from "@/components/review-card";
@@ -113,7 +112,6 @@ export async function ReviewSection({
 	return (
 		<SectionWrapper
 			className="w-full overflow-hidden relative"
-			// className="w-full bg-background overflow-hidden relative" // Removed bg-background
 			background={background}
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}

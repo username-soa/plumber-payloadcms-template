@@ -4,6 +4,14 @@ import { link } from "@/fields/link";
 
 export const TitleContentBlock: Block = {
 	slug: "titleContent",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "TitleContentLabel",
+			},
+		},
+	},
 	labels: {
 		singular: "Title & Content",
 		plural: "Title & Content Blocks",
@@ -11,38 +19,39 @@ export const TitleContentBlock: Block = {
 	fields: [
 		background,
 		{
-			name: "tagTitle",
-			type: "text",
-			label: "Tag Title",
-			admin: {
-				description: "Small tag text displayed above the main title",
-			},
-		},
-		{
-			name: "mainTitle",
-			type: "text",
-			label: "Main Title",
-			required: true,
-		},
-		{
-			name: "highlightedText",
-			type: "text",
-			label: "Highlighted Text",
-			admin: {
-				description:
-					"Text segment from the Main Title to highlight in primary color (case-sensitive)",
-			},
-		},
-		{
-			name: "description",
-			type: "textarea",
-			label: "Description",
-		},
-		{
-			name: "links",
-			type: "array",
-			label: "Links / Buttons",
-			fields: [link()],
+			type: "row",
+			fields: [
+				{
+					name: "paddingTopOption",
+					type: "select",
+					label: "Padding Top",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottomOption",
+					type: "select",
+					label: "Padding Bottom",
+					defaultValue: "default",
+					options: [
+						{ label: "None", value: "none" },
+						{ label: "Small", value: "small" },
+						{ label: "Default", value: "default" },
+						{ label: "Big", value: "big" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+			],
 		},
 		{
 			type: "row",
@@ -78,39 +87,48 @@ export const TitleContentBlock: Block = {
 			],
 		},
 		{
+			name: "tagTitle",
+			type: "text",
+			label: "Tag Title",
+			admin: {
+				description: "Small tag text displayed above the main title",
+			},
+		},
+		{
 			type: "row",
 			fields: [
 				{
-					name: "paddingTopOption",
-					type: "select",
-					label: "Padding Top",
-					defaultValue: "default",
-					options: [
-						{ label: "None", value: "none" },
-						{ label: "Small", value: "small" },
-						{ label: "Default", value: "default" },
-						{ label: "Big", value: "big" },
-					],
+					name: "mainTitle",
+					type: "text",
+					label: "Main Title",
+					required: true,
 					admin: {
 						width: "50%",
 					},
 				},
 				{
-					name: "paddingBottomOption",
-					type: "select",
-					label: "Padding Bottom",
-					defaultValue: "default",
-					options: [
-						{ label: "None", value: "none" },
-						{ label: "Small", value: "small" },
-						{ label: "Default", value: "default" },
-						{ label: "Big", value: "big" },
-					],
+					name: "highlightedText",
+					type: "text",
+					label: "Highlighted Text",
 					admin: {
 						width: "50%",
+						description:
+							"Text segment from the Main Title to highlight in primary color (case-sensitive)",
 					},
 				},
 			],
+		},
+
+		{
+			name: "description",
+			type: "textarea",
+			label: "Description",
+		},
+		{
+			name: "links",
+			type: "array",
+			label: "Links / Buttons",
+			fields: [link()],
 		},
 	],
 };

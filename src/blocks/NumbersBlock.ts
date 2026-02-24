@@ -3,9 +3,17 @@ import { background } from "@/fields/background";
 
 export const NumbersBlock: Block = {
 	slug: "numbers",
+	admin: {
+		components: {
+			Label: {
+				path: "@/components/payload/BlockRowLabel",
+				exportName: "NumbersLabel",
+			},
+		},
+	},
 	labels: {
-		singular: "Numbers & Custom Characters",
-		plural: "Numbers & Custom Characters Blocks",
+		singular: "Numbers Block",
+		plural: "Numbers Blocks",
 	},
 	fields: [
 		background,
@@ -118,16 +126,24 @@ export const NumbersBlock: Block = {
 			label: "Items",
 			fields: [
 				{
-					name: "title",
-					type: "text",
-					label: "Title (e.g., 10+)",
-					required: true,
+					type: "row",
+					fields: [
+						{
+							name: "title",
+							type: "text",
+							label: "Title (e.g., 10+)",
+							required: true,
+							admin: { width: "50%" },
+						},
+						{
+							name: "subTitle",
+							type: "text",
+							label: "Sub Title (e.g., Years of Experience)",
+							admin: { width: "50%" },
+						},
+					],
 				},
-				{
-					name: "subTitle",
-					type: "text",
-					label: "Sub Title (e.g., Years of Experience)",
-				},
+
 				{
 					name: "description",
 					type: "textarea",

@@ -1,39 +1,20 @@
-import dynamic from "next/dynamic";
 import { MessageCircleQuestion } from "lucide-react";
-
+import {
+	CMSLinkItem,
+	type CMSLinkType,
+} from "@/components/heroes/components/cms-link-item";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+	type PaddingOption,
+	SectionWrapper,
+} from "@/components/ui/section-wrapper";
 import {
 	TypographyH2,
 	TypographyH3,
 	TypographyMuted,
 } from "@/components/ui/typography";
-import {
-	CMSLinkItem,
-	CMSLinkType,
-} from "@/components/heroes/components/cms-link-item";
-import {
-	SectionWrapper,
-	type PaddingOption,
-} from "@/components/ui/section-wrapper";
-
-// Skeleton Loader for the Accordion
-const FAQSkeleton = () => (
-	<div className="w-full flex flex-col gap-4">
-		{[1, 2, 3, 4, 5].map((i) => (
-			<div
-				key={i}
-				className="h-20 w-full rounded-xl bg-card/50 animate-pulse border border-border/10"
-			/>
-		))}
-	</div>
-);
-
-// Dynamic import for the Accordion
-const FAQAccordion = dynamic(() => import("./faq-accordion"), {
-	loading: () => <FAQSkeleton />,
-});
-
 import type { Faq } from "@/payload-types";
+import FAQAccordion from "./faq-accordion";
 
 interface FAQBlockProps {
 	title?: string | null;
@@ -89,6 +70,7 @@ export function FAQSection({
 			<>
 				{parts.map((part, i) =>
 					part.toLowerCase() === titleHighlight.toLowerCase() ? (
+						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
 						<span key={i} className="text-primary">
 							{part}
 						</span>
@@ -103,7 +85,6 @@ export function FAQSection({
 	return (
 		<SectionWrapper
 			className="w-full"
-			// className="w-full bg-muted/20" // Removed to allow background prop to control
 			background={background}
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}
@@ -112,7 +93,7 @@ export function FAQSection({
 				{/* Left Column: Header & Info Card */}
 				<div className="flex flex-col gap-6 lg:sticky top-8">
 					<div className="flex items-center gap-2 text-primary font-medium">
-						<MessageCircleQuestion className="w-5 h-5" />
+						{/* <MessageCircleQuestion className="w-5 h-5" /> */}
 						<span className="uppercase tracking-wider text-sm">FAQ</span>
 					</div>
 

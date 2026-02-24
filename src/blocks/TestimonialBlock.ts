@@ -12,7 +12,6 @@ export const TestimonialBlock: Block = {
 		},
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -27,6 +26,32 @@ export const TestimonialBlock: Block = {
 						"Feature a customer quote or review with author details and optional photo to build trust and credibility.",
 				},
 			},
+		},
+		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTop",
+					type: "checkbox",
+					label: "Add Top Padding",
+					defaultValue: true,
+					admin: {
+						description: "Adds spacing above the block",
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottom",
+					type: "checkbox",
+					label: "Add Bottom Padding",
+					defaultValue: true,
+					admin: {
+						description: "Adds spacing below the block",
+						width: "50%",
+					},
+				},
+			],
 		},
 		{
 			type: "row",
@@ -73,31 +98,6 @@ export const TestimonialBlock: Block = {
 					label: "Author Image",
 					admin: {
 						description: "Optional photo of the author",
-						width: "50%",
-					},
-				},
-			],
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTop",
-					type: "checkbox",
-					label: "Add Top Padding",
-					defaultValue: true,
-					admin: {
-						description: "Adds spacing above the block",
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottom",
-					type: "checkbox",
-					label: "Add Bottom Padding",
-					defaultValue: true,
-					admin: {
-						description: "Adds spacing below the block",
 						width: "50%",
 					},
 				},

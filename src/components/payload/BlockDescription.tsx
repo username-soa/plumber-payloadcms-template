@@ -13,15 +13,7 @@ export const BlockDescription = ({
 		field?.admin?.custom?.description || "No description available";
 
 	return (
-		<div
-			style={{
-				padding: "12px 16px",
-				backgroundColor: "var(--theme-elevation-50)",
-				borderRadius: "4px",
-				marginBottom: "16px",
-				borderLeft: "3px solid var(--theme-elevation-400)",
-			}}
-		>
+		<div>
 			<p
 				style={{
 					margin: 0,

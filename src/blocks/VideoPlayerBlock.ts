@@ -12,7 +12,6 @@ export const VideoPlayerBlock: Block = {
 		},
 	},
 	fields: [
-		background,
 		{
 			name: "blockDescription",
 			type: "ui",
@@ -27,6 +26,32 @@ export const VideoPlayerBlock: Block = {
 						"Embed a self-hosted video with native HTML5 player controls. Supports MP4, WebM, and other video formats.",
 				},
 			},
+		},
+		background,
+		{
+			type: "row",
+			fields: [
+				{
+					name: "paddingTop",
+					type: "checkbox",
+					label: "Add Top Padding",
+					defaultValue: true,
+					admin: {
+						description: "Add spacing above this block.",
+						width: "50%",
+					},
+				},
+				{
+					name: "paddingBottom",
+					type: "checkbox",
+					label: "Add Bottom Padding",
+					defaultValue: true,
+					admin: {
+						description: "Add spacing below this block.",
+						width: "50%",
+					},
+				},
+			],
 		},
 		{
 			type: "row",
@@ -49,31 +74,6 @@ export const VideoPlayerBlock: Block = {
 					label: "Poster Image",
 					admin: {
 						description: "Upload an image to show before the video plays.",
-						width: "50%",
-					},
-				},
-			],
-		},
-		{
-			type: "row",
-			fields: [
-				{
-					name: "paddingTop",
-					type: "checkbox",
-					label: "Add Top Padding",
-					defaultValue: true,
-					admin: {
-						description: "Add spacing above this block.",
-						width: "50%",
-					},
-				},
-				{
-					name: "paddingBottom",
-					type: "checkbox",
-					label: "Add Bottom Padding",
-					defaultValue: true,
-					admin: {
-						description: "Add spacing below this block.",
 						width: "50%",
 					},
 				},
