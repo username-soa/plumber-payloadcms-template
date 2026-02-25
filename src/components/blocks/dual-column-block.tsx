@@ -2,6 +2,8 @@ import type React from "react";
 import { SectionWrapper } from "../ui/section-wrapper";
 import type { PaddingOption } from "../ui/section-wrapper";
 import Image from "next/image";
+import Link from "next/link";
+import { getCMSLinkHref, type CMSLinkType } from "@/lib/cms-link";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 import { blockConverters } from "@/components/richtext/block-converters";
 import { CMSLink } from "../payload/CMSLink";
@@ -9,7 +11,7 @@ import type { Page } from "@/payload-types";
 
 type Props = Extract<Page["layout"][0], { blockType: "dualColumn" }> & {
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 };
@@ -44,20 +46,45 @@ export const DualColumnBlock: React.FC<Props> = ({
 
 						if (!imageUrl) return null;
 
-						return (
+						const hasAutoLink =
+							"enableImageLink" in col && col.enableImageLink && col.imageLink;
+						const imgLink = (col as { imageLink?: CMSLinkType }).imageLink;
+						const href = hasAutoLink && imgLink ? getCMSLinkHref(imgLink) : "";
+
+						const imageContent = (
 							<div
 								key={col.id || index}
-								className="relative w-full h-full min-h-[300px] max-md:aspect-2/3 rounded-2xl overflow-hidden shadow-xl"
+								className={`max-h-[80vh] sticky md:top-[10vh] w-full h-full min-h-[300px] max-md:aspect-2/3 rounded-2xl overflow-hidden shadow-xl ${hasAutoLink ? "group" : ""}`}
 							>
 								<Image
 									src={imageUrl}
 									alt={imageAlt}
 									fill
-									className="object-cover w-full h-full"
+									className={`object-cover w-full h-full ${hasAutoLink ? "transition-transform duration-500 group-hover:scale-105" : ""}`}
 									priority
 								/>
+								{hasAutoLink && imgLink && (
+									<div className="absolute bottom-3 right-3 bg-background/30 backdrop-blur-md px-2 py-1 rounded-md shadow-lg z-10 text-foreground/90 group-hover:bg-background/90 group-hover:text-foreground transition-colors border border-border/50 text-xs font-medium">
+										{imgLink.label || "View Details"}
+									</div>
+								)}
 							</div>
 						);
+
+						if (hasAutoLink && href) {
+							return (
+								<Link
+									key={col.id || index}
+									href={href}
+									target={col.imageLink?.newTab ? "_blank" : undefined}
+									className="block w-full h-full"
+								>
+									{imageContent}
+								</Link>
+							);
+						}
+
+						return imageContent;
 					}
 
 					return (

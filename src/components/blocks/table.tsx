@@ -27,7 +27,7 @@ export function Table({
 	bordered = true,
 	className,
 }: TableProps) {
-	if (!headers?.length) return null;
+	if (!headers?.length && !rows?.length) return null;
 
 	return (
 		<div className={cn("my-8 not-prose", className)}>
@@ -38,23 +38,25 @@ export function Table({
 				)}
 			>
 				<ShadcnTable>
-					<TableHeader>
-						<TableRow className="bg-muted/60 hover:bg-muted/60 border-b-2 border-border">
-							{headers.map((header, index) => (
-								<TableHead
-									key={`header-${index}-${header}`}
-									className={cn(
-										"py-3.5 px-4 text-xs font-bold uppercase tracking-wider text-muted-foreground",
-										bordered &&
-											index !== headers.length - 1 &&
-											"border-r border-border/40",
-									)}
-								>
-									{header}
-								</TableHead>
-							))}
-						</TableRow>
-					</TableHeader>
+					{headers?.length > 0 && (
+						<TableHeader>
+							<TableRow className="bg-muted/60 hover:bg-muted/60 border-b-2 border-border">
+								{headers.map((header, index) => (
+									<TableHead
+										key={`header-${index}-${header}`}
+										className={cn(
+											"py-3.5 px-4 text-xs font-bold uppercase tracking-wider text-muted-foreground",
+											bordered &&
+												index !== headers.length - 1 &&
+												"border-r border-border/40",
+										)}
+									>
+										{header}
+									</TableHead>
+								))}
+							</TableRow>
+						</TableHeader>
+					)}
 					<TableBody>
 						{rows.map((row, rowIndex) => (
 							<TableRow

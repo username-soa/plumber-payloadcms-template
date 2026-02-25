@@ -10,6 +10,7 @@ import {
 	SectionWrapper,
 	type PaddingOption,
 } from "@/components/ui/section-wrapper";
+import { HighlightedTitle } from "@/components/ui/highlighted-title";
 
 // Helper type since we don't have the full deeply inferred type here easily
 // and we want to keep it simple. Adjust as needed based on generated types.
@@ -34,7 +35,7 @@ type Props = {
 	paddingTopOption?: string | null;
 	paddingBottomOption?: string | null;
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 };
@@ -62,14 +63,8 @@ export function Team({
 					<span className="uppercase tracking-wider text-sm">Our Team</span>
 				</div>
 				<TypographyH2 className="text-3xl md:text-4xl font-bold border-none tracking-tight leading-tight mb-4">
-					{titleHighlight && title ? (
-						<>
-							{title.split(titleHighlight)[0]}
-							<span className="text-primary">{titleHighlight}</span>
-							{title.split(titleHighlight)[1]}
-						</>
-					) : (
-						title
+					{title && (
+						<HighlightedTitle title={title} highlight={titleHighlight} />
 					)}
 				</TypographyH2>
 				{description && (

@@ -4,11 +4,12 @@ import { cn } from "@/lib/utils";
 import type { Page } from "@/payload-types";
 import { TypographyH2, TypographyP } from "../ui/typography";
 import { SectionWrapper } from "../ui/section-wrapper";
+import { HighlightedTitle } from "../ui/highlighted-title";
 import type { PaddingOption } from "../ui/section-wrapper";
 
 type Props = Extract<Page["layout"][0], { blockType: "titleContent" }> & {
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 };
@@ -25,27 +26,6 @@ export const TitleContentBlock: React.FC<Props> = ({
 	paddingBottomOption = "default",
 	background,
 }) => {
-	// Function to highlight text
-	const renderTitle = () => {
-		if (!highlightedText || !mainTitle.includes(highlightedText)) {
-			return mainTitle;
-		}
-
-		const parts = mainTitle.split(highlightedText);
-		return (
-			<>
-				{parts.map((part, index) => (
-					<React.Fragment key={index + part}>
-						{part}
-						{index < parts.length - 1 && (
-							<span className="text-primary">{highlightedText}</span>
-						)}
-					</React.Fragment>
-				))}
-			</>
-		);
-	};
-
 	const alignmentClasses = {
 		left: "text-left items-start",
 		center: "text-center items-center",
@@ -71,7 +51,7 @@ export const TitleContentBlock: React.FC<Props> = ({
 				)}
 
 				<TypographyH2 className="text-3xl max-w-[1000px] md:text-5xl font-bold border-none tracking-tight leading-tight m-0 p-0">
-					{renderTitle()}
+					<HighlightedTitle title={mainTitle} highlight={highlightedText} />
 				</TypographyH2>
 
 				{description && (

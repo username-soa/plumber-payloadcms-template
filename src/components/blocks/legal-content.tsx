@@ -11,7 +11,7 @@ type LegalContentProps = NonNullable<Page["layout"]>[number] & {
 	paddingTopOption?: string | null;
 	paddingBottomOption?: string | null;
 	background?: {
-		bg?: "transparent" | "muted" | "primary" | null;
+		bg?: "transparent" | "muted" | null;
 		decoration?: "none" | "dots" | null;
 	};
 };

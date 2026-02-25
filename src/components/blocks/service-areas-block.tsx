@@ -4,6 +4,7 @@ import {
 	type PaddingOption,
 	SectionWrapper,
 } from "@/components/ui/section-wrapper";
+import { HighlightedTitle } from "@/components/ui/highlighted-title";
 import { TypographyH2, TypographyMuted } from "@/components/ui/typography";
 import { getCompanyInfo } from "@/lib/payload/getGlobals";
 import { SITE_CONFIG } from "@/lib/site-config";
@@ -24,7 +25,7 @@ interface ServiceAreasProps {
 	paddingTopOption?: "none" | "small" | "default" | "big";
 	paddingBottomOption?: "none" | "small" | "default" | "big";
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 }
@@ -60,24 +61,6 @@ export async function ServiceAreasBlockComponent(props: ServiceAreasProps) {
 		serviceAreas = customServiceAreas.map((area) => area.name);
 	}
 
-	// Helper to highlight text
-	const renderHeadline = () => {
-		if (
-			!highlightedHeadlineText ||
-			!headline.includes(highlightedHeadlineText)
-		) {
-			return headline;
-		}
-		const parts = headline.split(highlightedHeadlineText);
-		return (
-			<>
-				{parts[0]}
-				<span className="text-primary">{highlightedHeadlineText}</span>
-				{parts[1]}
-			</>
-		);
-	};
-
 	return (
 		<SectionWrapper
 			paddingTop={paddingTopOption as PaddingOption}
@@ -94,7 +77,10 @@ export async function ServiceAreasBlockComponent(props: ServiceAreasProps) {
 				)}
 				{headline && (
 					<TypographyH2 className="text-3xl md:text-4xl font-bold border-none tracking-tight leading-tight mb-4">
-						{renderHeadline()}
+						<HighlightedTitle
+							title={headline}
+							highlight={highlightedHeadlineText}
+						/>
 					</TypographyH2>
 				)}
 				{description && (

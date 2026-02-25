@@ -429,7 +429,7 @@ export interface Service {
     | (
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -455,7 +455,7 @@ export interface Service {
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -480,7 +480,7 @@ export interface Service {
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -494,11 +494,13 @@ export interface Service {
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
             paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            tag?: string | null;
+            type?: ('default' | 'simple') | null;
             title?: string | null;
             /**
              * Text to highlight in primary color (case-insensitive)
@@ -506,11 +508,11 @@ export interface Service {
             titleHighlight?: string | null;
             description?: string | null;
             faqs?: (number | Faq)[] | null;
-            cta: {
+            cta?: {
               showCta?: boolean | null;
               headline?: string | null;
               text?: string | null;
-              ctaLink: {
+              ctaLink?: {
                 type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
                 label: string;
                 url?: string | null;
@@ -547,7 +549,7 @@ export interface Service {
         | ReviewBlock
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -566,7 +568,7 @@ export interface Service {
         | TimelineBlock
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -594,7 +596,7 @@ export interface Service {
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -651,7 +653,7 @@ export interface Service {
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             textAlign?: ('left' | 'center' | 'right') | null;
@@ -672,7 +674,7 @@ export interface Service {
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -692,9 +694,9 @@ export interface Service {
                   title: string;
                   icon?: string | null;
                   description?: string | null;
-                  link: {
+                  link?: {
                     type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
-                    label: string;
+                    label?: string | null;
                     url?: string | null;
                     newTab?: boolean | null;
                     email?: string | null;
@@ -730,36 +732,42 @@ export interface Service {
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
             paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
             title?: string | null;
+            /**
+             * Default to Global Service Areas from Company Info
+             */
+            useGlobalServiceAreas?: boolean | null;
             headline?: string | null;
             /**
              * Text to be highlighted with primary color within the headline (if applicable)
              */
             highlightedHeadlineText?: string | null;
+            /**
+             * Text displayed Above the service areas grid.
+             */
             description?: string | null;
-            useGlobalServiceAreas?: boolean | null;
+            /**
+             * Text displayed Below the service areas grid.
+             */
+            bottomText?: string | null;
             customServiceAreas?:
               | {
                   name: string;
                   id?: string | null;
                 }[]
               | null;
-            /**
-             * Text displayed below the service areas grid.
-             */
-            bottomText?: string | null;
             id?: string | null;
             blockName?: string | null;
             blockType: 'serviceAreas';
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             tag?: string | null;
@@ -816,7 +824,7 @@ export interface Service {
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             textAlign?: ('left' | 'center' | 'right') | null;
@@ -842,7 +850,7 @@ export interface Service {
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -851,6 +859,36 @@ export interface Service {
               | {
                   type?: ('content' | 'image') | null;
                   image?: (number | null) | Media;
+                  enableImageLink?: boolean | null;
+                  imageLink?: {
+                    type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                    label: string;
+                    url?: string | null;
+                    newTab?: boolean | null;
+                    email?: string | null;
+                    phoneNumber?: string | null;
+                    reference?:
+                      | ({
+                          relationTo: 'pages';
+                          value: number | Page;
+                        } | null)
+                      | ({
+                          relationTo: 'services';
+                          value: number | Service;
+                        } | null);
+                    style?:
+                      | (
+                          | 'primary'
+                          | 'secondary'
+                          | 'outline'
+                          | 'ghost'
+                          | 'destructive'
+                          | 'badge'
+                          | 'badge-pulsing'
+                          | 'primary-gradient-dots'
+                        )
+                      | null;
+                  };
                   richText?: {
                     root: {
                       type: string;
@@ -909,7 +947,7 @@ export interface Service {
           }
         | {
             background?: {
-              bg?: ('transparent' | 'muted' | 'primary') | null;
+              bg?: ('transparent' | 'muted') | null;
               decoration?: ('none' | 'dots') | null;
             };
             paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -985,9 +1023,13 @@ export interface Service {
                */
               fadeEdges?: boolean | null;
               /**
-               * Stop animation when mouse is over
+               * Stop animation on hover
                */
               pauseOnHover?: boolean | null;
+              /**
+               * Add top and bottom border
+               */
+              borders?: boolean | null;
             };
             style?: {
               bg?: string | null;
@@ -1086,7 +1128,7 @@ export interface Page {
   layout: (
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -1112,7 +1154,7 @@ export interface Page {
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -1137,7 +1179,7 @@ export interface Page {
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -1151,11 +1193,13 @@ export interface Page {
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
         paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+        tag?: string | null;
+        type?: ('default' | 'simple') | null;
         title?: string | null;
         /**
          * Text to highlight in primary color (case-insensitive)
@@ -1163,11 +1207,11 @@ export interface Page {
         titleHighlight?: string | null;
         description?: string | null;
         faqs?: (number | Faq)[] | null;
-        cta: {
+        cta?: {
           showCta?: boolean | null;
           headline?: string | null;
           text?: string | null;
-          ctaLink: {
+          ctaLink?: {
             type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
             label: string;
             url?: string | null;
@@ -1204,7 +1248,7 @@ export interface Page {
     | ReviewBlock
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -1223,7 +1267,7 @@ export interface Page {
     | TimelineBlock
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -1251,7 +1295,7 @@ export interface Page {
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -1308,7 +1352,7 @@ export interface Page {
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         textAlign?: ('left' | 'center' | 'right') | null;
@@ -1329,7 +1373,7 @@ export interface Page {
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -1349,9 +1393,9 @@ export interface Page {
               title: string;
               icon?: string | null;
               description?: string | null;
-              link: {
+              link?: {
                 type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
-                label: string;
+                label?: string | null;
                 url?: string | null;
                 newTab?: boolean | null;
                 email?: string | null;
@@ -1387,36 +1431,42 @@ export interface Page {
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
         paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
         title?: string | null;
+        /**
+         * Default to Global Service Areas from Company Info
+         */
+        useGlobalServiceAreas?: boolean | null;
         headline?: string | null;
         /**
          * Text to be highlighted with primary color within the headline (if applicable)
          */
         highlightedHeadlineText?: string | null;
+        /**
+         * Text displayed Above the service areas grid.
+         */
         description?: string | null;
-        useGlobalServiceAreas?: boolean | null;
+        /**
+         * Text displayed Below the service areas grid.
+         */
+        bottomText?: string | null;
         customServiceAreas?:
           | {
               name: string;
               id?: string | null;
             }[]
           | null;
-        /**
-         * Text displayed below the service areas grid.
-         */
-        bottomText?: string | null;
         id?: string | null;
         blockName?: string | null;
         blockType: 'serviceAreas';
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         tag?: string | null;
@@ -1473,7 +1523,7 @@ export interface Page {
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         textAlign?: ('left' | 'center' | 'right') | null;
@@ -1499,7 +1549,7 @@ export interface Page {
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -1508,6 +1558,36 @@ export interface Page {
           | {
               type?: ('content' | 'image') | null;
               image?: (number | null) | Media;
+              enableImageLink?: boolean | null;
+              imageLink?: {
+                type?: ('reference' | 'custom' | 'email' | 'phone' | 'badge') | null;
+                label: string;
+                url?: string | null;
+                newTab?: boolean | null;
+                email?: string | null;
+                phoneNumber?: string | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: number | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'services';
+                      value: number | Service;
+                    } | null);
+                style?:
+                  | (
+                      | 'primary'
+                      | 'secondary'
+                      | 'outline'
+                      | 'ghost'
+                      | 'destructive'
+                      | 'badge'
+                      | 'badge-pulsing'
+                      | 'primary-gradient-dots'
+                    )
+                  | null;
+              };
               richText?: {
                 root: {
                   type: string;
@@ -1566,7 +1646,7 @@ export interface Page {
       }
     | {
         background?: {
-          bg?: ('transparent' | 'muted' | 'primary') | null;
+          bg?: ('transparent' | 'muted') | null;
           decoration?: ('none' | 'dots') | null;
         };
         paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -1642,9 +1722,13 @@ export interface Page {
            */
           fadeEdges?: boolean | null;
           /**
-           * Stop animation when mouse is over
+           * Stop animation on hover
            */
           pauseOnHover?: boolean | null;
+          /**
+           * Add top and bottom border
+           */
+          borders?: boolean | null;
         };
         style?: {
           bg?: string | null;
@@ -1787,7 +1871,7 @@ export interface Page {
  */
 export interface ReviewBlock {
   background?: {
-    bg?: ('transparent' | 'muted' | 'primary') | null;
+    bg?: ('transparent' | 'muted') | null;
     decoration?: ('none' | 'dots') | null;
   };
   paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -1852,7 +1936,7 @@ export interface TeamMember {
  */
 export interface TimelineBlock {
   background?: {
-    bg?: ('transparent' | 'muted' | 'primary') | null;
+    bg?: ('transparent' | 'muted') | null;
     decoration?: ('none' | 'dots') | null;
   };
   paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
@@ -2546,6 +2630,8 @@ export interface ServicesSelect<T extends boolean = true> {
                   };
               paddingTopOption?: T;
               paddingBottomOption?: T;
+              tag?: T;
+              type?: T;
               title?: T;
               titleHighlight?: T;
               description?: T;
@@ -2725,17 +2811,17 @@ export interface ServicesSelect<T extends boolean = true> {
               paddingTopOption?: T;
               paddingBottomOption?: T;
               title?: T;
+              useGlobalServiceAreas?: T;
               headline?: T;
               highlightedHeadlineText?: T;
               description?: T;
-              useGlobalServiceAreas?: T;
+              bottomText?: T;
               customServiceAreas?:
                 | T
                 | {
                     name?: T;
                     id?: T;
                   };
-              bottomText?: T;
               id?: T;
               blockName?: T;
             };
@@ -2815,6 +2901,19 @@ export interface ServicesSelect<T extends boolean = true> {
                 | {
                     type?: T;
                     image?: T;
+                    enableImageLink?: T;
+                    imageLink?:
+                      | T
+                      | {
+                          type?: T;
+                          label?: T;
+                          url?: T;
+                          newTab?: T;
+                          email?: T;
+                          phoneNumber?: T;
+                          reference?: T;
+                          style?: T;
+                        };
                     richText?: T;
                     links?:
                       | T
@@ -2872,6 +2971,7 @@ export interface ServicesSelect<T extends boolean = true> {
                     verticalPadding?: T;
                     fadeEdges?: T;
                     pauseOnHover?: T;
+                    borders?: T;
                   };
               style?:
                 | T
@@ -3066,6 +3166,8 @@ export interface PagesSelect<T extends boolean = true> {
                   };
               paddingTopOption?: T;
               paddingBottomOption?: T;
+              tag?: T;
+              type?: T;
               title?: T;
               titleHighlight?: T;
               description?: T;
@@ -3245,17 +3347,17 @@ export interface PagesSelect<T extends boolean = true> {
               paddingTopOption?: T;
               paddingBottomOption?: T;
               title?: T;
+              useGlobalServiceAreas?: T;
               headline?: T;
               highlightedHeadlineText?: T;
               description?: T;
-              useGlobalServiceAreas?: T;
+              bottomText?: T;
               customServiceAreas?:
                 | T
                 | {
                     name?: T;
                     id?: T;
                   };
-              bottomText?: T;
               id?: T;
               blockName?: T;
             };
@@ -3335,6 +3437,19 @@ export interface PagesSelect<T extends boolean = true> {
                 | {
                     type?: T;
                     image?: T;
+                    enableImageLink?: T;
+                    imageLink?:
+                      | T
+                      | {
+                          type?: T;
+                          label?: T;
+                          url?: T;
+                          newTab?: T;
+                          email?: T;
+                          phoneNumber?: T;
+                          reference?: T;
+                          style?: T;
+                        };
                     richText?: T;
                     links?:
                       | T
@@ -3392,6 +3507,7 @@ export interface PagesSelect<T extends boolean = true> {
                     verticalPadding?: T;
                     fadeEdges?: T;
                     pauseOnHover?: T;
+                    borders?: T;
                   };
               style?:
                 | T
@@ -4311,7 +4427,7 @@ export interface AnnouncementBarSelect<T extends boolean = true> {
  */
 export interface StepTimelineBlock {
   background?: {
-    bg?: ('transparent' | 'muted' | 'primary') | null;
+    bg?: ('transparent' | 'muted') | null;
     decoration?: ('none' | 'dots') | null;
   };
   /**

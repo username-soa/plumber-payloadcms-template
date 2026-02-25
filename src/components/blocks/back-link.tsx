@@ -9,7 +9,7 @@ import {
 type BackLinkProps = NonNullable<Page["layout"]>[number] & {
 	blockType: "backLink";
 	background?: {
-		bg?: "transparent" | "muted" | "primary" | null;
+		bg?: "transparent" | "muted" | null;
 		decoration?: "none" | "dots" | null;
 	};
 };

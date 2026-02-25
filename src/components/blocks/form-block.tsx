@@ -20,7 +20,7 @@ type Props = {
 	paddingBottomOption?: string;
 	className?: string;
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 };

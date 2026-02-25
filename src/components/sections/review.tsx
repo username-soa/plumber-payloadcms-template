@@ -31,7 +31,7 @@ export async function ReviewSection({
 	paddingTopOption?: string | null;
 	paddingBottomOption?: string | null;
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 }) {
@@ -111,12 +111,12 @@ export async function ReviewSection({
 
 	return (
 		<SectionWrapper
-			className="w-full overflow-hidden relative"
+			className="w-full overflow-hidden relative [&>div]:w-full [&>div]:max-w-none [&>div]:p-0 [&>div]:m-0"
 			background={background}
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}
 		>
-			<div className="mb-12">
+			<div className="mb-12 container mx-auto px-6 md:px-12">
 				{/* Header */}
 				<div className="flex flex-col md:flex-row justify-between md:items-end gap-6">
 					<div className="max-w-2xl">

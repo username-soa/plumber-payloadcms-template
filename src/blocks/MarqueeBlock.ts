@@ -78,7 +78,7 @@ export const MarqueeBlock: Block = {
 							label: "Fade Edges",
 							defaultValue: true,
 							admin: {
-								width: "50%",
+								width: "33%",
 								description: "Add a soft fade effect to the edges",
 							},
 						},
@@ -88,8 +88,18 @@ export const MarqueeBlock: Block = {
 							label: "Pause on Hover",
 							defaultValue: true,
 							admin: {
-								width: "50%",
-								description: "Stop animation when mouse is over",
+								width: "33%",
+								description: "Stop animation on hover",
+							},
+						},
+						{
+							name: "borders",
+							type: "checkbox",
+							label: "Show Top and Bottom Borders",
+							defaultValue: false,
+							admin: {
+								width: "33%",
+								description: "Add top and bottom border",
 							},
 						},
 					],

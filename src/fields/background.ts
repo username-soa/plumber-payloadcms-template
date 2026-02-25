@@ -24,10 +24,6 @@ export const background: Field = {
 							label: "Muted",
 							value: "muted",
 						},
-						{
-							label: "Primary",
-							value: "primary",
-						},
 					],
 					admin: {
 						width: "50%",

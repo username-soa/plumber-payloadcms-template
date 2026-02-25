@@ -58,6 +58,31 @@ export const FAQBlock: Block = {
 			type: "row",
 			fields: [
 				{
+					name: "tag",
+					type: "text",
+					defaultValue: "FAQ",
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "type",
+					type: "select",
+					defaultValue: "default",
+					options: [
+						{ label: "Default (2 columns Design)", value: "default" },
+						{ label: "Simple (Centered)", value: "simple" },
+					],
+					admin: {
+						width: "50%",
+					},
+				},
+			],
+		},
+		{
+			type: "row",
+			fields: [
+				{
 					name: "title",
 					type: "text",
 					defaultValue: "Your Questions, Our Answers",
@@ -94,6 +119,9 @@ export const FAQBlock: Block = {
 			name: "cta",
 			type: "group",
 			label: "Call to Action Card",
+			admin: {
+				condition: (_, siblingData) => siblingData.type !== "simple",
+			},
 			fields: [
 				{
 					name: "showCta",
@@ -103,6 +131,9 @@ export const FAQBlock: Block = {
 				},
 				{
 					type: "row",
+					admin: {
+						condition: (_, siblingData) => siblingData?.showCta !== false,
+					},
 					fields: [
 						{
 							name: "headline",
@@ -124,6 +155,9 @@ export const FAQBlock: Block = {
 					overrides: {
 						name: "ctaLink",
 						label: "CTA Link",
+						admin: {
+							condition: (_, siblingData) => siblingData?.showCta !== false,
+						},
 					},
 				}),
 			],

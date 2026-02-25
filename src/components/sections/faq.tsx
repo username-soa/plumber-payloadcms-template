@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/typography";
 import type { Faq } from "@/payload-types";
 import FAQAccordion from "./faq-accordion";
+import { HighlightedTitle } from "@/components/ui/highlighted-title";
 
 interface FAQBlockProps {
 	title?: string | null;
@@ -30,9 +31,11 @@ interface FAQBlockProps {
 	paddingTopOption?: string | null;
 	paddingBottomOption?: string | null;
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
+	type?: "default" | "simple" | null;
+	tag?: string | null;
 }
 
 export function FAQSection({
@@ -44,43 +47,27 @@ export function FAQSection({
 	paddingTopOption,
 	paddingBottomOption,
 	background,
+	type = "default",
+	tag,
 }: FAQBlockProps) {
 	// Transform relationship data to the format expected by FAQAccordion
-	const transformedFaqs =
-		faqs
-			?.map((faq) => {
-				if (typeof faq === "object" && faq !== null) {
-					return {
-						id: faq.id.toString(),
-						question: faq.question,
-						answer: faq.answer,
-					};
-				}
-				return null;
-			})
-			.filter((item) => item !== null) || [];
-
-	// Logic to highlight title
-	const renderTitle = () => {
-		if (!title) return "Your Questions, Our Answers";
-		if (!titleHighlight) return title;
-
-		const parts = title.split(new RegExp(`(${titleHighlight})`, "gi"));
-		return (
-			<>
-				{parts.map((part, i) =>
-					part.toLowerCase() === titleHighlight.toLowerCase() ? (
-						// biome-ignore lint/suspicious/noArrayIndexKey: <explanation>
-						<span key={i} className="text-primary">
-							{part}
-						</span>
-					) : (
-						part
-					),
-				)}
-			</>
+	const transformedFaqs = (faqs || [])
+		.map((faq) => {
+			if (typeof faq === "object" && faq !== null) {
+				return {
+					id: faq.id.toString(),
+					question: faq.question || "",
+					answer: faq.answer || "",
+				};
+			}
+			return null;
+		})
+		.filter(
+			(item): item is { id: string; question: string; answer: string } =>
+				item !== null,
 		);
-	};
+
+	const isSimple = type === "simple";
 
 	return (
 		<SectionWrapper
@@ -89,26 +76,45 @@ export function FAQSection({
 			paddingTop={paddingTopOption as PaddingOption}
 			paddingBottom={paddingBottomOption as PaddingOption}
 		>
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
-				{/* Left Column: Header & Info Card */}
-				<div className="flex flex-col gap-6 lg:sticky top-8">
+			<div
+				className={
+					isSimple
+						? "flex flex-col items-center text-center gap-12 max-w-4xl mx-auto"
+						: "grid grid-cols-1 lg:grid-cols-2 gap-16 items-start"
+				}
+			>
+				{/* Left Column / Header Section */}
+				<div
+					className={
+						isSimple
+							? "flex flex-col items-center gap-6"
+							: "flex flex-col gap-6 lg:sticky top-8"
+					}
+				>
 					<div className="flex items-center gap-2 text-primary font-medium">
 						{/* <MessageCircleQuestion className="w-5 h-5" /> */}
-						<span className="uppercase tracking-wider text-sm">FAQ</span>
+						<span className="uppercase tracking-wider text-sm">
+							{tag || "FAQ"}
+						</span>
 					</div>
 
 					<TypographyH2 className="text-4xl md:text-5xl font-bold border-none tracking-tight">
-						{renderTitle()}
+						<HighlightedTitle
+							title={title || "Your Questions, Our Answers"}
+							highlight={titleHighlight}
+						/>
 					</TypographyH2>
 
 					{description && (
-						<TypographyMuted className="text-lg max-w-md">
+						<TypographyMuted
+							className={isSimple ? "text-lg max-w-2xl" : "text-lg max-w-md"}
+						>
 							{description}
 						</TypographyMuted>
 					)}
 
-					{cta?.showCta && (
-						<Card className="bg-card/50 border-none shadow-sm max-w-md">
+					{!isSimple && cta?.showCta && (
+						<Card className="bg-card/50 border-none shadow-sm max-w-md text-left">
 							<CardContent className="p-4 flex flex-col gap-6">
 								<div className="flex items-start gap-4">
 									<div className="p-3 bg-primary/10 rounded-xl text-primary shrink-0">
@@ -132,9 +138,9 @@ export function FAQSection({
 					)}
 				</div>
 
-				{/* Right Column: Accordion */}
-				<div className="w-full">
-					<FAQAccordion items={transformedFaqs as any} />
+				{/* Right Column / Accordion Section */}
+				<div className={isSimple ? "w-full text-left" : "w-full"}>
+					<FAQAccordion items={transformedFaqs} type={type} />
 				</div>
 			</div>
 		</SectionWrapper>

@@ -215,14 +215,14 @@ export function Footer({ companyInfo, footerData }: FooterProps) {
 				{companyInfo.seo?.serviceAreas &&
 					companyInfo.seo.serviceAreas.length > 0 && (
 						<div className="mb-10">
-							<div className="mb-4 flex items-center gap-4 md:gap-6">
+							<div className="mb-5 flex items-center gap-4 md:gap-6">
 								<Separator className="flex-1" />
 								<TypographyH3 className="shrink-0 font-semibold text-foreground">
 									Proudly Serving
 								</TypographyH3>
 								<Separator className="flex-1" />
 							</div>
-							<div className="mx-auto flex max-w-4xl flex-wrap items-center justify-center text-center text-sm leading-relaxed text-muted-foreground">
+							<div className="mx-auto flex md:gap-y-1 gap-y-0.5 max-w-4xl flex-wrap items-center justify-center text-center text-sm leading-relaxed text-muted-foreground">
 								{companyInfo.seo.serviceAreas.map((area, index) => {
 									const isLast =
 										index === (companyInfo.seo?.serviceAreas?.length || 0) - 1;

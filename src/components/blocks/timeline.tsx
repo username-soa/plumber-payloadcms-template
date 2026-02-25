@@ -23,7 +23,7 @@ interface TimelineProps {
 	paddingTopOption?: string | null;
 	paddingBottomOption?: string | null;
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 }

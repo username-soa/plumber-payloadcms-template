@@ -8,7 +8,7 @@ import Image from "next/image";
 
 type Props = Extract<Page["layout"][0], { blockType: "imagesGrid" }> & {
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 };

@@ -12,9 +12,7 @@ import { LegalContactBlock } from "@/blocks/LegalContactBlock";
 import { BackLinkBlock } from "@/blocks/BackLinkBlock";
 import { FAQBlock } from "@/blocks/FAQBlock";
 import { ReviewBlock } from "@/blocks/ReviewBlock";
-// import { CertificationsBlock } from "@/blocks/CertificationsBlock";
 import { TeamBlock } from "@/blocks/TeamBlock";
-// import { TrustStatsBlock } from "@/blocks/TrustStatsBlock";
 import { TimelineBlock } from "@/blocks/TimelineBlock";
 import { ContentFetcherBlock } from "@/blocks/ContentFetcherBlock";
 import { TitleContentBlock } from "@/blocks/TitleContentBlock";
@@ -131,9 +129,7 @@ export const Pages: CollectionConfig = {
 								BackLinkBlock,
 								FAQBlock,
 								ReviewBlock,
-								// CertificationsBlock,
 								TeamBlock,
-								// TrustStatsBlock,
 								TimelineBlock,
 								ContentFetcherBlock,
 								TitleContentBlock,

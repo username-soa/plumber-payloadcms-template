@@ -521,7 +521,7 @@ function TableRenderer({ node }: { node: SerializedBlockNode<TableBlock> }) {
 		(row.cells || []).map((cell) => cell.value),
 	);
 
-	if (!headerLabels.length) return null;
+	if (!headerLabels.length && !rowData.length) return null;
 
 	return (
 		<div
@@ -560,7 +560,8 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 	defaultConverters,
 }) => ({
 	...defaultConverters,
-	text: ({ node }) => {
+	text: (args) => {
+		const { node } = args;
 		const textNode = node as SerializedTextNode & { style?: string };
 		const style = textNode.style;
 
@@ -570,10 +571,16 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 			combinedStyle = { ...combinedStyle, ...formatStyle(style) };
 		}
 
+		const defaultTextConverter = defaultConverters?.text;
+		const defaultConvertedText =
+			typeof defaultTextConverter === "function"
+				? defaultTextConverter(args)
+				: (defaultTextConverter ?? <>{node.text}</>);
+
 		if (Object.keys(combinedStyle).length > 0) {
-			return <span style={combinedStyle}>{node.text}</span>;
+			return <span style={combinedStyle}>{defaultConvertedText}</span>;
 		}
-		return <>{node.text}</>;
+		return <>{defaultConvertedText}</>;
 	},
 	heading: ({ node, nodesToJSX }) => {
 		const tag = node.tag;
@@ -591,7 +598,11 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 		return <h6 className="text-base font-semibold mt-4 mb-2">{children}</h6>;
 	},
 	paragraph: ({ node, nodesToJSX }) => {
-		return <TypographyP>{nodesToJSX({ nodes: node.children })}</TypographyP>;
+		return (
+			<TypographyP className="whitespace-pre-wrap">
+				{nodesToJSX({ nodes: node.children })}
+			</TypographyP>
+		);
 	},
 	quote: ({ node, nodesToJSX }) => {
 		return (

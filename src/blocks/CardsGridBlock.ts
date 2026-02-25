@@ -158,6 +158,7 @@ export const CardsGridBlock: Block = {
 				link({
 					name: "link",
 					label: "Link",
+					required: false,
 				}),
 			],
 		},

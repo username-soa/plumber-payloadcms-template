@@ -5,9 +5,7 @@ import { LegalContact } from "@/components/blocks/legal-contact";
 import { BackLink } from "@/components/blocks/back-link";
 import { ReviewSection } from "@/components/sections/review";
 import { FAQSection } from "@/components/sections/faq";
-// import { Certifications } from "@/components/blocks/certifications";
 import { Team } from "@/components/blocks/team";
-// import { TrustStats } from "@/components/blocks/trust-stats";
 import { Timeline } from "@/components/blocks/timeline";
 import { ContentFetcher } from "@/components/blocks/content-fetcher";
 import { TitleContentBlock } from "@/components/blocks/title-content-block";
@@ -64,15 +62,9 @@ export function RenderBlocks({
 					case "reviewsSection":
 						// @ts-ignore
 						return <ReviewSection key={key} {...block} />;
-					/* 					case "certifications":
-						// @ts-ignore
-						return <Certifications key={key} {...block} />; */
 					case "team":
 						// @ts-ignore
 						return <Team key={key} {...block} />;
-					/* 					case "trustStats":
-						// @ts-ignore
-						return <TrustStats key={key} {...block} />; */
 					case "timeline":
 						// @ts-ignore
 						return <Timeline key={key} {...block} />;
@@ -97,7 +89,7 @@ export function RenderBlocks({
 					case "cardsGrid":
 						// @ts-ignore
 						return <CardsGridBlock key={key} {...block} />;
-					case "serviceAreasBlock":
+					case "serviceAreas":
 						// @ts-ignore
 						return <ServiceAreasBlockComponent key={key} {...block} />;
 					case "highlightedServices":

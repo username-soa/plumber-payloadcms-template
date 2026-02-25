@@ -5,8 +5,6 @@ import { cn } from "@/lib/utils";
 import { SectionWrapper } from "../ui/section-wrapper";
 import type { PaddingOption } from "../ui/section-wrapper";
 import { TypographyH3, TypographyP } from "../ui/typography";
-import { Badge } from "@/components/ui/badge";
-import { CMSLink } from "@/components/payload/CMSLink";
 import type { CMSLinkType } from "@/lib/cms-link";
 import { getCMSLinkHref } from "@/lib/cms-link"; // Added helper
 
@@ -40,7 +38,7 @@ type Props = {
 		link?: CMSLinkType;
 	}[];
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 };
@@ -128,9 +126,6 @@ export const CardsGridBlock: React.FC<Props> = ({
 										{card.description}
 									</TypographyP>
 								)}
-								{/* Link button removed as the whole card is clickable. 
-                                    We could conditionally render a text link or arrow if desired, 
-                                    but the request was to wrap the card. */}
 							</div>
 						</CardWrapper>
 					);

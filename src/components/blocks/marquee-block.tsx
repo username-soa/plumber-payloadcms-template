@@ -28,7 +28,8 @@ export const MarqueeBlockComponent: React.FC<MarqueeBlockProps> = ({
 		verticalPadding = 80,
 		fadeEdges = true,
 		pauseOnHover = true,
-	} = animation || {};
+		borders = false,
+	} = (animation as any) || {};
 
 	const {
 		bg = "transparent",
@@ -77,6 +78,7 @@ export const MarqueeBlockComponent: React.FC<MarqueeBlockProps> = ({
 		<section
 			className={cn(
 				"relative w-full overflow-hidden flex flex-col items-center justify-center",
+				borders && "border-y-2 border-border",
 			)}
 			style={{
 				paddingTop: `${verticalPadding}px`,

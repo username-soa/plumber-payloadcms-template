@@ -53,34 +53,17 @@ export const ServiceAreasBlock: Block = {
 			],
 		},
 		{
-			name: "title",
-			type: "text",
-			label: "Section Title (Small)",
-			defaultValue: "Service Areas",
-		},
-		{
-			name: "headline",
-			type: "text",
-			label: "Main Headline",
-			defaultValue: "Proudly Serving Your Community",
-		},
-		{
-			name: "highlightedHeadlineText",
-			type: "text",
-			label: "Highlighted Text in Headline",
-			admin: {
-				description:
-					"Text to be highlighted with primary color within the headline (if applicable)",
-			},
-		},
-		{
-			name: "description",
-			type: "textarea",
-			label: "Description",
-		},
-		{
 			type: "row",
 			fields: [
+				{
+					name: "title",
+					type: "text",
+					label: "Section Title (Small)",
+					defaultValue: "Service Areas",
+					admin: {
+						width: "50%",
+					},
+				},
 				{
 					name: "useGlobalServiceAreas",
 					type: "checkbox",
@@ -88,11 +71,60 @@ export const ServiceAreasBlock: Block = {
 					defaultValue: true,
 					admin: {
 						width: "50%",
+						style: { paddingTop: "24px" },
+						description: "Default to Global Service Areas from Company Info",
 					},
 				},
 			],
 		},
 
+		{
+			type: "row",
+			fields: [
+				{
+					name: "headline",
+					type: "text",
+					label: "Main Headline",
+					defaultValue: "Proudly Serving Your Community",
+					admin: {
+						width: "50%",
+					},
+				},
+				{
+					name: "highlightedHeadlineText",
+					type: "text",
+					label: "Highlighted Text in Headline",
+					admin: {
+						width: "50%",
+						description:
+							"Text to be highlighted with primary color within the headline (if applicable)",
+					},
+				},
+			],
+		},
+		{
+			type: "row",
+			fields: [
+				{
+					name: "description",
+					type: "textarea",
+					label: "Description",
+					admin: {
+						width: "50%",
+						description: "Text displayed Above the service areas grid.",
+					},
+				},
+				{
+					name: "bottomText",
+					type: "textarea",
+					label: "Bottom Text (SEO)",
+					admin: {
+						width: "50%",
+						description: "Text displayed Below the service areas grid.",
+					},
+				},
+			],
+		},
 		{
 			name: "customServiceAreas",
 			type: "array",
@@ -107,14 +139,6 @@ export const ServiceAreasBlock: Block = {
 					required: true,
 				},
 			],
-		},
-		{
-			name: "bottomText",
-			type: "textarea",
-			label: "Bottom Text (SEO)",
-			admin: {
-				description: "Text displayed below the service areas grid.",
-			},
 		},
 	],
 };

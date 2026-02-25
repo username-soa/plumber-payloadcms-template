@@ -9,7 +9,7 @@ interface SectionWrapperProps {
 	paddingTop?: PaddingOption | string;
 	paddingBottom?: PaddingOption | string;
 	background?: {
-		bg?: "transparent" | "muted" | "primary" | null;
+		bg?: "transparent" | "muted" | null;
 		decoration?: "none" | "dots" | null;
 	};
 }
@@ -26,8 +26,6 @@ const getBackgroundClass = (bg: string | undefined | null) => {
 	switch (bg) {
 		case "muted":
 			return "bg-muted";
-		case "primary":
-			return "bg-primary text-primary-foreground";
 		default:
 			return "bg-transparent"; // transparent is default
 	}

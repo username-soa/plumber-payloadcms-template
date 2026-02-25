@@ -11,6 +11,7 @@ import {
 import { TypographyH2, TypographyP } from "@/components/ui/typography";
 import { ServiceCard } from "@/components/cards/service-card";
 import { Button } from "@/components/ui/button";
+import { HighlightedTitle } from "@/components/ui/highlighted-title";
 
 import { CMSLink } from "@/components/payload/CMSLink";
 import type { CMSLinkType } from "@/lib/cms-link";
@@ -35,7 +36,7 @@ interface HighlightedServicesBlockProps {
 	paddingTopOption?: "none" | "small" | "default" | "big";
 	paddingBottomOption?: "none" | "small" | "default" | "big";
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 }
@@ -57,21 +58,6 @@ export const HighlightedServicesBlockComponent = (
 		paddingBottomOption = "default",
 		background,
 	} = props;
-
-	// Helper to highlight text
-	const renderTitle = () => {
-		if (!highlightedText || !title.includes(highlightedText)) {
-			return title;
-		}
-		const parts = title.split(highlightedText);
-		return (
-			<>
-				{parts[0]}
-				<span className="text-primary">{highlightedText}</span>
-				{parts[1]}
-			</>
-		);
-	};
 
 	// 1. Resolve Emergency Service
 	const resolvedEmergencyService = useMemo(() => {
@@ -119,7 +105,7 @@ export const HighlightedServicesBlockComponent = (
 							</span>
 						)}
 						<TypographyH2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3 border-none">
-							{renderTitle()}
+							<HighlightedTitle title={title} highlight={highlightedText} />
 						</TypographyH2>
 						{description && (
 							<TypographyP className="text-muted-foreground text-lg mt-0">

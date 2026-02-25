@@ -6,7 +6,7 @@ import type { PaddingOption } from "../ui/section-wrapper";
 
 type Props = Extract<Page["layout"][0], { blockType: "numbers" }> & {
 	background?: {
-		bg?: "transparent" | "muted" | "primary";
+		bg?: "transparent" | "muted";
 		decoration?: "none" | "dots";
 	};
 };
