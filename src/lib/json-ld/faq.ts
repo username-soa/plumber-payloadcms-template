@@ -26,12 +26,3 @@ export function generateFAQSchema(faqs: FAQItem[]) {
 		})),
 	};
 }
-
-/**
- * Generate FAQPage schema from service FAQs
- */
-export function generateServiceFAQSchema(
-	faqs: Array<{ question: string; answer: string }>,
-) {
-	return generateFAQSchema(faqs);
-}

@@ -154,6 +154,22 @@ export const Pages: CollectionConfig = {
 					label: "SEO",
 					fields: [
 						{
+							name: "pageType",
+							type: "select",
+							label: "Page Schema Type",
+							defaultValue: "default",
+							admin: {
+								description:
+									"Controls the JSON-LD structured data type injected for SEO. Most pages should use 'Default (WebPage)'.",
+							},
+							options: [
+								{ label: "Default (WebPage)", value: "default" },
+								{ label: "About Page", value: "about" },
+								{ label: "Contact Page", value: "contact" },
+								{ label: "Services Listing", value: "servicesListing" },
+							],
+						},
+						{
 							name: "meta",
 							label: "SEO",
 							type: "group",

@@ -25,6 +25,7 @@ import { NumbersBlock } from "@/blocks/NumbersBlock";
 import { DualColumnBlock } from "@/blocks/DualColumnBlock";
 import { FormBlock } from "@/blocks/FormBlock";
 import { MarqueeBlock } from "@/blocks/MarqueeBlock";
+import { SubServicesBlock } from "@/blocks/SubServicesBlock";
 
 export const Services: CollectionConfig = {
 	slug: "services",
@@ -155,6 +156,7 @@ export const Services: CollectionConfig = {
 								DualColumnBlock,
 								FormBlock,
 								MarqueeBlock,
+								SubServicesBlock,
 							],
 						},
 					],

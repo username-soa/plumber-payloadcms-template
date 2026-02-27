@@ -17,3 +17,4 @@ export * from "./article";
 export * from "./faq";
 export * from "./breadcrumb";
 export * from "./review";
+export * from "./page-jsonld";

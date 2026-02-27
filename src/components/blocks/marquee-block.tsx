@@ -29,7 +29,7 @@ export const MarqueeBlockComponent: React.FC<MarqueeBlockProps> = ({
 		fadeEdges = true,
 		pauseOnHover = true,
 		borders = false,
-	} = (animation as any) || {};
+	} = (animation ?? {}) as NonNullable<MarqueeBlockProps["animation"]>;
 
 	const {
 		bg = "transparent",

@@ -1,34 +1,13 @@
 import { FormRenderer } from "@/components/forms/form-renderer";
-import type { Form } from "@/payload-types";
-import { RichText } from "@payloadcms/richtext-lexical/react";
-
-import { blockConverters } from "@/components/richtext/block-converters";
-
-import { SectionWrapper } from "../ui/section-wrapper";
-import type { PaddingOption } from "../ui/section-wrapper";
-
-type Props = {
-	form: Form | number;
-	enableIntro?: boolean;
-	introContent?: any;
-	enableHeader?: boolean;
-	headerContent?: any;
-	enableFooter?: boolean;
-	footerContent?: any;
-	enableBorder?: boolean;
-	paddingTopOption?: string;
-	paddingBottomOption?: string;
-	className?: string;
-	background?: {
-		bg?: "transparent" | "muted";
-		decoration?: "none" | "dots";
-	};
-};
-
-const customRenderers = {};
-
-// ... imports
+import type { Form, Page } from "@/payload-types";
 import { getServices } from "@/app/(site)/actions/get-services";
+import { RichText } from "@payloadcms/richtext-lexical/react";
+import { blockConverters } from "@/components/richtext/block-converters";
+import { SectionWrapper } from "../ui/section-wrapper";
+
+type Props = Extract<Page["layout"][0], { blockType: "formBlock" }> & {
+	className?: string;
+};
 
 export const FormBlock = async ({
 	form,
@@ -52,8 +31,8 @@ export const FormBlock = async ({
 
 	return (
 		<SectionWrapper
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			className={`form-block ${className || ""}`}
 			background={background}
 		>
@@ -79,7 +58,6 @@ export const FormBlock = async ({
 					)}
 					<FormRenderer
 						form={form as Form}
-						customRenderers={customRenderers}
 						initialServiceOptions={serviceOptions}
 					/>
 					{enableFooter && footerContent && (

@@ -5,12 +5,11 @@
  * dropdowns (backed by URL query params via `nuqs`) and an optional SearchBar.
  *
  * This is a Client Component because it reads and writes URL search params.
+ * All filter state is managed by the shared `useContentFilters` hook.
  */
 
 "use client";
 
-import { useCallback } from "react";
-import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,8 +20,8 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import type { CategoryOption, TagOption, ContentType } from "@/lib/content";
-import { CONTENT_TYPE_TO_SEARCH_FILTER } from "@/lib/content";
 import { SearchBar } from "@/components/ui/SearchBar";
+import { useContentFilters } from "./use-content-filters";
 
 // ---------------------------------------------------------------------------
 // Props
@@ -45,50 +44,16 @@ export function ContentFilters({
 	showSearch = true,
 	contentType,
 }: ContentFiltersProps) {
-	// Sync filter state with URL query params (triggers server re-fetch via nuqs)
-	const [category, setCategory] = useQueryState(
-		"category",
-		parseAsString.withDefault("").withOptions({ shallow: false }),
-	);
-	const [tag, setTag] = useQueryState(
-		"tag",
-		parseAsString.withDefault("").withOptions({ shallow: false }),
-	);
-	// We only write to `page` (reset to 1 on filter change) — we don't read it here
-	const [, setPage] = useQueryState(
-		"page",
-		parseAsInteger.withDefault(1).withOptions({ shallow: false }),
-	);
-
-	/** Select a category and reset to page 1 */
-	const handleCategoryChange = useCallback(
-		(value: string) => {
-			setCategory(value === "all" ? null : value);
-			setPage(1);
-		},
-		[setCategory, setPage],
-	);
-
-	/** Select a tag and reset to page 1 */
-	const handleTagChange = useCallback(
-		(value: string) => {
-			setTag(value === "all" ? null : value);
-			setPage(1);
-		},
-		[setTag, setPage],
-	);
-
-	/** Clear all active filters and reset to page 1 */
-	const clearFilters = useCallback(() => {
-		setCategory(null);
-		setTag(null);
-		setPage(1);
-	}, [setCategory, setTag, setPage]);
-
-	const hasActiveFilters = Boolean(category || tag);
-	// Map the ContentFetcher type to the search plugin's collection slug
-	const filterType = CONTENT_TYPE_TO_SEARCH_FILTER[contentType];
-	const searchPlaceholder = `Search ${contentType === "blogs" ? "blog posts" : contentType}…`;
+	const {
+		category,
+		tag,
+		handleCategoryChange,
+		handleTagChange,
+		clearFilters,
+		hasActiveFilters,
+		filterType,
+		searchPlaceholder,
+	} = useContentFilters(contentType);
 
 	return (
 		<div className="flex justify-between gap-3 md:mb-14 mb-8">

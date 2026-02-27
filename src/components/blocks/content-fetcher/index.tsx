@@ -13,9 +13,7 @@
  * no client-side loading states or waterfalls for the initial render.
  */
 
-import { getPayload } from "payload";
-import config from "@payload-config";
-import type { BlogPost, CaseStudy, Service } from "@/payload-types";
+import type { Page } from "@/payload-types";
 import {
 	BlogCard,
 	FeaturedBlogCard,
@@ -27,11 +25,7 @@ import { TypographyMuted } from "@/components/ui/typography";
 
 // Data layer
 import {
-	type ContentType,
 	type ContentItem,
-	type SortOption,
-	type PaginationStyle,
-	type GridColumns,
 	type SearchParams,
 	isBlogPost,
 	isCaseStudy,
@@ -47,10 +41,7 @@ import { PaginationNumbered } from "./pagination-numbered";
 import { LoadMoreButton } from "./load-more-button";
 import { InfiniteScroll } from "./infinite-scroll";
 import { cn } from "@/lib/utils";
-import {
-	SectionWrapper,
-	type PaddingOption,
-} from "@/components/ui/section-wrapper";
+import { SectionWrapper } from "@/components/ui/section-wrapper";
 
 // Re-export for backwards compatibility
 export type { CategoryOption, TagOption } from "@/lib/content";
@@ -59,26 +50,13 @@ export type { CategoryOption, TagOption } from "@/lib/content";
 // Types
 // =============================================================================
 
-interface ContentFetcherProps {
-	title?: string | null;
-	titleHighlight?: string | null;
-	description?: string | null;
-	contentType: ContentType;
-	itemsPerRow?: GridColumns | null;
-	limit?: number | null;
-	sortBy?: SortOption | null;
-	featuredOnly?: boolean | null;
-	showFilters?: boolean | null;
-	showSearch?: boolean | null;
-	paginationStyle?: PaginationStyle | null;
+type ContentFetcherProps = Extract<
+	Page["layout"][0],
+	{ blockType: "contentFetcher" }
+> & {
+	/** Runtime-only: injected by RenderBlocks from URL search params */
 	searchParams?: SearchParams;
-	paddingTopOption?: string | null;
-	paddingBottomOption?: string | null;
-	background?: {
-		bg?: "transparent" | "muted" | null;
-		decoration?: "none" | "dots" | null;
-	};
-}
+};
 
 // =============================================================================
 // Error fallback
@@ -105,7 +83,7 @@ function ContentFetcherError() {
  * Defined at module scope (not inside the component) so it is never recreated
  * across renders — the factory itself is pure and has no closure over state.
  */
-function createCardRenderer(contentType: ContentType) {
+function createCardRenderer() {
 	return (item: ContentItem, index: number) => {
 		// Featured items span the full grid width
 		const isFeatured =
@@ -161,14 +139,13 @@ export async function ContentFetcher({
 	background,
 }: ContentFetcherProps) {
 	try {
-		const payload = await getPayload({ config });
 		const page = Number.parseInt(searchParams.page || "1", 10);
 		const itemsPerPage = limit || 6;
 
 		// Fetch filter options and content in parallel — no sequential waterfall
 		const [filterOptions, contentResult] = await Promise.all([
-			getFilterOptions(payload, contentType),
-			fetchContent(payload, {
+			getFilterOptions(contentType),
+			fetchContent({
 				contentType,
 				page,
 				limit: itemsPerPage,
@@ -193,14 +170,14 @@ export async function ContentFetcher({
 			return 0;
 		});
 
-		// Stable card renderer — created once per contentType, not per render
-		const renderCard = createCardRenderer(contentType);
+		// Stable card renderer — created once, not per render
+		const renderCard = createCardRenderer();
 
 		return (
 			<SectionWrapper
 				className={cn(contentType !== "services" && "bg-muted/30")}
-				paddingTop={paddingTopOption as PaddingOption}
-				paddingBottom={paddingBottomOption as PaddingOption}
+				paddingTop={paddingTopOption}
+				paddingBottom={paddingBottomOption}
 				background={background}
 			>
 				{/* Filter bar / mobile sheet */}

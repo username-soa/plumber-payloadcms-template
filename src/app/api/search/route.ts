@@ -1,12 +1,13 @@
 /**
- * GET /api/search?q=<query>
+ * GET /api/search?q=<query>&type=<collection-slug>
  *
  * Queries the Payload `search` collection (populated by @payloadcms/plugin-search)
  * and returns a normalised list of matching results with their URL, title, excerpt,
  * and collection type.
  *
  * Query parameters:
- * @param q - The search string (minimum 2 characters)
+ * @param q    - The search string (minimum 2 characters)
+ * @param type - Optional. Collection slug to filter by (e.g. "blog-posts", "services")
  *
  * Response shape:
  * { results: Array<{ id, title, excerpt, type, url }> }
@@ -42,6 +43,7 @@ const URL_MAP: Record<string, string> = {
 export async function GET(request: NextRequest) {
 	const { searchParams } = request.nextUrl;
 	const query = searchParams.get("q")?.trim();
+	const type = searchParams.get("type")?.trim();
 
 	// Reject empty or too-short queries early — no DB round-trip needed
 	if (!query || query.length < 2) {
@@ -51,13 +53,27 @@ export async function GET(request: NextRequest) {
 	try {
 		const payload = await getPayload({ config });
 
+		// Build the where clause — always search title + excerpt
+		const searchConditions = [
+			{ title: { like: query } },
+			{ excerpt: { like: query } },
+		];
+
+		// When a collection type is specified, filter at the DB level
+		// instead of fetching everything and filtering client-side
+		const where = type
+			? {
+					and: [
+						{ or: searchConditions },
+						{ "doc.relationTo": { equals: type } },
+					],
+				}
+			: { or: searchConditions };
+
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		const result = await (payload.find as any)({
 			collection: SEARCH_COLLECTION,
-			where: {
-				// Search both title and excerpt fields
-				or: [{ title: { like: query } }, { excerpt: { like: query } }],
-			},
+			where,
 			limit: 10,
 			// depth: 1 populates the related source document so we can read its
 			// slug even for records that were indexed before the slug field was added

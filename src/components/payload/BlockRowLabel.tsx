@@ -257,3 +257,7 @@ export const ServiceSelectLabel = () => {
 export const UrgencyLabel = () => {
 	return <BlockRowLabel blockType="Urgency Input" icon={Zap} />;
 };
+
+export const SubServicesLabel = () => {
+	return <BlockRowLabel blockType={"Sub-Services Grid"} icon={LayoutGrid} />;
+};

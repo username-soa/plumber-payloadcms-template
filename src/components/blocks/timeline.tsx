@@ -4,29 +4,10 @@ import { useRef } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
 import { TypographyH3 } from "@/components/ui/typography";
 import { cn } from "@/lib/utils";
-import {
-	SectionWrapper,
-	type PaddingOption,
-} from "@/components/ui/section-wrapper";
+import { SectionWrapper } from "@/components/ui/section-wrapper";
+import type { TimelineBlock } from "@/payload-types";
 
-interface TimelineItem {
-	title: string;
-	date: string;
-	description?: string | null;
-	id?: string | null;
-}
-
-interface TimelineProps {
-	title?: string;
-	items?: TimelineItem[] | null;
-	className?: string;
-	paddingTopOption?: string | null;
-	paddingBottomOption?: string | null;
-	background?: {
-		bg?: "transparent" | "muted";
-		decoration?: "none" | "dots";
-	};
-}
+type TimelineProps = TimelineBlock & { className?: string };
 
 export function Timeline({
 	title,
@@ -52,8 +33,8 @@ export function Timeline({
 	return (
 		<SectionWrapper
 			className={className}
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			{title && (
@@ -77,91 +58,81 @@ export function Timeline({
 
 				{/* Timeline Items */}
 				<div className="md:space-y-14 space-y-10">
-					{items.map(
-						(
-							item: {
-								title: string;
-								date: string;
-								description?: string | null;
-								id?: string | null;
-							},
-							index: number,
-						) => {
-							const isEven = index % 2 === 0;
+					{items.map((item, index) => {
+						const isEven = index % 2 === 0;
 
-							return (
+						return (
+							<div
+								key={item.id || index}
+								className="relative grid grid-cols-[1fr_auto_1fr] gap-4 items-start"
+							>
+								{/* Left Content (for even items) / Date (for odd items) */}
 								<div
-									key={item.id || index}
-									className="relative grid grid-cols-[1fr_auto_1fr] gap-4 items-start"
+									className={cn(
+										isEven ? "text-right pr-10" : "text-right md:pr-10 pr-2",
+									)}
 								>
-									{/* Left Content (for even items) / Date (for odd items) */}
-									<div
-										className={cn(
-											isEven ? "text-right pr-10" : "text-right md:pr-10 pr-2",
-										)}
-									>
-										{isEven ? (
-											<span className="block text-2xl md:text-3xl font-bold text-primary">
-												{item.date}
+									{isEven ? (
+										<span className="block text-2xl md:text-3xl font-bold text-primary">
+											{item.date}
+										</span>
+									) : (
+										<>
+											<span className="block text-2xl md:text-3xl font-bold text-primary mb-2">
+												{item.title}
 											</span>
-										) : (
-											<>
-												<span className="block text-2xl md:text-3xl font-bold text-primary mb-2">
-													{item.title}
-												</span>
-												{item.description && (
-													<p className="text-sm text-muted-foreground leading-relaxed">
-														{item.description}
-													</p>
-												)}
-											</>
-										)}
-									</div>
-
-									{/* Center Node */}
-									<div className="relative z-10 flex items-center justify-center md:pt-2.5 pt-1.5">
-										<span
-											className={cn(
-												"h-[2px] w-10 bg-primary inline-flex absolute",
-												isEven ? "-left-10" : "-right-10",
+											{item.description && (
+												<p className="text-sm text-muted-foreground leading-relaxed">
+													{item.description}
+												</p>
 											)}
-										/>
-
-										<div
-											className={cn(
-												"w-4 h-4 rounded-full border-2 border-primary bg-background transition-all",
-												"w-6 h-6 bg-primary",
-											)}
-										/>
-									</div>
-
-									{/* Right Content (for odd items) / Title & Desc (for even items) */}
-									<div
-										className={cn(
-											isEven ? "text-left md:pl-10 pl-2" : "text-left pl-10",
-										)}
-									>
-										{isEven ? (
-											<>
-												<span className="block text-2xl md:text-3xl font-bold text-primary mb-2">
-													{item.title}
-												</span>
-												{item.description && (
-													<p className="text-sm text-muted-foreground leading-relaxed">
-														{item.description}
-													</p>
-												)}
-											</>
-										) : (
-											<span className="block text-2xl md:text-3xl font-bold text-primary">
-												{item.date}
-											</span>
-										)}
-									</div>
+										</>
+									)}
 								</div>
-							);
-						},
-					)}
+
+								{/* Center Node */}
+								<div className="relative z-10 flex items-center justify-center md:pt-2.5 pt-1.5">
+									<span
+										className={cn(
+											"h-[2px] w-10 bg-primary inline-flex absolute",
+											isEven ? "-left-10" : "-right-10",
+										)}
+									/>
+
+									<div
+										className={cn(
+											"w-4 h-4 rounded-full border-2 border-primary bg-background transition-all",
+											"w-6 h-6 bg-primary",
+										)}
+									/>
+								</div>
+
+								{/* Right Content (for odd items) / Title & Desc (for even items) */}
+								<div
+									className={cn(
+										isEven ? "text-left md:pl-10 pl-2" : "text-left pl-10",
+									)}
+								>
+									{isEven ? (
+										<>
+											<span className="block text-2xl md:text-3xl font-bold text-primary mb-2">
+												{item.title}
+											</span>
+											{item.description && (
+												<p className="text-sm text-muted-foreground leading-relaxed">
+													{item.description}
+												</p>
+											)}
+										</>
+									) : (
+										<span className="block text-2xl md:text-3xl font-bold text-primary">
+											{item.date}
+										</span>
+									)}
+								</div>
+							</div>
+						);
+					})}
 				</div>
 			</div>
 		</SectionWrapper>

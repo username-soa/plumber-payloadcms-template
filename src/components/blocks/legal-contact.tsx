@@ -2,23 +2,18 @@ import type { Page } from "@/payload-types";
 import { Card, CardContent } from "@/components/ui/card";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/site-config";
-import {
-	SectionWrapper,
-	type PaddingOption,
-} from "@/components/ui/section-wrapper";
+import { SectionWrapper } from "@/components/ui/section-wrapper";
 
-type LegalContactProps = NonNullable<Page["layout"]>[number] & {
-	blockType: "legalContact";
+type LegalContactProps = Extract<
+	Page["layout"][0],
+	{ blockType: "legalContact" }
+> & {
 	// globalData is injected by the populateLegalContact hook in Pages.ts
 	globalData?: {
 		email: string;
 		phone: string;
 		address: string;
 		brandName?: string;
-	};
-	background?: {
-		bg?: "transparent" | "muted" | null;
-		decoration?: "none" | "dots" | null;
 	};
 };
 
@@ -43,8 +38,8 @@ export function LegalContact({
 
 	return (
 		<SectionWrapper
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			<div className="max-w-3xl mx-auto">

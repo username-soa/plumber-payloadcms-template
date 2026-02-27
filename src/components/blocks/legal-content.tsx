@@ -1,20 +1,12 @@
 import type { Page } from "@/payload-types";
 import { RichText } from "@payloadcms/richtext-lexical/react";
 import { blockConverters } from "@/components/richtext/block-converters";
-import {
-	SectionWrapper,
-	type PaddingOption,
-} from "@/components/ui/section-wrapper";
+import { SectionWrapper } from "@/components/ui/section-wrapper";
 
-type LegalContentProps = NonNullable<Page["layout"]>[number] & {
-	blockType: "legalContent";
-	paddingTopOption?: string | null;
-	paddingBottomOption?: string | null;
-	background?: {
-		bg?: "transparent" | "muted" | null;
-		decoration?: "none" | "dots" | null;
-	};
-};
+type LegalContentProps = Extract<
+	Page["layout"][0],
+	{ blockType: "legalContent" }
+>;
 
 export function LegalContent({
 	content,
@@ -26,8 +18,8 @@ export function LegalContent({
 
 	return (
 		<SectionWrapper
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			<div className="max-w-3xl mx-auto">

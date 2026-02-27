@@ -1,34 +1,16 @@
 import { MapPin } from "lucide-react";
 
-import {
-	type PaddingOption,
-	SectionWrapper,
-} from "@/components/ui/section-wrapper";
+import { SectionWrapper } from "@/components/ui/section-wrapper";
 import { HighlightedTitle } from "@/components/ui/highlighted-title";
 import { TypographyH2, TypographyMuted } from "@/components/ui/typography";
 import { getCompanyInfo } from "@/lib/payload/getGlobals";
 import { SITE_CONFIG } from "@/lib/site-config";
+import type { Page } from "@/payload-types";
 
-// Temporary interface until types are regenerated
-interface ServiceAreasProps {
-	blockType: "serviceAreas";
-	title?: string;
-	headline?: string;
-	highlightedHeadlineText?: string;
-	description?: string;
-	useGlobalServiceAreas?: boolean;
-	customServiceAreas?: {
-		name: string;
-		id?: string;
-	}[];
-	bottomText?: string;
-	paddingTopOption?: "none" | "small" | "default" | "big";
-	paddingBottomOption?: "none" | "small" | "default" | "big";
-	background?: {
-		bg?: "transparent" | "muted";
-		decoration?: "none" | "dots";
-	};
-}
+type ServiceAreasProps = Extract<
+	NonNullable<Page["layout"]>[number],
+	{ blockType: "serviceAreas" }
+>;
 
 export async function ServiceAreasBlockComponent(props: ServiceAreasProps) {
 	const {
@@ -63,9 +45,8 @@ export async function ServiceAreasBlockComponent(props: ServiceAreasProps) {
 
 	return (
 		<SectionWrapper
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
-			// className="bg-muted/30" // Removed to allow background prop to control
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			<div className="text-center max-w-2xl mx-auto mb-12">

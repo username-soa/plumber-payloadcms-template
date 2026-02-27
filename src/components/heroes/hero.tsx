@@ -1,4 +1,4 @@
-import type { Page, Service } from "@/payload-types";
+import type { Page } from "@/payload-types";
 import { DefaultHero } from "./templates/default";
 import { HighImpactHero } from "./templates/high-impact";
 import { MinimalHero } from "./templates/minimal";
@@ -6,7 +6,7 @@ import { ServicesHero } from "./templates/services-hero";
 
 type HeroProps = {
 	page?: Page;
-	hero?: Page["hero"] | Service["hero"];
+	hero?: Page["hero"];
 	title?: string;
 };
 
@@ -29,7 +29,6 @@ export function Hero({ page, hero: heroProp, title }: HeroProps) {
 					pageTitle={pageTitle}
 				/>
 			);
-		case "default":
 		default:
 			return <DefaultHero hero={hero} pageTitle={pageTitle} />;
 	}

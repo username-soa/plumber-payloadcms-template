@@ -4,10 +4,7 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { useMemo } from "react";
 
-import {
-	type PaddingOption,
-	SectionWrapper,
-} from "@/components/ui/section-wrapper";
+import { SectionWrapper } from "@/components/ui/section-wrapper";
 import { TypographyH2, TypographyP } from "@/components/ui/typography";
 import { ServiceCard } from "@/components/cards/service-card";
 import { Button } from "@/components/ui/button";
@@ -15,31 +12,16 @@ import { HighlightedTitle } from "@/components/ui/highlighted-title";
 
 import { CMSLink } from "@/components/payload/CMSLink";
 import type { CMSLinkType } from "@/lib/cms-link";
-import type { Service } from "@/payload-types";
+import type { Page, Service } from "@/payload-types";
 
 // Helper Components
 import { ServiceHero } from "./highlighted-services/service-hero";
 import { ServiceCarousel } from "./highlighted-services/service-carousel";
 
-// Temporary type definition until Paylod types are regenerated
-interface HighlightedServicesBlockProps {
-	blockType: "highlightedServices";
-	tag?: string;
-	title: string;
-	highlightedText?: string;
-	description?: string;
-	selectedServices: (string | Service)[];
-	emergencyService?: string | Service;
-	layout?: "grid" | "carousel";
-	cta?: CMSLinkType;
-	linkToAllServices?: boolean;
-	paddingTopOption?: "none" | "small" | "default" | "big";
-	paddingBottomOption?: "none" | "small" | "default" | "big";
-	background?: {
-		bg?: "transparent" | "muted";
-		decoration?: "none" | "dots";
-	};
-}
+type HighlightedServicesBlockProps = Extract<
+	NonNullable<Page["layout"]>[number],
+	{ blockType: "highlightedServices" }
+> & { cta?: CMSLinkType };
 
 export const HighlightedServicesBlockComponent = (
 	props: HighlightedServicesBlockProps,
@@ -91,8 +73,8 @@ export const HighlightedServicesBlockComponent = (
 
 	return (
 		<SectionWrapper
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			<div className="container mx-auto">

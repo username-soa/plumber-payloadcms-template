@@ -10,9 +10,30 @@ import type { CompanyInfo } from "@/payload-types";
 import type { FeaturedReview } from "./types";
 
 /**
- * Generate a single Review schema
+ * Payload polymorphic relationship item for the Reviews collection.
+ * `value` is a number (unresolved ID) or a resolved Review document.
  */
-export function generateReviewSchema(review: FeaturedReview) {
+type HighlightedReviewRelation = {
+	relationTo: "reviews";
+	value:
+		| number
+		| {
+				author: string;
+				rating: number;
+				date: string;
+				platform: "google" | "facebook" | "yelp" | "website" | "other";
+				content: string;
+		  };
+};
+
+/**
+ * Generate a single Review schema.
+ * `platform` is informational only and not part of Schema.org spec —
+ * accept any string to support both CMS ('google') and site-config ('Google') values.
+ */
+export function generateReviewSchema(
+	review: Omit<FeaturedReview, "platform"> & { platform: string },
+) {
 	return {
 		"@type": "Review",
 		reviewRating: {
@@ -34,17 +55,18 @@ export function generateReviewSchema(review: FeaturedReview) {
  */
 export function generateFeaturedReviewsSchema(companyInfo?: CompanyInfo) {
 	if (companyInfo?.seo?.reviews?.highlightedReviews) {
-		const featured = companyInfo.seo.reviews.highlightedReviews;
-		// Map Payload review format to FeaturedReview type or handle directly
+		const featured = companyInfo.seo.reviews
+			.highlightedReviews as HighlightedReviewRelation[];
 		return featured
-			.map((r: any) => {
-				if (typeof r === "string") return null;
+			.map(({ value: r }) => {
+				// Skip unresolved IDs (only populate if the relationship was fetched)
+				if (typeof r === "number") return null;
 				return generateReviewSchema({
 					author: r.author,
 					rating: r.rating,
 					text: r.content,
-					date: r.date,
-					platform: (r.platform as any) || "Google", // Simple cast or fallback
+					date: r.date ? new Date(r.date).toISOString().split("T")[0] : "",
+					platform: r.platform,
 				});
 			})
 			.filter(Boolean);
@@ -61,7 +83,7 @@ export function generateFeaturedReviewsSchema(companyInfo?: CompanyInfo) {
 export function generateReviewsWithAggregate(companyInfo?: CompanyInfo) {
 	const { siteUrl, schemaIds } = SITE_CONFIG.seo;
 
-	// Use Payload data if available
+	// Use Payload CMS data if available
 	if (companyInfo?.seo?.reviews?.ratingValue) {
 		const {
 			ratingValue,
@@ -70,7 +92,10 @@ export function generateReviewsWithAggregate(companyInfo?: CompanyInfo) {
 			worstRating,
 			highlightedReviews,
 		} = companyInfo.seo.reviews;
-		const featured = highlightedReviews;
+		const featured = highlightedReviews as
+			| HighlightedReviewRelation[]
+			| null
+			| undefined;
 		return {
 			"@type": "LocalBusiness",
 			"@id": `${siteUrl}/${schemaIds.organization}`,
@@ -78,25 +103,26 @@ export function generateReviewsWithAggregate(companyInfo?: CompanyInfo) {
 				"@type": "AggregateRating",
 				ratingValue: ratingValue.toString(),
 				reviewCount: reviewCount.toString(),
-				bestRating: (bestRating || 5).toString(),
-				worstRating: (worstRating || 1).toString(),
+				bestRating: (bestRating ?? 5).toString(),
+				worstRating: (worstRating ?? 1).toString(),
 			},
-			review: (featured as any[])
-				?.map((r) => {
-					if (typeof r === "string") return null;
+			review: featured
+				?.map(({ value: r }) => {
+					// Skip unresolved IDs
+					if (typeof r === "number") return null;
 					return generateReviewSchema({
 						author: r.author,
 						rating: r.rating,
 						text: r.content,
-						date: r.date,
-						platform: (r.platform as any) || "Google",
+						date: r.date ? new Date(r.date).toISOString().split("T")[0] : "",
+						platform: r.platform,
 					});
 				})
 				.filter(Boolean),
 		};
 	}
 
-	// Fallback
+	// Fallback to site-config.ts hardcoded data
 	const { aggregate, featured } = SITE_CONFIG.seo.reviews;
 	return {
 		"@type": "LocalBusiness",

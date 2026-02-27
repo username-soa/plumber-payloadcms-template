@@ -5,12 +5,12 @@
  * Provides category and tag pill buttons and an optional SearchBar.
  *
  * This is a Client Component because it reads and writes URL search params.
+ * All filter state is managed by the shared `useContentFilters` hook.
  */
 
 "use client";
 
-import { useState, useCallback } from "react";
-import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
+import { useState } from "react";
 import { Filter, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -22,9 +22,10 @@ import {
 } from "@/components/ui/sheet";
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 import type { CategoryOption, TagOption, ContentType } from "@/lib/content";
-import { CONTENT_TYPE_TO_SEARCH_FILTER } from "@/lib/content";
 import { SearchBar } from "@/components/ui/SearchBar";
+import { useContentFilters } from "./use-content-filters";
 
 // ---------------------------------------------------------------------------
 // Props
@@ -49,67 +50,17 @@ export function ContentFilterSheet({
 }: ContentFilterSheetProps) {
 	const [open, setOpen] = useState(false);
 
-	// Sync filter state with URL query params (triggers server re-fetch via nuqs)
-	const [category, setCategory] = useQueryState(
-		"category",
-		parseAsString.withDefault("").withOptions({ shallow: false }),
-	);
-	const [tag, setTag] = useQueryState(
-		"tag",
-		parseAsString.withDefault("").withOptions({ shallow: false }),
-	);
-	// We only write to `page` (reset to 1 on filter change) — we don't read it here
-	const [, setPage] = useQueryState(
-		"page",
-		parseAsInteger.withDefault(1).withOptions({ shallow: false }),
-	);
-
-	/**
-	 * Toggle a category: selecting the same value again deselects it.
-	 * Resets to page 1 on every change.
-	 */
-	const handleCategoryChange = useCallback(
-		(value: string) => {
-			const newValue = value === category ? null : value;
-			setCategory(newValue === "all" ? null : newValue);
-			setPage(1);
-		},
-		[category, setCategory, setPage],
-	);
-
-	/**
-	 * Toggle a tag: selecting the same value again deselects it.
-	 * Resets to page 1 on every change.
-	 */
-	const handleTagChange = useCallback(
-		(value: string) => {
-			const newValue = value === tag ? null : value;
-			setTag(newValue === "all" ? null : newValue);
-			setPage(1);
-		},
-		[tag, setTag, setPage],
-	);
-
-	/** Clear all active filters and reset to page 1 */
-	const clearFilters = useCallback(() => {
-		setCategory(null);
-		setTag(null);
-		setPage(1);
-	}, [setCategory, setTag, setPage]);
-
-	const hasActiveFilters = Boolean(category || tag);
-	const activeFilterCount = [category, tag].filter(Boolean).length;
-	// Map the ContentFetcher type to the search plugin's collection slug
-	const filterType = CONTENT_TYPE_TO_SEARCH_FILTER[contentType];
-	const searchPlaceholder = `Search ${contentType === "blogs" ? "blog posts" : contentType}…`;
-
-	/** Shared pill button class builder */
-	const pillClass = (active: boolean) =>
-		`rounded-full transition-all ${
-			active
-				? "bg-primary text-white hover:bg-primary/90 border-transparent"
-				: "border-muted-foreground/20 text-foreground hover:bg-muted"
-		}`;
+	const {
+		category,
+		tag,
+		handleCategoryToggle,
+		handleTagToggle,
+		clearFilters,
+		hasActiveFilters,
+		activeFilterCount,
+		filterType,
+		searchPlaceholder,
+	} = useContentFilters(contentType);
 
 	return (
 		<div className="md:hidden block mb-6">
@@ -117,7 +68,10 @@ export function ContentFilterSheet({
 				<Sheet open={open} onOpenChange={setOpen}>
 					{/* ── Trigger button ──────────────────────────────────────────── */}
 					<SheetTrigger asChild>
-						<Button variant="outline" className="flex-1 w-full justify-between h-10">
+						<Button
+							variant="outline"
+							className="flex-1 w-full justify-between h-10"
+						>
 							<span className="flex items-center">
 								<Filter className="w-4 h-4 mr-2" />
 								Filters
@@ -169,8 +123,13 @@ export function ContentFilterSheet({
 									<Button
 										variant={!category ? "default" : "outline"}
 										size="sm"
-										onClick={() => handleCategoryChange("all")}
-										className={pillClass(!category)}
+										onClick={() => handleCategoryToggle("all")}
+										className={cn(
+											"rounded-full transition-all",
+											!category
+												? "bg-primary text-white hover:bg-primary/90 border-transparent"
+												: "border-muted-foreground/20 text-foreground hover:bg-muted",
+										)}
 									>
 										All Categories
 									</Button>
@@ -179,10 +138,17 @@ export function ContentFilterSheet({
 										.map((option) => (
 											<Button
 												key={option.value}
-												variant={category === option.value ? "default" : "outline"}
+												variant={
+													category === option.value ? "default" : "outline"
+												}
 												size="sm"
-												onClick={() => handleCategoryChange(option.value)}
-												className={pillClass(category === option.value)}
+												onClick={() => handleCategoryToggle(option.value)}
+												className={cn(
+													"rounded-full transition-all",
+													category === option.value
+														? "bg-primary text-white hover:bg-primary/90 border-transparent"
+														: "border-muted-foreground/20 text-foreground hover:bg-muted",
+												)}
 											>
 												{option.label}
 											</Button>
@@ -198,8 +164,13 @@ export function ContentFilterSheet({
 										<Button
 											variant={!tag ? "default" : "outline"}
 											size="sm"
-											onClick={() => handleTagChange("all")}
-											className={pillClass(!tag)}
+											onClick={() => handleTagToggle("all")}
+											className={cn(
+												"rounded-full transition-all",
+												!tag
+													? "bg-primary text-white hover:bg-primary/90 border-transparent"
+													: "border-muted-foreground/20 text-foreground hover:bg-muted",
+											)}
 										>
 											All Tags
 										</Button>
@@ -210,8 +181,13 @@ export function ContentFilterSheet({
 													key={option.value}
 													variant={tag === option.value ? "default" : "outline"}
 													size="sm"
-													onClick={() => handleTagChange(option.value)}
-													className={pillClass(tag === option.value)}
+													onClick={() => handleTagToggle(option.value)}
+													className={cn(
+														"rounded-full transition-all",
+														tag === option.value
+															? "bg-primary text-white hover:bg-primary/90 border-transparent"
+															: "border-muted-foreground/20 text-foreground hover:bg-muted",
+													)}
 												>
 													{option.label}
 												</Button>

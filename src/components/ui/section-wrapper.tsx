@@ -6,8 +6,8 @@ export type PaddingOption = "none" | "small" | "default" | "big";
 interface SectionWrapperProps {
 	children: React.ReactNode;
 	className?: string;
-	paddingTop?: PaddingOption | string;
-	paddingBottom?: PaddingOption | string;
+	paddingTop?: PaddingOption | string | null;
+	paddingBottom?: PaddingOption | string | null;
 	background?: {
 		bg?: "transparent" | "muted" | null;
 		decoration?: "none" | "dots" | null;

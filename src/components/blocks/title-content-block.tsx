@@ -1,18 +1,12 @@
-import React from "react";
+import type React from "react";
 import { CMSLink } from "../payload/CMSLink";
 import { cn } from "@/lib/utils";
 import type { Page } from "@/payload-types";
 import { TypographyH2, TypographyP } from "../ui/typography";
 import { SectionWrapper } from "../ui/section-wrapper";
 import { HighlightedTitle } from "../ui/highlighted-title";
-import type { PaddingOption } from "../ui/section-wrapper";
 
-type Props = Extract<Page["layout"][0], { blockType: "titleContent" }> & {
-	background?: {
-		bg?: "transparent" | "muted";
-		decoration?: "none" | "dots";
-	};
-};
+type Props = Extract<Page["layout"][0], { blockType: "titleContent" }>;
 
 export const TitleContentBlock: React.FC<Props> = ({
 	tagTitle,
@@ -34,8 +28,8 @@ export const TitleContentBlock: React.FC<Props> = ({
 
 	return (
 		<SectionWrapper
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			<div

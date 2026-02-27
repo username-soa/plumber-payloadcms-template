@@ -1,6 +1,5 @@
 import type React from "react";
 import { SectionWrapper } from "../ui/section-wrapper";
-import type { PaddingOption } from "../ui/section-wrapper";
 import Image from "next/image";
 import Link from "next/link";
 import { getCMSLinkHref, type CMSLinkType } from "@/lib/cms-link";
@@ -9,12 +8,7 @@ import { blockConverters } from "@/components/richtext/block-converters";
 import { CMSLink } from "../payload/CMSLink";
 import type { Page } from "@/payload-types";
 
-type Props = Extract<Page["layout"][0], { blockType: "dualColumn" }> & {
-	background?: {
-		bg?: "transparent" | "muted";
-		decoration?: "none" | "dots";
-	};
-};
+type Props = Extract<Page["layout"][0], { blockType: "dualColumn" }>;
 
 export const DualColumnBlock: React.FC<Props> = ({
 	columns,
@@ -24,8 +18,8 @@ export const DualColumnBlock: React.FC<Props> = ({
 }) => {
 	return (
 		<SectionWrapper
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			<div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">

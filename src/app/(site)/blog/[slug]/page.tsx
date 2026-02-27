@@ -1,82 +1,22 @@
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
-import { getPayload } from "payload";
-import config from "@payload-config";
 import { SITE_CONFIG } from "@/lib/site-config";
 import { JsonLd } from "@/components/json-ld";
 import { generateArticleSchema, generateBlogBreadcrumbs } from "@/lib/json-ld";
-import type { BlogPost, Author } from "@/payload-types";
 import { getMediaUrl } from "@/lib/payload-utils";
 import { PostHero } from "@/app/(site)/blog/components/post-hero";
 import { PostContent } from "@/app/(site)/blog/components/post-content";
 import { PostSidebar } from "@/app/(site)/blog/components/post-sidebar";
+import {
+	getBlogPostBySlug,
+	getAllBlogPostSlugs,
+	getRelatedPosts,
+} from "@/lib/payload/getBlogPosts";
 
 const { seo } = SITE_CONFIG;
 
 interface PageProps {
 	params: Promise<{ slug: string }>;
-}
-
-async function getBlogPostBySlug(
-	slug: string,
-	draft = false,
-): Promise<BlogPost | null> {
-	const payload = await getPayload({ config });
-	const result = await payload.find({
-		collection: "blog-posts",
-		where: draft
-			? { slug: { equals: slug } }
-			: { slug: { equals: slug }, status: { equals: "published" } },
-		draft,
-		limit: 1,
-		depth: 2,
-	});
-	return result.docs[0] || null;
-}
-
-async function getAllBlogPostSlugs(): Promise<string[]> {
-	const payload = await getPayload({ config });
-	const result = await payload.find({
-		collection: "blog-posts",
-		where: {
-			status: { equals: "published" },
-		},
-		limit: 1000,
-	});
-	return result.docs.map((doc) => doc.slug).filter(Boolean) as string[];
-}
-
-async function getRelatedPosts(
-	categoryId: number,
-	currentSlug: string,
-): Promise<BlogPost[]> {
-	const payload = await getPayload({ config });
-	const result = await payload.find({
-		collection: "blog-posts",
-		where: {
-			and: [
-				{
-					category: {
-						equals: categoryId,
-					},
-				},
-				{
-					slug: {
-						not_equals: currentSlug,
-					},
-				},
-				{
-					status: {
-						equals: "published",
-					},
-				},
-			],
-		},
-		limit: 3,
-		depth: 1,
-		sort: "-publishedAt",
-	});
-	return result.docs;
 }
 
 export async function generateStaticParams() {
@@ -86,12 +26,11 @@ export async function generateStaticParams() {
 
 export async function generateMetadata({ params }: PageProps) {
 	const { slug } = await params;
+	// React.cache() ensures BlogPostPage below reuses this result.
 	const post = await getBlogPostBySlug(slug);
 
 	if (!post) {
-		return {
-			title: "Post Not Found",
-		};
+		return { title: "Post Not Found" };
 	}
 
 	const metaTitle =
@@ -107,20 +46,18 @@ export async function generateMetadata({ params }: PageProps) {
 			title: metaTitle,
 			description: metaDescription,
 			url: `/blog/${post.slug}`,
-			images: ogImage
-				? [
-						{
-							url: ogImage,
-						},
-					]
-				: undefined,
+			images: ogImage ? [{ url: ogImage }] : undefined,
 		},
 	};
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
-	const { slug } = await params;
-	const { isEnabled: isDraftMode } = await draftMode();
+	const [{ slug }, { isEnabled: isDraftMode }] = await Promise.all([
+		params,
+		draftMode(),
+	]);
+
+	// Shared with generateMetadata via React.cache() — zero extra DB hits.
 	const post = await getBlogPostBySlug(slug, isDraftMode);
 
 	if (!post) {
@@ -135,20 +72,16 @@ export default async function BlogPostPage({ params }: PageProps) {
 		: [];
 
 	const imageUrl = getMediaUrl(post.featuredImage);
-	const author = post.author as Author | null;
-
-	// Calculate read time (rough estimate)
+	const author =
+		post.author && typeof post.author === "object" ? post.author : null;
 	const readTime = post.content
 		? Math.ceil(JSON.stringify(post.content).length / 3000)
 		: 5;
 
-	// JSON-LD Schema for blog post
 	const jsonLd = {
 		"@context": "https://schema.org",
 		"@graph": [
-			// Breadcrumb schema
 			generateBlogBreadcrumbs(post.title),
-			// Article schema (NewsArticle or BlogPosting)
 			generateArticleSchema({
 				title: post.meta?.title || post.title,
 				description: post.meta?.description || post.summary || "",

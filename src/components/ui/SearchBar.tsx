@@ -20,8 +20,23 @@
 
 "use client";
 
-import { useState, useEffect, useRef, useCallback, useMemo, useId } from "react";
-import { Search, X, FileText, Wrench, BookOpen, HelpCircle, Loader2 } from "lucide-react";
+import {
+	useState,
+	useEffect,
+	useRef,
+	useCallback,
+	useMemo,
+	useId,
+} from "react";
+import {
+	Search,
+	X,
+	FileText,
+	Wrench,
+	BookOpen,
+	HelpCircle,
+	Loader2,
+} from "lucide-react";
 import Link from "next/link";
 import { useDebounce } from "@/hooks/use-debounce";
 import type { SearchFilterType } from "@/lib/content";
@@ -42,7 +57,10 @@ interface SearchResult {
 // Type config — maps a collection slug to its display label, icon, and colour
 // =============================================================================
 
-const TYPE_CONFIG: Record<string, { label: string; icon: React.ReactNode; color: string }> = {
+const TYPE_CONFIG: Record<
+	string,
+	{ label: string; icon: React.ReactNode; color: string }
+> = {
 	"blog-posts": {
 		label: "Blog",
 		icon: <BookOpen className="w-3.5 h-3.5" />,
@@ -114,12 +132,15 @@ export function SearchBar({
 
 			setIsLoading(true);
 			try {
-				const res = await fetch(`/api/search?q=${encodeURIComponent(q)}`);
+				// Build the URL — pass filterType as a server-side param so the
+				// DB query only returns results from the requested collection
+				const url = new URL("/api/search", window.location.origin);
+				url.searchParams.set("q", q);
+				if (filterType) url.searchParams.set("type", filterType);
+
+				const res = await fetch(url);
 				const data = await res.json();
-				const all: SearchResult[] = data.results ?? [];
-				// Client-side filter when a specific collection is requested
-				const filtered = filterType ? all.filter((r) => r.type === filterType) : all;
-				setResults(filtered);
+				setResults(data.results ?? []);
 				setIsOpen(true);
 			} catch {
 				// Silently clear results on network errors
@@ -142,7 +163,10 @@ export function SearchBar({
 
 	useEffect(() => {
 		function handleClickOutside(e: MouseEvent) {
-			if (wrapperRef.current && !wrapperRef.current.contains(e.target as Node)) {
+			if (
+				wrapperRef.current &&
+				!wrapperRef.current.contains(e.target as Node)
+			) {
 				setIsOpen(false);
 			}
 		}
@@ -219,6 +243,7 @@ export function SearchBar({
 						<Loader2 className="w-4 h-4 text-muted-foreground animate-spin" />
 					) : query ? (
 						<button
+							type="button"
 							onClick={clearSearch}
 							className="text-muted-foreground hover:text-foreground transition-colors"
 							aria-label="Clear search"
@@ -248,7 +273,9 @@ export function SearchBar({
 									<div key={type}>
 										{/* Group header */}
 										<div className="px-3 py-1.5 flex items-center gap-1.5 bg-muted/40">
-											<span className={config?.color ?? "text-muted-foreground"}>
+											<span
+												className={config?.color ?? "text-muted-foreground"}
+											>
 												{config?.icon}
 											</span>
 											<span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">

@@ -743,6 +743,8 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 			).fields;
 			return (
 				<FormBlock
+					blockType="formBlock"
+					id={(node as unknown as { id: string }).id}
 					form={form}
 					enableIntro={enableIntro}
 					introContent={introContent}

@@ -1088,6 +1088,24 @@ export interface Service {
             blockName?: string | null;
             blockType: 'marquee';
           }
+        | {
+            background?: {
+              bg?: ('transparent' | 'muted') | null;
+              decoration?: ('none' | 'dots') | null;
+            };
+            tag?: string | null;
+            title: string;
+            /**
+             * Text to highlight within the Title. Case-sensitive.
+             */
+            highlightedText?: string | null;
+            description?: string | null;
+            paddingTopOption?: ('none' | 'small' | 'default' | 'big') | null;
+            paddingBottomOption?: ('none' | 'small' | 'default' | 'big') | null;
+            id?: string | null;
+            blockName?: string | null;
+            blockType: 'subServices';
+          }
       )[]
     | null;
   meta?: {
@@ -1853,6 +1871,10 @@ export interface Page {
       | null;
     showDate?: boolean | null;
   };
+  /**
+   * Controls the JSON-LD structured data type injected for SEO. Most pages should use 'Default (WebPage)'.
+   */
+  pageType?: ('default' | 'about' | 'contact' | 'servicesListing') | null;
   meta?: {
     title?: string | null;
     description?: string | null;
@@ -3013,6 +3035,24 @@ export interface ServicesSelect<T extends boolean = true> {
               id?: T;
               blockName?: T;
             };
+        subServices?:
+          | T
+          | {
+              background?:
+                | T
+                | {
+                    bg?: T;
+                    decoration?: T;
+                  };
+              tag?: T;
+              title?: T;
+              highlightedText?: T;
+              description?: T;
+              paddingTopOption?: T;
+              paddingBottomOption?: T;
+              id?: T;
+              blockName?: T;
+            };
       };
   meta?:
     | T
@@ -3596,6 +3636,7 @@ export interface PagesSelect<T extends boolean = true> {
             };
         showDate?: T;
       };
+  pageType?: T;
   meta?:
     | T
     | {

@@ -1,10 +1,14 @@
 /**
  * Filter Fetchers
- * Cached functions for fetching category and tag options from the CMS
+ * Self-contained, cached functions for fetching category and tag options.
+ *
+ * These are self-contained — they call getPayload() internally so callers
+ * don't need to manage the payload instance (consistent with lib/payload pattern).
  */
 
+import { getPayload } from "payload";
+import configPromise from "@payload-config";
 import { cache } from "react";
-import type { Payload } from "payload";
 import type { Category, Tag } from "@/payload-types";
 import type {
 	ContentType,
@@ -19,72 +23,67 @@ import { SERVICE_CATEGORY_OPTIONS } from "../types";
 // =============================================================================
 
 /**
- * Fetch categories from CMS (cached to dedupe across renders)
+ * Fetch categories from CMS (cached to dedupe across renders within a request)
  */
-export const getCachedCategories = cache(
-	async (payload: Payload, contentType: ContentType) => {
-		return payload.find({
-			collection: "categories",
-			where: { appliesTo: { contains: contentType } },
-			limit: 100,
-			sort: "name",
-		});
-	},
-);
+const getCachedCategories = cache(async (contentType: ContentType) => {
+	const payload = await getPayload({ config: configPromise });
+	return payload.find({
+		collection: "categories",
+		where: { appliesTo: { contains: contentType } },
+		limit: 100,
+		sort: "name",
+	});
+});
 
 /**
- * Fetch tags from CMS (cached to dedupe across renders)
+ * Fetch tags from CMS (cached to dedupe across renders within a request)
  */
-export const getCachedTags = cache(
-	async (payload: Payload, contentType: ContentType) => {
-		return payload.find({
-			collection: "tags",
-			where: { appliesTo: { contains: contentType } },
-			limit: 100,
-			sort: "name",
-		});
-	},
-);
+const getCachedTags = cache(async (contentType: ContentType) => {
+	const payload = await getPayload({ config: configPromise });
+	return payload.find({
+		collection: "tags",
+		where: { appliesTo: { contains: contentType } },
+		limit: 100,
+		sort: "name",
+	});
+});
 
 /**
  * Fetch a category by slug (cached for filter resolution)
  */
-export const getCachedCategoryBySlug = cache(
-	async (payload: Payload, slug: string) => {
-		return payload.find({
-			collection: "categories",
-			where: { slug: { equals: slug } },
-			limit: 1,
-		});
-	},
-);
+const getCachedCategoryBySlug = cache(async (slug: string) => {
+	const payload = await getPayload({ config: configPromise });
+	return payload.find({
+		collection: "categories",
+		where: { slug: { equals: slug } },
+		limit: 1,
+	});
+});
 
 /**
  * Fetch a tag by slug (cached for filter resolution)
  */
-export const getCachedTagBySlug = cache(
-	async (payload: Payload, slug: string) => {
-		return payload.find({
-			collection: "tags",
-			where: { slug: { equals: slug } },
-			limit: 1,
-		});
-	},
-);
+const getCachedTagBySlug = cache(async (slug: string) => {
+	const payload = await getPayload({ config: configPromise });
+	return payload.find({
+		collection: "tags",
+		where: { slug: { equals: slug } },
+		limit: 1,
+	});
+});
 
 // =============================================================================
 // Filter Options Builder
 // =============================================================================
 
 /**
- * Get all filter options for a content type
- * Returns category and tag options formatted for UI components
+ * Get all filter options for a content type.
+ * Returns category and tag options formatted for UI components.
  */
 export async function getFilterOptions(
-	payload: Payload,
 	contentType: ContentType,
 ): Promise<FilterOptions> {
-	// Services use hardcoded filters
+	// Services use hardcoded filters (no CMS categories/tags)
 	if (contentType === "services") {
 		return {
 			categoryOptions: SERVICE_CATEGORY_OPTIONS,
@@ -94,8 +93,8 @@ export async function getFilterOptions(
 
 	// Fetch categories and tags in parallel
 	const [categoriesResult, tagsResult] = await Promise.all([
-		getCachedCategories(payload, contentType),
-		getCachedTags(payload, contentType),
+		getCachedCategories(contentType),
+		getCachedTags(contentType),
 	]);
 
 	const categoryOptions: CategoryOption[] = [
@@ -118,23 +117,23 @@ export async function getFilterOptions(
 }
 
 /**
- * Resolve a category slug to its ID
+ * Resolve a category slug to its ID.
+ * Used internally by the query builder.
  */
 export async function resolveCategorySlug(
-	payload: Payload,
 	slug: string,
 ): Promise<number | string | null> {
-	const result = await getCachedCategoryBySlug(payload, slug);
+	const result = await getCachedCategoryBySlug(slug);
 	return result.docs.length > 0 ? result.docs[0].id : null;
 }
 
 /**
- * Resolve a tag slug to its ID
+ * Resolve a tag slug to its ID.
+ * Used internally by the query builder.
  */
 export async function resolveTagSlug(
-	payload: Payload,
 	slug: string,
 ): Promise<number | string | null> {
-	const result = await getCachedTagBySlug(payload, slug);
+	const result = await getCachedTagBySlug(slug);
 	return result.docs.length > 0 ? result.docs[0].id : null;
 }

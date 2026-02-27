@@ -3,102 +3,110 @@ import { SITE_CONFIG } from "@/lib/site-config";
 import { getPayload } from "payload";
 import config from "@payload-config";
 
-const { seo, services } = SITE_CONFIG;
+const baseUrl = SITE_CONFIG.seo.siteUrl;
+
+// The homepage is always present regardless of what's in the CMS.
+const homepageEntry: MetadataRoute.Sitemap[number] = {
+	url: baseUrl,
+	changeFrequency: "weekly",
+	priority: 1,
+};
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-	const baseUrl = seo.siteUrl;
+	try {
+		const payload = await getPayload({ config });
 
-	// Static pages
-	const staticPages: MetadataRoute.Sitemap = [
-		{
-			url: baseUrl,
-			lastModified: new Date(),
-			changeFrequency: "weekly",
-			priority: 1,
-		},
-		{
-			url: `${baseUrl}/about`,
-			lastModified: new Date(),
-			changeFrequency: "monthly",
-			priority: 0.8,
-		},
-		{
-			url: `${baseUrl}/services`,
-			lastModified: new Date(),
-			changeFrequency: "weekly",
-			priority: 0.9,
-		},
-		{
-			url: `${baseUrl}/blog`,
-			lastModified: new Date(),
-			changeFrequency: "weekly",
-			priority: 0.8,
-		},
-		{
-			url: `${baseUrl}/case-studies`,
-			lastModified: new Date(),
-			changeFrequency: "weekly",
-			priority: 0.8,
-		},
-		{
-			url: `${baseUrl}/contact`,
-			lastModified: new Date(),
-			changeFrequency: "monthly",
-			priority: 0.7,
-		},
-		{
-			url: `${baseUrl}/privacy-policy`,
-			lastModified: new Date(),
-			changeFrequency: "yearly",
-			priority: 0.3,
-		},
-		{
-			url: `${baseUrl}/terms-conditions`,
-			lastModified: new Date(),
-			changeFrequency: "yearly",
-			priority: 0.3,
-		},
-	];
+		// Run all four queries in parallel for performance.
+		const [pagesResult, servicesResult, blogPostsResult, caseStudiesResult] =
+			await Promise.all([
+				// Pages — custom `status` field (not Payload drafts)
+				payload.find({
+					collection: "pages",
+					where: { status: { equals: "published" } },
+					limit: 0, // fetch all
+					select: { slug: true, updatedAt: true },
+				}),
 
-	// Dynamic service pages
-	const servicePages: MetadataRoute.Sitemap = services.map((service) => ({
-		url: `${baseUrl}/services/${service.slug}`,
-		lastModified: new Date(),
-		changeFrequency: "monthly" as const,
-		priority: 0.8,
-	}));
+				// Services — no status field; all are considered live
+				payload.find({
+					collection: "services",
+					limit: 0,
+					select: { slug: true, updatedAt: true },
+				}),
 
-	const payload = await getPayload({ config });
+				// Blog posts — uses Payload's built-in draft/publish system
+				payload.find({
+					collection: "blog-posts",
+					where: { _status: { equals: "published" } },
+					limit: 0,
+					select: { slug: true, updatedAt: true },
+				}),
 
-	// Dynamic blog posts from Payload
-	const blogPostsResult = await payload.find({
-		collection: "blog-posts",
-		where: { _status: { equals: "published" } },
-		limit: 1000,
-	});
-	const blogPages: MetadataRoute.Sitemap = blogPostsResult.docs
-		.filter((post) => post.slug)
-		.map((post) => ({
-			url: `${baseUrl}/blog/${post.slug}`,
-			lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
-			changeFrequency: "monthly" as const,
-			priority: 0.7,
-		}));
+				// Case studies — uses Payload's built-in draft/publish system
+				payload.find({
+					collection: "case-studies",
+					where: { _status: { equals: "published" } },
+					limit: 0,
+					select: { slug: true, updatedAt: true },
+				}),
+			]);
 
-	// Dynamic case studies from Payload
-	const caseStudiesResult = await payload.find({
-		collection: "case-studies",
-		where: { _status: { equals: "published" } },
-		limit: 1000,
-	});
-	const caseStudyPages: MetadataRoute.Sitemap = caseStudiesResult.docs
-		.filter((study) => study.slug)
-		.map((study) => ({
-			url: `${baseUrl}/case-studies/${study.slug}`,
-			lastModified: study.updatedAt ? new Date(study.updatedAt) : new Date(),
-			changeFrequency: "monthly" as const,
-			priority: 0.7,
-		}));
+		// Map Pages — exclude the homepage slug (handled separately with priority 1).
+		const pageEntries: MetadataRoute.Sitemap = pagesResult.docs
+			// Exclude homepage slugs — handled separately above with priority 1
+			.filter(
+				(page) => page.slug && page.slug !== "home" && page.slug !== "index",
+			)
+			.map((page) => ({
+				url: `${baseUrl}/${page.slug}`,
+				lastModified: page.updatedAt ? new Date(page.updatedAt) : undefined,
+				changeFrequency: "monthly" as const,
+				priority: 0.8,
+			}));
 
-	return [...staticPages, ...servicePages, ...blogPages, ...caseStudyPages];
+		// Map Services
+		const serviceEntries: MetadataRoute.Sitemap = servicesResult.docs
+			.filter((service) => service.slug)
+			.map((service) => ({
+				url: `${baseUrl}/services/${service.slug}`,
+				lastModified: service.updatedAt
+					? new Date(service.updatedAt)
+					: undefined,
+				changeFrequency: "monthly" as const,
+				priority: 0.8,
+			}));
+
+		// Map Blog posts
+		const blogEntries: MetadataRoute.Sitemap = blogPostsResult.docs
+			.filter((post) => post.slug)
+			.map((post) => ({
+				url: `${baseUrl}/blog/${post.slug}`,
+				lastModified: post.updatedAt ? new Date(post.updatedAt) : undefined,
+				changeFrequency: "monthly" as const,
+				priority: 0.7,
+			}));
+
+		// Map Case Studies
+		const caseStudyEntries: MetadataRoute.Sitemap = caseStudiesResult.docs
+			.filter((study) => study.slug)
+			.map((study) => ({
+				url: `${baseUrl}/case-studies/${study.slug}`,
+				lastModified: study.updatedAt ? new Date(study.updatedAt) : undefined,
+				changeFrequency: "monthly" as const,
+				priority: 0.7,
+			}));
+
+		return [
+			homepageEntry,
+			...pageEntries,
+			...serviceEntries,
+			...blogEntries,
+			...caseStudyEntries,
+		];
+	} catch (error) {
+		// If Payload is unavailable, return a minimal fallback so the sitemap
+		// endpoint never returns a 500.
+		console.error("[sitemap] Failed to generate dynamic sitemap:", error);
+		return [homepageEntry];
+	}
 }

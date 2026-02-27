@@ -5,40 +5,11 @@ import {
 	TypographyMuted,
 } from "@/components/ui/typography";
 import { Badge } from "@/components/ui/badge";
-import { Media } from "@/payload-types";
-import {
-	SectionWrapper,
-	type PaddingOption,
-} from "@/components/ui/section-wrapper";
+import type { Page } from "@/payload-types";
+import { SectionWrapper } from "@/components/ui/section-wrapper";
 import { HighlightedTitle } from "@/components/ui/highlighted-title";
 
-// Helper type since we don't have the full deeply inferred type here easily
-// and we want to keep it simple. Adjust as needed based on generated types.
-type TeamMember = {
-	name: string;
-	role: string;
-	image: Media | string; // Handle expanded or ID
-	bio?: string | null;
-	certifications?:
-		| {
-				certification: string;
-				id?: string | null;
-		  }[]
-		| null;
-};
-
-type Props = {
-	title?: string | null;
-	titleHighlight?: string | null;
-	description?: string | null;
-	selectedMembers?: (TeamMember | string)[] | null; // Relationship can be ID or object
-	paddingTopOption?: string | null;
-	paddingBottomOption?: string | null;
-	background?: {
-		bg?: "transparent" | "muted";
-		decoration?: "none" | "dots";
-	};
-};
+type Props = Extract<Page["layout"][0], { blockType: "team" }>;
 
 export function Team({
 	title,
@@ -53,15 +24,16 @@ export function Team({
 
 	return (
 		<SectionWrapper
-			// className="bg-muted/30" // Removed strict override to allow background prop to work
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			<div className="text-center max-w-2xl mx-auto mb-12">
-				<div className="flex items-center justify-center gap-2 text-primary font-medium mb-4">
-					<span className="uppercase tracking-wider text-sm">Our Team</span>
-				</div>
+				{title && (
+					<div className="flex items-center justify-center gap-2 text-primary font-medium mb-4">
+						<span className="uppercase tracking-wider text-sm">{title}</span>
+					</div>
+				)}
 				<TypographyH2 className="text-3xl md:text-4xl font-bold border-none tracking-tight leading-tight mb-4">
 					{title && (
 						<HighlightedTitle title={title} highlight={titleHighlight} />
@@ -74,8 +46,8 @@ export function Team({
 
 			<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
 				{selectedMembers.map((member, index) => {
-					// Handle potential simple ID if not populated (though typically it is in blocks)
-					if (typeof member === "string") return null;
+					// Skip un-populated IDs (relationship not depth-populated)
+					if (typeof member === "number") return null;
 
 					const imageUrl =
 						typeof member.image === "object" && member.image?.url

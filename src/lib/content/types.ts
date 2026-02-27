@@ -76,11 +76,14 @@ export interface FilterOptions {
 // Collection Slug Mapping
 // =============================================================================
 
-export const COLLECTION_SLUG_MAP: Record<ContentType, string> = {
+export const COLLECTION_SLUG_MAP = {
 	blogs: "blog-posts",
 	"case-studies": "case-studies",
 	services: "services",
-} as const;
+} as const satisfies Record<ContentType, string>;
+
+/** The union of all valid Payload collection slugs used by the ContentFetcher */
+export type CollectionSlug = (typeof COLLECTION_SLUG_MAP)[ContentType];
 
 // =============================================================================
 // Grid Column CSS Classes

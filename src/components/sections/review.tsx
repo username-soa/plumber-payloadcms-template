@@ -2,15 +2,15 @@ import { Star } from "lucide-react";
 import Marquee from "@/components/ui/marquee";
 import { TypographyH2 } from "@/components/ui/typography";
 import { ReviewCard } from "@/components/review-card";
-import type { CompanyInfo } from "@/payload-types";
-import {
-	SectionWrapper,
-	type PaddingOption,
-} from "@/components/ui/section-wrapper";
+import { SectionWrapper } from "@/components/ui/section-wrapper";
+import type { Page, CompanyInfo, Review } from "@/payload-types";
 
-interface ReviewSectionProps {
+type ReviewSectionProps = Extract<
+	Page["layout"][0],
+	{ blockType: "reviewsSection" }
+> & {
 	companyInfo?: CompanyInfo;
-}
+};
 
 export async function ReviewSection({
 	companyInfo,
@@ -22,19 +22,7 @@ export async function ReviewSection({
 	paddingTopOption,
 	paddingBottomOption,
 	background,
-}: ReviewSectionProps & {
-	title?: string;
-	subtitle?: string;
-	source?: "manual" | "collection" | "google-api" | "hardcoded";
-	manualReviews?: any[];
-	selectedReviews?: any[];
-	paddingTopOption?: string | null;
-	paddingBottomOption?: string | null;
-	background?: {
-		bg?: "transparent" | "muted";
-		decoration?: "none" | "dots";
-	};
-}) {
+}: ReviewSectionProps) {
 	// Determine review source
 	// Priority: Direct Props (Block) > Company Info (Global)
 	const globalReviews = companyInfo?.seo?.reviews;
@@ -44,7 +32,16 @@ export async function ReviewSection({
 	// We default to 'collection' if nothing is set, assuming the user will populate it.
 	const activeSource = source || globalReviews?.source || "collection";
 
-	let reviews: any[] = [];
+	const reviews: {
+		id: string;
+		authorName: string;
+		authorImage: string;
+		rating: number;
+		title: string;
+		text: string;
+		role: string;
+		relativeTime: string;
+	}[] = [];
 
 	// Default stats
 	let rating = 5.0;
@@ -53,16 +50,20 @@ export async function ReviewSection({
 	if (activeSource === "manual") {
 		// 1. Manual Reviews (from Block)
 		if (manualReviews && manualReviews.length > 0) {
-			reviews = manualReviews.map((r) => ({
-				id: r.id || Math.random().toString(),
-				authorName: r.author,
-				authorImage: "", // Manual reviews typically don't have images unless added to schema
-				rating: r.rating,
-				title: "5 Star Review",
-				role: "Customer",
-				relativeTime: r.date ? new Date(r.date).toLocaleDateString() : "Recent",
-				text: r.content,
-			}));
+			for (const r of manualReviews) {
+				reviews.push({
+					id: r.id || Math.random().toString(),
+					authorName: r.author,
+					authorImage: "", // Manual reviews typically don't have images unless added to schema
+					rating: r.rating || 5,
+					title: "5 Star Review",
+					role: "Customer",
+					relativeTime: r.date
+						? new Date(r.date).toLocaleDateString()
+						: "Recent",
+					text: r.content,
+				});
+			}
 		}
 	} else {
 		// 2. Collection Reviews (from Block or Global)
@@ -71,25 +72,25 @@ export async function ReviewSection({
 			selectedReviews || globalReviews?.highlightedReviews;
 
 		if (reviewsToProcess && reviewsToProcess.length > 0) {
-			reviews = reviewsToProcess
-				.map((r: any) => {
-					// Handle unpopulated ID strings
-					if (typeof r === "string") return null;
+			for (const r of reviewsToProcess) {
+				// Handle unpopulated ID strings
+				if (typeof r === "string" || typeof r === "number") continue;
+				const review = r as Review;
 
-					return {
-						id: r.id,
-						authorName: r.author,
-						authorImage: r.avatar?.url || "",
-						rating: r.rating,
-						title: "5 Star Review",
-						text: r.content,
-						role: "Customer",
-						relativeTime: r.date
-							? new Date(r.date).toLocaleDateString()
-							: "Recent",
-					};
-				})
-				.filter(Boolean);
+				reviews.push({
+					id: review.id.toString(),
+					authorName: review.author,
+					authorImage:
+						typeof review.avatar === "object" ? review.avatar?.url || "" : "",
+					rating: review.rating,
+					title: "5 Star Review",
+					text: review.content,
+					role: "Customer",
+					relativeTime: review.date
+						? new Date(review.date).toLocaleDateString()
+						: "Recent",
+				});
+			}
 		}
 	}
 
@@ -113,8 +114,8 @@ export async function ReviewSection({
 		<SectionWrapper
 			className="w-full overflow-hidden relative [&>div]:w-full [&>div]:max-w-none [&>div]:p-0 [&>div]:m-0"
 			background={background}
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 		>
 			<div className="mb-12 container mx-auto px-6 md:px-12">
 				{/* Header */}

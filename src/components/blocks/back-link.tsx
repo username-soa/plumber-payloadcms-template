@@ -1,18 +1,9 @@
 import type { Page } from "@/payload-types";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
-import {
-	SectionWrapper,
-	type PaddingOption,
-} from "@/components/ui/section-wrapper";
+import { SectionWrapper } from "@/components/ui/section-wrapper";
 
-type BackLinkProps = NonNullable<Page["layout"]>[number] & {
-	blockType: "backLink";
-	background?: {
-		bg?: "transparent" | "muted" | null;
-		decoration?: "none" | "dots" | null;
-	};
-};
+type BackLinkProps = Extract<Page["layout"][0], { blockType: "backLink" }>;
 
 export function BackLink({
 	label,
@@ -24,8 +15,8 @@ export function BackLink({
 }: BackLinkProps) {
 	return (
 		<SectionWrapper
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			<div

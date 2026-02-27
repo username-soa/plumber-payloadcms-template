@@ -1,47 +1,13 @@
-import * as React from "react";
-import * as LucideIcons from "lucide-react";
-import Link from "next/link"; // Re-added Link
+import type React from "react";
+import Link from "next/link";
 import { cn } from "@/lib/utils";
 import { SectionWrapper } from "../ui/section-wrapper";
-import type { PaddingOption } from "../ui/section-wrapper";
 import { TypographyH3, TypographyP } from "../ui/typography";
-import type { CMSLinkType } from "@/lib/cms-link";
-import { getCMSLinkHref } from "@/lib/cms-link"; // Added helper
+import { getCMSLinkHref } from "@/lib/cms-link";
+import { getLucideIcon } from "@/lib/icons";
+import type { Page } from "@/payload-types";
 
-// ... existing helpers ...
-// Helper to convert kebab-case to PascalCase for icon lookup
-const kebabToPascal = (str: string) =>
-	str
-		?.split("-")
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join("");
-
-const getLucideIcon = (name: string) => {
-	if (!name) return null;
-	const pascalName = kebabToPascal(name);
-	const Icon = (LucideIcons as any)[pascalName];
-	return Icon || null;
-};
-
-type Props = {
-	columns?: "1" | "2" | "3" | "4" | "5" | "6";
-	cardLayout?: "stacked" | "sideBySide";
-	paddingTopOption?: "none" | "small" | "default" | "big";
-	paddingBottomOption?: "none" | "small" | "default" | "big";
-	enableHighlight?: boolean;
-	cards: {
-		id?: string | null;
-		tag?: string | null;
-		icon?: string;
-		title: string;
-		description?: string;
-		link?: CMSLinkType;
-	}[];
-	background?: {
-		bg?: "transparent" | "muted";
-		decoration?: "none" | "dots";
-	};
-};
+type Props = Extract<Page["layout"][0], { blockType: "cardsGrid" }>;
 
 export const CardsGridBlock: React.FC<Props> = ({
 	columns = "3",
@@ -59,63 +25,44 @@ export const CardsGridBlock: React.FC<Props> = ({
 		"4": "grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
 		"5": "grid-cols-1 md:grid-cols-3 lg:grid-cols-5",
 		"6": "grid-cols-1 md:grid-cols-3 lg:grid-cols-6",
-	}[columns];
+	}[columns ?? "3"];
 
 	return (
 		<SectionWrapper
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			<div className={cn("grid gap-6", gridColsClass)}>
 				{cards?.map((card, index) => {
-					const IconComponent = getLucideIcon(card.icon || "");
-					const href = getCMSLinkHref(card.link);
+					const IconComponent = getLucideIcon(card.icon ?? "");
+					const href = getCMSLinkHref(
+						card.link
+							? { ...card.link, label: card.link.label ?? "" }
+							: undefined,
+					);
 					const hasLink = !!href && href !== "#";
 
-					const CardWrapper = hasLink ? Link : "div";
-					const wrapperProps = hasLink
-						? {
-								href,
-								target: card.link?.newTab ? "_blank" : undefined,
-								className: cn(
-									"group relative bg-muted/30 p-6 rounded-2xl border text-card-foreground transition-all duration-300 block h-full",
-									enableHighlight && "hover:border-primary/50 hover:shadow-lg",
-									cardLayout === "sideBySide"
-										? "flex items-start gap-4"
-										: "flex flex-col items-start gap-4",
-								),
-							}
-						: {
-								className: cn(
-									"group relative bg-muted/30 p-6 rounded-2xl border text-card-foreground transition-all duration-300 h-full",
-									enableHighlight && "hover:border-primary/50",
-									cardLayout === "sideBySide"
-										? "flex items-start gap-4"
-										: "flex flex-col items-start gap-4",
-								),
-							};
-
-					return (
-						// @ts-ignore
-						<CardWrapper key={card.id || index} {...wrapperProps}>
-							{IconComponent && (
-								<div
-									className={cn(
-										"flex items-center justify-center rounded-xl transition-colors duration-300",
-										"bg-secondary text-primary",
-										enableHighlight &&
-											"group-hover:bg-primary group-hover:text-primary-foreground",
-										cardLayout === "sideBySide" ? "p-3 shrink-0" : "p-4 mb-2",
-									)}
-								>
-									<IconComponent
-										size={cardLayout === "sideBySide" ? 24 : 32}
-										strokeWidth={1.5}
-									/>
-								</div>
+					const iconEl = IconComponent ? (
+						<div
+							className={cn(
+								"flex items-center justify-center rounded-xl transition-colors duration-300",
+								"bg-secondary text-primary",
+								enableHighlight &&
+									"group-hover:bg-primary group-hover:text-primary-foreground",
+								cardLayout === "sideBySide" ? "p-3 shrink-0" : "p-4 mb-2",
 							)}
+						>
+							<IconComponent
+								size={cardLayout === "sideBySide" ? 24 : 32}
+								strokeWidth={1.5}
+							/>
+						</div>
+					) : null;
 
+					const inner = (
+						<>
+							{iconEl}
 							<div className="flex flex-col gap-2">
 								{card.tag && <TypographyP>{card.tag}</TypographyP>}
 								<TypographyH3 className="text-xl font-semibold leading-tight tracking-tight">
@@ -127,7 +74,41 @@ export const CardsGridBlock: React.FC<Props> = ({
 									</TypographyP>
 								)}
 							</div>
-						</CardWrapper>
+						</>
+					);
+
+					if (hasLink && href) {
+						return (
+							<Link
+								key={card.id ?? index}
+								href={href}
+								target={card.link?.newTab ? "_blank" : undefined}
+								className={cn(
+									"group relative bg-muted/30 p-6 rounded-2xl border text-card-foreground transition-all duration-300 block h-full",
+									enableHighlight && "hover:border-primary/50 hover:shadow-lg",
+									cardLayout === "sideBySide"
+										? "flex items-start gap-4"
+										: "flex flex-col items-start gap-4",
+								)}
+							>
+								{inner}
+							</Link>
+						);
+					}
+
+					return (
+						<div
+							key={card.id ?? index}
+							className={cn(
+								"group relative bg-muted/30 p-6 rounded-2xl border text-card-foreground transition-all duration-300 h-full",
+								enableHighlight && "hover:border-primary/50",
+								cardLayout === "sideBySide"
+									? "flex items-start gap-4"
+									: "flex flex-col items-start gap-4",
+							)}
+						>
+							{inner}
+						</div>
 					);
 				})}
 			</div>

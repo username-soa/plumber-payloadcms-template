@@ -1,25 +1,18 @@
 import { notFound } from "next/navigation";
 import { draftMode } from "next/headers";
-import { getPayload } from "payload";
-import config from "@payload-config";
 import { SITE_CONFIG } from "@/lib/site-config";
-import type { Page as PayloadPage } from "@/payload-types";
 import { getMediaUrl } from "@/lib/payload-utils";
 import { Hero } from "@/components/heroes";
 import { RenderBlocks } from "@/components/payload/RenderBlocks";
+import { JsonLd } from "@/components/json-ld";
+import { generatePageJsonLd } from "@/lib/json-ld";
+import { getPageBySlug, getAllPageSlugs } from "@/lib/payload/getPages";
+import { getCompanyInfo } from "@/lib/payload/getGlobals";
+import { getServices } from "@/lib/payload/getServices";
 
-async function getPageData(slug: string, draft = false) {
-	const payload = await getPayload({ config });
-	const result = await payload.find({
-		collection: "pages",
-		where: draft
-			? { slug: { equals: slug } }
-			: { slug: { equals: slug }, status: { equals: "published" } },
-		draft,
-		limit: 1,
-		depth: 3,
-	});
-	return result.docs[0] || null;
+export async function generateStaticParams() {
+	const slugs = await getAllPageSlugs();
+	return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({
@@ -28,7 +21,8 @@ export async function generateMetadata({
 	params: Promise<{ slug: string }>;
 }) {
 	const { slug } = await params;
-	const page = await getPageData(slug);
+	// React.cache() ensures the page component below reuses this result.
+	const page = await getPageBySlug(slug);
 
 	if (!page) {
 		return { title: "Page Not Found" };
@@ -58,29 +52,48 @@ export default async function DynamicPage({
 	params: Promise<{ slug: string }>;
 	searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-	const { slug } = await params;
-	const resolvedSearchParams = await searchParams;
-	const { isEnabled: isDraftMode } = await draftMode();
+	const [{ slug }, resolvedSearchParams, { isEnabled: isDraftMode }] =
+		await Promise.all([params, searchParams, draftMode()]);
 
-	const page = (await getPageData(slug, isDraftMode)) as PayloadPage | null;
+	// Shared with generateMetadata via React.cache() — zero extra DB hits.
+	const page = await getPageBySlug(slug, isDraftMode);
 
 	if (!page) {
 		notFound();
 	}
 
-	return (
-		<main className="min-h-screen bg-background">
-			{/* Hero section */}
-			<Hero page={page} />
+	// Determine pageType set by the editor (defaults to "default" if unset).
+	const pageType: string = page.pageType ?? "default";
 
-			{/* Blocks — server-rendered; ContentFetcher must stay server-side */}
-			<RenderBlocks
-				layout={page.layout}
-				pageTitle={page.title}
-				updatedAt={page.updatedAt}
-				lastUpdated={page.lastUpdated}
-				searchParams={resolvedSearchParams}
-			/>
-		</main>
+	// Fetch companyInfo (always needed for WebPage schema context).
+	// Fetch services only when this page is the services listing.
+	const [companyInfo, services] = await Promise.all([
+		getCompanyInfo(),
+		pageType === "servicesListing" ? getServices() : Promise.resolve([]),
+	]);
+
+	const jsonLd = {
+		"@context": "https://schema.org",
+		"@graph": generatePageJsonLd(
+			page as Parameters<typeof generatePageJsonLd>[0],
+			companyInfo,
+			services.length > 0 ? services : undefined,
+		),
+	};
+
+	return (
+		<>
+			<JsonLd data={jsonLd} />
+			<main className="min-h-screen bg-background">
+				{/* Hero section */}
+				<Hero page={page} />
+
+				{/* Blocks — server-rendered; ContentFetcher must stay server-side */}
+				<RenderBlocks
+					layout={page.layout}
+					searchParams={resolvedSearchParams}
+				/>
+			</main>
+		</>
 	);
 }

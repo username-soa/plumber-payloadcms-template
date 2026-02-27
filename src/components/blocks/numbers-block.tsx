@@ -1,15 +1,10 @@
-import React, { Fragment } from "react";
+import type React from "react";
+import { Fragment } from "react";
 import { cn } from "@/lib/utils";
 import type { Page } from "@/payload-types";
 import { SectionWrapper } from "../ui/section-wrapper";
-import type { PaddingOption } from "../ui/section-wrapper";
 
-type Props = Extract<Page["layout"][0], { blockType: "numbers" }> & {
-	background?: {
-		bg?: "transparent" | "muted";
-		decoration?: "none" | "dots";
-	};
-};
+type Props = Extract<Page["layout"][0], { blockType: "numbers" }>;
 
 export const NumbersBlock: React.FC<Props> = ({
 	textAlign = "left",
@@ -38,8 +33,8 @@ export const NumbersBlock: React.FC<Props> = ({
 
 	return (
 		<SectionWrapper
-			paddingTop={paddingTopOption as PaddingOption}
-			paddingBottom={paddingBottomOption as PaddingOption}
+			paddingTop={paddingTopOption}
+			paddingBottom={paddingBottomOption}
 			background={background}
 		>
 			<div className="container mx-auto">

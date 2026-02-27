@@ -52,7 +52,6 @@ export function StatCard({
 	// Mobile: 1 column (always last in row)
 	// SM: 2 columns (index % 2 === 1 is last)
 	// LG: 3 columns (index % 3 === 2 is last)
-	const isLastInRowMobile = true; // Always last in 1-col layout
 	const isLastInRowSm = (index + 1) % 2 === 0 || index === total - 1;
 	const isLastInRowLg = (index + 1) % 3 === 0 || index === total - 1;
 
@@ -65,8 +64,7 @@ export function StatCard({
 		<div
 			className={cn(
 				"p-6 flex flex-col items-center justify-center text-center border-border/50",
-				// Border right: hide on mobile (1 col), conditionally on sm/lg
-				!isLastInRowMobile && "border-r",
+				// Border right: conditionally hidden at sm/lg breakpoints
 				isLastInRowSm ? "sm:border-r-0" : "sm:border-r",
 				isLastInRowLg ? "lg:border-r-0" : "lg:border-r",
 				// Border bottom: hide in last row for each breakpoint

@@ -1,26 +1,7 @@
-import * as LucideIcons from "lucide-react";
 import { CheckCircle2 } from "lucide-react";
 import type React from "react";
 import { Badge } from "@/components/ui/badge";
-
-// Helper to convert kebab-case to PascalCase for icon lookup
-const kebabToPascal = (str: string) =>
-	str
-		?.split("-")
-		.map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-		.join("");
-
-const getLucideIcon = (name: string) => {
-	if (!name) return null;
-	const pascalName = kebabToPascal(name);
-	const Icon = (
-		LucideIcons as unknown as Record<
-			string,
-			React.ComponentType<LucideIcons.LucideProps>
-		>
-	)[pascalName];
-	return Icon || null;
-};
+import { getLucideIcon } from "@/lib/icons";
 
 type Props = {
 	layout?: "default" | "pills";

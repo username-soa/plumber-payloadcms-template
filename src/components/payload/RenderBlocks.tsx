@@ -1,4 +1,4 @@
-import type { Page } from "@/payload-types";
+import type { Page, Service } from "@/payload-types";
 
 import { LegalContent } from "@/components/blocks/legal-content";
 import { LegalContact } from "@/components/blocks/legal-contact";
@@ -17,12 +17,10 @@ import { HighlightedServicesBlockComponent } from "@/components/blocks/highlight
 import { DualColumnBlock } from "@/components/blocks/dual-column-block";
 import { FormBlock } from "@/components/blocks/form-block";
 import { MarqueeBlockComponent } from "@/components/blocks/marquee-block";
+import { SubServicesBlockComponent } from "@/components/blocks/sub-services-block";
 
 interface RenderBlocksProps {
-	layout: Page["layout"];
-	pageTitle: string;
-	updatedAt: string;
-	lastUpdated?: string | null;
+	layout: Page["layout"] | Service["layout"];
 	searchParams?: {
 		page?: string;
 		category?: string;
@@ -30,21 +28,25 @@ interface RenderBlocksProps {
 		search?: string;
 		[key: string]: string | string[] | undefined;
 	};
+	subServices?: Service[]; // Passed down when rendering on a Service detailing page
 }
+
+type LayoutBlock =
+	| NonNullable<Page["layout"]>[number]
+	| NonNullable<Service["layout"]>[number];
 
 export function RenderBlocks({
 	layout,
-	pageTitle,
-	updatedAt,
-	lastUpdated,
 	searchParams,
+	subServices,
 }: RenderBlocksProps) {
 	if (!layout) return null;
 
 	return (
 		<>
 			{layout.map((block, index) => {
-				const { blockType } = block;
+				const b = block as LayoutBlock;
+				const { blockType } = b;
 
 				if (!blockType) return null;
 
@@ -52,59 +54,163 @@ export function RenderBlocks({
 
 				switch (blockType) {
 					case "legalContent":
-						return <LegalContent key={key} {...block} />;
+						return (
+							<LegalContent
+								key={key}
+								{...(block as Extract<
+									LayoutBlock,
+									{ blockType: "legalContent" }
+								>)}
+							/>
+						);
 					case "legalContact":
-						return <LegalContact key={key} {...block} />;
+						return (
+							<LegalContact
+								key={key}
+								{...(block as Extract<
+									LayoutBlock,
+									{ blockType: "legalContact" }
+								>)}
+							/>
+						);
 					case "backLink":
-						return <BackLink key={key} {...block} />;
+						return (
+							<BackLink
+								key={key}
+								{...(block as Extract<LayoutBlock, { blockType: "backLink" }>)}
+							/>
+						);
 					case "faq":
-						return <FAQSection key={key} {...(block as any)} />;
+						return (
+							<FAQSection
+								key={key}
+								{...(block as Extract<LayoutBlock, { blockType: "faq" }>)}
+							/>
+						);
 					case "reviewsSection":
-						// @ts-ignore
-						return <ReviewSection key={key} {...block} />;
+						return (
+							<ReviewSection
+								key={key}
+								{...(block as Extract<
+									LayoutBlock,
+									{ blockType: "reviewsSection" }
+								>)}
+							/>
+						);
 					case "team":
-						// @ts-ignore
-						return <Team key={key} {...block} />;
+						return (
+							<Team
+								key={key}
+								{...(block as Extract<LayoutBlock, { blockType: "team" }>)}
+							/>
+						);
 					case "timeline":
-						// @ts-ignore
-						return <Timeline key={key} {...block} />;
+						return (
+							<Timeline
+								key={key}
+								{...(block as Extract<LayoutBlock, { blockType: "timeline" }>)}
+							/>
+						);
 					case "contentFetcher":
-						// @ts-ignore
 						return (
 							<ContentFetcher
 								key={key}
-								{...block}
+								{...(block as Extract<
+									LayoutBlock,
+									{ blockType: "contentFetcher" }
+								>)}
 								searchParams={searchParams}
 							/>
 						);
 					case "titleContent":
-						// @ts-ignore
-						return <TitleContentBlock key={key} {...block} />;
+						return (
+							<TitleContentBlock
+								key={key}
+								{...(block as Extract<
+									LayoutBlock,
+									{ blockType: "titleContent" }
+								>)}
+							/>
+						);
 					case "numbers":
-						// @ts-ignore
-						return <NumbersBlock key={key} {...block} />;
+						return (
+							<NumbersBlock
+								key={key}
+								{...(block as Extract<LayoutBlock, { blockType: "numbers" }>)}
+							/>
+						);
 					case "imagesGrid":
-						// @ts-ignore
-						return <ImagesGridBlock key={key} {...block} />;
+						return (
+							<ImagesGridBlock
+								key={key}
+								{...(block as Extract<
+									LayoutBlock,
+									{ blockType: "imagesGrid" }
+								>)}
+							/>
+						);
 					case "cardsGrid":
-						// @ts-ignore
-						return <CardsGridBlock key={key} {...block} />;
+						return (
+							<CardsGridBlock
+								key={key}
+								{...(block as Extract<LayoutBlock, { blockType: "cardsGrid" }>)}
+							/>
+						);
 					case "serviceAreas":
-						// @ts-ignore
-						return <ServiceAreasBlockComponent key={key} {...block} />;
+						return (
+							<ServiceAreasBlockComponent
+								key={key}
+								{...(block as Extract<
+									LayoutBlock,
+									{ blockType: "serviceAreas" }
+								>)}
+							/>
+						);
 					case "highlightedServices":
-						// @ts-ignore
-						return <HighlightedServicesBlockComponent key={key} {...block} />;
+						return (
+							<HighlightedServicesBlockComponent
+								key={key}
+								{...(block as Extract<
+									LayoutBlock,
+									{ blockType: "highlightedServices" }
+								>)}
+							/>
+						);
 					case "dualColumn":
-						// @ts-ignore
-						return <DualColumnBlock key={key} {...block} />;
+						return (
+							<DualColumnBlock
+								key={key}
+								{...(block as Extract<
+									LayoutBlock,
+									{ blockType: "dualColumn" }
+								>)}
+							/>
+						);
 					case "formBlock":
-						// @ts-ignore
-						return <FormBlock key={key} {...block} />;
-					// @ts-ignore
+						return (
+							<FormBlock
+								key={key}
+								{...(block as Extract<LayoutBlock, { blockType: "formBlock" }>)}
+							/>
+						);
 					case "marquee":
-						// @ts-ignore
-						return <MarqueeBlockComponent key={key} {...block} />;
+						return (
+							<MarqueeBlockComponent
+								key={key}
+								{...(block as Extract<LayoutBlock, { blockType: "marquee" }>)}
+							/>
+						);
+					case "subServices":
+						return (
+							<SubServicesBlockComponent
+								key={key}
+								{...(block as Extract<
+									LayoutBlock,
+									{ blockType: "subServices" }
+								>)}
+								subServices={subServices}
+							/>
+						);
 					default:
 						// Fallback for unknown blocks or standard blocks if needed
 						return null;

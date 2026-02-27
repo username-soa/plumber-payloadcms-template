@@ -4,7 +4,6 @@
  */
 
 import type { Where } from "payload";
-import type { Payload } from "payload";
 import type { ContentType, SortOption, SearchParams } from "../types";
 import { resolveCategorySlug, resolveTagSlug } from "../fetchers/fetch-filters";
 
@@ -23,7 +22,6 @@ export interface BuildWhereParams {
  * Handles category, tag, search, featured, and status filters
  */
 export async function buildWhereClause(
-	payload: Payload,
 	params: BuildWhereParams,
 ): Promise<Where> {
 	const { contentType, searchParams, featuredOnly } = params;
@@ -37,10 +35,7 @@ export async function buildWhereClause(
 			where.parentService = { exists: false };
 		} else {
 			// For blogs and case-studies, resolve category slug to ID
-			const categoryId = await resolveCategorySlug(
-				payload,
-				searchParams.category,
-			);
+			const categoryId = await resolveCategorySlug(searchParams.category);
 			if (categoryId) {
 				where.category = { equals: categoryId };
 			}
@@ -53,7 +48,7 @@ export async function buildWhereClause(
 		searchParams.tag !== "all" &&
 		contentType !== "services"
 	) {
-		const tagId = await resolveTagSlug(payload, searchParams.tag);
+		const tagId = await resolveTagSlug(searchParams.tag);
 		if (tagId) {
 			where.tags = { contains: tagId };
 		}

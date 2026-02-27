@@ -1,15 +1,19 @@
-import type { Page } from "@/payload-types";
+import { format } from "date-fns";
+import { FileText, Shield } from "lucide-react";
+
 import { Badge } from "@/components/ui/badge";
 import { TypographyH1, TypographyP } from "@/components/ui/typography";
-import { Shield, FileText } from "lucide-react";
-import { format } from "date-fns";
 
-type LegalHeroProps = NonNullable<Page["layout"]>[number] & {
-	blockType: "legalHero";
+interface LegalHeroProps {
+	badge?: string | null;
+	title?: string | null;
+	subtitle?: string | null;
+	icon?: string | null;
+	showLastUpdated?: boolean | null;
 	lastUpdated?: string;
 	updatedAt: string;
 	pageTitle: string;
-};
+}
 
 export function LegalHero({
 	badge,

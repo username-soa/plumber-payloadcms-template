@@ -1,5 +1,3 @@
-"use client";
-
 import type { RefObject } from "react";
 
 export interface VideoPlayerProps {
@@ -40,15 +38,15 @@ export interface VideoActions {
 	seek: (time: number) => void;
 }
 
-export interface ProgressBarProps {
+/** Props for the VideoProgressBar component */
+export interface VideoProgressBarProps {
 	progress: number;
 	bufferedProgress: number;
-	duration: number;
 	isDragging: boolean;
-	onSeek: (clientX: number) => void;
-	onDragStart: () => void;
-	onDragEnd: () => void;
 	progressRef: RefObject<HTMLDivElement | null>;
+	onMouseDown: (e: React.MouseEvent<HTMLDivElement>) => void;
+	onTouchStart: (e: React.TouchEvent<HTMLDivElement>) => void;
+	onKeyDown: (e: React.KeyboardEvent<HTMLDivElement>) => void;
 }
 
 export interface ControlButtonProps {
