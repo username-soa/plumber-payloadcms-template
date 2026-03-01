@@ -18,6 +18,15 @@ const nextConfig: NextConfig = {
 				port: "3000",
 				pathname: "/api/media/**",
 			},
+			{
+				protocol: "https",
+				hostname: "*.vercel.app",
+				pathname: "/api/media/**",
+			},
+			{
+				protocol: "https",
+				hostname: "*.supabase.co",
+			},
 		],
 		// Allow loading images from localhost during development
 		dangerouslyAllowSVG: true,
