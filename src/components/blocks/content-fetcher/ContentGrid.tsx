@@ -16,8 +16,8 @@
 
 import type { ReactNode } from "react";
 import { TypographyMuted } from "@/components/ui/typography";
-import type { GridColumns, ContentType } from "@/lib/content";
-import { GRID_COLS_MAP } from "@/lib/content";
+import type { GridColumns, ContentType } from "@/lib/content/types";
+import { GRID_COLS_MAP } from "@/lib/content/types";
 import { cn } from "@/lib/utils";
 
 // ---------------------------------------------------------------------------
@@ -64,7 +64,9 @@ export function ContentGrid<T>({
 							// Mobile: single column
 							"[&>div]:w-full [&>div]:grow",
 							// 2 columns at md breakpoint
-							(itemsPerRow === "2" || itemsPerRow === "3" || itemsPerRow === "4") &&
+							(itemsPerRow === "2" ||
+								itemsPerRow === "3" ||
+								itemsPerRow === "4") &&
 								"md:[&>div]:w-[calc(50%-0.5px)]",
 							// 3 columns at lg breakpoint
 							itemsPerRow === "3" && "lg:[&>div]:w-[calc(33.333%-0.67px)]",

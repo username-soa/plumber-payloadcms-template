@@ -12,8 +12,8 @@
 
 import { useCallback } from "react";
 import { useQueryState, parseAsString, parseAsInteger } from "nuqs";
-import type { ContentType } from "@/lib/content";
-import { CONTENT_TYPE_TO_SEARCH_FILTER } from "@/lib/content";
+import type { ContentType } from "@/lib/content/types";
+import { CONTENT_TYPE_TO_SEARCH_FILTER } from "@/lib/content/search-type-map";
 
 // =============================================================================
 // Hook

@@ -1,9 +1,8 @@
-import { Block } from "payload";
+import type { Block } from "payload";
 import { background } from "@/fields/background";
 import { lexicalEditor, BlocksFeature } from "@payloadcms/richtext-lexical";
-import { FeatureListBlock } from "./FeatureListBlock";
-import { WorkflowStepBlock } from "./WorkflowStepBlock";
 import { SimpleStatsBlock } from "./SimpleStatsBlock";
+import { FeatureGridBlock } from "./FeatureGridBlock";
 import { CustomColorFeature } from "@/components/richtext/features/custom-color/CustomColorFeature";
 
 export const FormBlock: Block = {
@@ -113,7 +112,7 @@ export const FormBlock: Block = {
 					CustomColorFeature(),
 					...defaultFeatures,
 					BlocksFeature({
-						blocks: [FeatureListBlock, WorkflowStepBlock, SimpleStatsBlock],
+						blocks: [SimpleStatsBlock, FeatureGridBlock],
 					}),
 				],
 			}),
@@ -130,7 +129,7 @@ export const FormBlock: Block = {
 					CustomColorFeature(),
 					...defaultFeatures,
 					BlocksFeature({
-						blocks: [FeatureListBlock, WorkflowStepBlock, SimpleStatsBlock],
+						blocks: [SimpleStatsBlock, FeatureGridBlock],
 					}),
 				],
 			}),
@@ -147,7 +146,7 @@ export const FormBlock: Block = {
 					CustomColorFeature(),
 					...defaultFeatures,
 					BlocksFeature({
-						blocks: [FeatureListBlock, WorkflowStepBlock, SimpleStatsBlock],
+						blocks: [SimpleStatsBlock, FeatureGridBlock],
 					}),
 				],
 			}),

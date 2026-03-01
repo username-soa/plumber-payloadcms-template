@@ -11,7 +11,11 @@
  *   so the search bar is always accessible on mobile even without category filters
  */
 
-import type { CategoryOption, TagOption, ContentType } from "@/lib/content";
+import type {
+	CategoryOption,
+	TagOption,
+	ContentType,
+} from "@/lib/content/types";
 import { ContentFilters } from "./content-filters";
 import { ContentFilterSheet } from "./content-filter-sheet";
 

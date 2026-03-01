@@ -5,10 +5,9 @@ import {
 	BlocksFeature,
 	FixedToolbarFeature,
 } from "@payloadcms/richtext-lexical";
-import { FeatureListBlock } from "./FeatureListBlock";
-import { WorkflowStepBlock } from "./WorkflowStepBlock";
 import { SimpleStatsBlock } from "./SimpleStatsBlock";
 import { TableBlock } from "./TableBlock";
+import { FeatureGridBlock } from "./FeatureGridBlock";
 import { link } from "@/fields/link";
 
 import { CustomColorFeature } from "@/components/richtext/features/custom-color/CustomColorFeature";
@@ -123,12 +122,7 @@ export const DualColumnBlock: Block = {
 							CustomColorFeature(),
 							...defaultFeatures,
 							BlocksFeature({
-								blocks: [
-									FeatureListBlock,
-									WorkflowStepBlock,
-									SimpleStatsBlock,
-									TableBlock,
-								],
+								blocks: [SimpleStatsBlock, TableBlock, FeatureGridBlock],
 							}),
 							FixedToolbarFeature(),
 						],

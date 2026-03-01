@@ -19,7 +19,11 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import type { CategoryOption, TagOption, ContentType } from "@/lib/content";
+import type {
+	CategoryOption,
+	TagOption,
+	ContentType,
+} from "@/lib/content/types";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { useContentFilters } from "./use-content-filters";
 

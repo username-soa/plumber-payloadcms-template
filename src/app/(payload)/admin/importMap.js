@@ -59,9 +59,8 @@ import { CardsGridLabel as CardsGridLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } fro
 import { ServiceAreasLabel as ServiceAreasLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { HighlightedServicesLabel as HighlightedServicesLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { NumbersLabel as NumbersLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
-import { FeatureListLabel as FeatureListLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
-import { WorkflowStepLabel as WorkflowStepLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { SimpleStatsLabel as SimpleStatsLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
+import { FeatureGridLabel as FeatureGridLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { CustomColorFeatureClient as CustomColorFeatureClient_b83ad90ea9134ea5eaa80a2a49485dd9 } from '@/components/richtext/features/custom-color/CustomColorFeatureClient'
 import { DualColumnLabel as DualColumnLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
 import { FormLabel as FormLabel_daf97bbe60f04dd3f0e27e8cfb1b6484 } from '@/components/payload/BlockRowLabel'
@@ -138,9 +137,8 @@ export const importMap = {
   "@/components/payload/BlockRowLabel#ServiceAreasLabel": ServiceAreasLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#HighlightedServicesLabel": HighlightedServicesLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#NumbersLabel": NumbersLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
-  "@/components/payload/BlockRowLabel#FeatureListLabel": FeatureListLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
-  "@/components/payload/BlockRowLabel#WorkflowStepLabel": WorkflowStepLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#SimpleStatsLabel": SimpleStatsLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
+  "@/components/payload/BlockRowLabel#FeatureGridLabel": FeatureGridLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/richtext/features/custom-color/CustomColorFeatureClient#CustomColorFeatureClient": CustomColorFeatureClient_b83ad90ea9134ea5eaa80a2a49485dd9,
   "@/components/payload/BlockRowLabel#DualColumnLabel": DualColumnLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,
   "@/components/payload/BlockRowLabel#FormLabel": FormLabel_daf97bbe60f04dd3f0e27e8cfb1b6484,

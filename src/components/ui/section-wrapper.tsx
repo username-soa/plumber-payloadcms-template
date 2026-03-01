@@ -1,5 +1,6 @@
 import type React from "react";
 import { cn } from "@/lib/utils";
+import { AnimatedBackground } from "./animated-background";
 
 export type PaddingOption = "none" | "small" | "default" | "big";
 
@@ -12,6 +13,7 @@ interface SectionWrapperProps {
 		bg?: "transparent" | "muted" | null;
 		decoration?: "none" | "dots" | null;
 	};
+	animation?: "none" | "active" | null;
 }
 
 const paddingClasses: Record<string, string> = {
@@ -44,15 +46,6 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
 		paddingBottom && paddingClasses[paddingBottom] ? paddingBottom : "default";
 
 	const bgClass = getBackgroundClass(background?.bg);
-	const decorationStyle =
-		background?.decoration === "dots"
-			? {
-					backgroundImage:
-						"radial-gradient(circle, currentColor 1px, transparent 1px)",
-					backgroundSize: "20px 20px",
-					opacity: 0.8, // subtle effect
-				}
-			: {};
 
 	return (
 		<section
@@ -63,16 +56,11 @@ export const SectionWrapper: React.FC<SectionWrapperProps> = ({
 				"relative",
 				className,
 			)}
-			style={
-				background?.decoration === "dots"
-					? {
-							backgroundImage:
-								"radial-gradient(circle, rgba(0,0,0,0.1) 1px, transparent 1px)", // Default fallback
-							...decorationStyle,
-						}
-					: undefined
-			}
 		>
+			<AnimatedBackground
+				animation={"active"}
+				decoration={background?.decoration}
+			/>
 			<div className="mx-auto px-6 md:px-12 container relative z-10">
 				{children}
 			</div>

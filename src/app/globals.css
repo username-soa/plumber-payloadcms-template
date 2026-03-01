@@ -346,6 +346,9 @@
 		animation: ring 5s ease-in-out infinite;
 		transform-origin: center center;
 	}
+	.animate-pan-bg {
+		animation: pan-bg 10s linear infinite;
+	}
 
 	@keyframes marquee {
 		from {
@@ -353,6 +356,14 @@
 		}
 		to {
 			transform: translateX(calc(-100% - var(--gap)));
+		}
+	}
+	@keyframes pan-bg {
+		from {
+			background-position: 0 0;
+		}
+		to {
+			background-position: 40px -40px;
 		}
 	}
 	@keyframes marquee-reverse {

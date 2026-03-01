@@ -261,3 +261,7 @@ export const UrgencyLabel = () => {
 export const SubServicesLabel = () => {
 	return <BlockRowLabel blockType={"Sub-Services Grid"} icon={LayoutGrid} />;
 };
+
+export const FeatureGridLabel = () => {
+	return <BlockRowLabel blockType="Feature Grid" icon={LayoutGrid} />;
+};

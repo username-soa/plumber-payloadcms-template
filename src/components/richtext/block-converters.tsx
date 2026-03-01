@@ -12,12 +12,15 @@ import { cn } from "@/lib/utils";
 
 import { BeforeAfter } from "@/components/blocks/before-after";
 import { Callout } from "@/components/blocks/callout";
-import { CTA } from "@/components/blocks/cta";
 import { ImageGallery } from "@/components/blocks/image-gallery";
+import { CTA } from "@/components/blocks/cta";
 
-import { FeatureListBlock } from "@/components/blocks/feature-list-block";
-import { WorkflowStepBlock } from "@/components/blocks/workflow-step-block";
 import { SimpleStatsBlock } from "@/components/blocks/simple-stats-block";
+
+import {
+	FeatureGrid,
+	type FeatureGridItemType,
+} from "@/components/richtext/features/feature-grid";
 
 import { ServiceLink } from "@/components/blocks/service-link";
 import { StatsRow } from "@/components/blocks/stats-row";
@@ -176,21 +179,8 @@ interface TableBlock {
 	caption?: string;
 	headers?: TableHeader[];
 	rows?: TableRow[];
-	striped?: boolean;
 	bordered?: boolean;
-}
-
-interface FeatureListBlockType {
-	blockType: "featureList";
-	layout?: "default" | "pills";
-	features: { icon?: string; text: string }[];
-}
-
-interface WorkflowStepBlockType {
-	blockType: "workflowStep";
-	stepNumber: number;
-	title: string;
-	description?: string;
+	striped?: boolean;
 }
 
 interface SimpleStatsBlockType {
@@ -205,6 +195,19 @@ interface FormBlockType {
 	introContent?: SerializedEditorState;
 }
 
+interface FeatureGridBlockType {
+	blockType: "featureGrid";
+	layout?: "row" | "column";
+	items?: FeatureGridItemType[];
+	size?: "small" | "medium" | "big" | null;
+	titleSize?: "small" | "normal" | "big" | null;
+	descriptionSize?: "small" | "normal" | "big" | null;
+	showBorder?: boolean;
+	showShadow?: boolean;
+	showIconBackground?: boolean;
+	customIconColor?: string;
+}
+
 type CustomBlocks =
 	| CalloutBlock
 	| StepTimelineBlock
@@ -217,12 +220,10 @@ type CustomBlocks =
 	| CTABlock
 	| ImageGalleryBlock
 	| SpacingBlock
-	| SpacingBlock
 	| TableBlock
-	| FeatureListBlockType
-	| WorkflowStepBlockType
 	| SimpleStatsBlockType
-	| FormBlockType;
+	| FormBlockType
+	| FeatureGridBlockType;
 
 type NodeTypes = DefaultNodeTypes | SerializedBlockNode<CustomBlocks>;
 
@@ -721,17 +722,6 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 		table: ({ node }) => (
 			<TableRenderer node={node as SerializedBlockNode<TableBlock>} />
 		),
-		featureList: ({ node }) => {
-			const { features, layout } = (
-				node as SerializedBlockNode<FeatureListBlockType>
-			).fields;
-			return <FeatureListBlock features={features} layout={layout} />;
-		},
-		workflowStep: ({ node }) => {
-			const fields = (node as SerializedBlockNode<WorkflowStepBlockType>)
-				.fields;
-			return <WorkflowStepBlock {...fields} />;
-		},
 		simpleStats: ({ node }) => {
 			const { stats } = (node as SerializedBlockNode<SimpleStatsBlockType>)
 				.fields;
@@ -748,6 +738,32 @@ export const blockConverters: JSXConvertersFunction<NodeTypes> = ({
 					form={form}
 					enableIntro={enableIntro}
 					introContent={introContent}
+				/>
+			);
+		},
+		featureGrid: ({ node }) => {
+			const {
+				layout,
+				items,
+				size,
+				titleSize,
+				descriptionSize,
+				showBorder,
+				showShadow,
+				showIconBackground,
+				customIconColor,
+			} = (node as SerializedBlockNode<FeatureGridBlockType>).fields;
+			return (
+				<FeatureGrid
+					layout={layout}
+					items={items}
+					size={size}
+					titleSize={titleSize}
+					descriptionSize={descriptionSize}
+					showBorder={showBorder}
+					showShadow={showShadow}
+					showIconBackground={showIconBackground}
+					customIconColor={customIconColor}
 				/>
 			);
 		},

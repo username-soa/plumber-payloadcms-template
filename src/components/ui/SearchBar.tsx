@@ -39,7 +39,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useDebounce } from "@/hooks/use-debounce";
-import type { SearchFilterType } from "@/lib/content";
+import type { SearchFilterType } from "@/lib/content/search-type-map";
 
 // =============================================================================
 // Types

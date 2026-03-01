@@ -16,7 +16,6 @@ import { nodemailerAdapter } from "@payloadcms/email-nodemailer";
 import { Media } from "./collections/Media";
 import { Authors } from "./collections/Authors";
 import { FormBlock } from "./blocks/FormBlock";
-import { FeatureListBlock } from "./blocks/FeatureListBlock";
 import { UrgencyBlock } from "./blocks/UrgencyBlock";
 import { PropertyTypeBlock } from "./blocks/PropertyTypeBlock";
 import { FileBlock } from "./blocks/FileBlock";
@@ -97,7 +96,7 @@ export default buildConfig({
 				...defaultFeatures,
 				CustomColorFeature(),
 				BlocksFeature({
-					blocks: [FormBlock, FeatureListBlock],
+					blocks: [FormBlock],
 				}),
 			];
 		},

@@ -23,7 +23,11 @@ import {
 import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import type { CategoryOption, TagOption, ContentType } from "@/lib/content";
+import type {
+	CategoryOption,
+	TagOption,
+	ContentType,
+} from "@/lib/content/types";
 import { SearchBar } from "@/components/ui/SearchBar";
 import { useContentFilters } from "./use-content-filters";
 
