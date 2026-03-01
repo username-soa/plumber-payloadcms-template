@@ -41,18 +41,26 @@ export function LayoutBody({
 	companyInfo,
 	announcementBarData,
 }: LayoutBodyProps) {
-	return (
+	const content = (
+		<>
+			<AnnouncementBar data={announcementBarData} />
+			<Header navItems={headerData.navItems} phone={companyInfo.phone} />
+			<ThemeSwitcher />
+			<main className="flex-1">{children}</main>
+			<Footer footerData={footerData} companyInfo={companyInfo} />
+		</>
+	);
+
+	return process.env.NODE_ENV === "development" ? (
 		<ThemeProvider
 			attribute="data-theme"
 			defaultTheme={THEME_CONFIG.defaultTheme}
 			enableSystem
 			disableTransitionOnChange
 		>
-			<AnnouncementBar data={announcementBarData} />
-			<Header navItems={headerData.navItems} phone={companyInfo.phone} />
-			<ThemeSwitcher />
-			<main className="flex-1">{children}</main>
-			<Footer footerData={footerData} companyInfo={companyInfo} />
+			{content}
 		</ThemeProvider>
+	) : (
+		content
 	);
 }
