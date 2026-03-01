@@ -49,7 +49,7 @@ const THEMES = [
 const SNAP_PADDING = 24;
 const DRAG_TIMEOUT = 150;
 
-export function ThemeSwitcher() {
+export default function ThemeSwitcher() {
 	const { setTheme, theme } = useTheme();
 	const [mounted, setMounted] = useState(false);
 

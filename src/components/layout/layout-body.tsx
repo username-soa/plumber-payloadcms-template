@@ -17,10 +17,7 @@ import type { CMSLinkType } from "@/lib/cms-link";
 // Dynamically import ThemeSwitcher to defer loading the motion library
 // The theme switcher uses motion/react for drag animations which is heavy
 const ThemeSwitcher = dynamic(
-	() =>
-		import("@/components/layout/theme-switcher").then(
-			(mod) => mod.ThemeSwitcher,
-		),
+	() => import("@/components/layout/theme-switcher"),
 	{ ssr: false },
 );
 

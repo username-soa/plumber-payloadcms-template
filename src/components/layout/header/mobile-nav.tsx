@@ -14,7 +14,7 @@ import {
 import { CallButton } from "./call-button";
 import { getCMSLinkHref, type CMSLinkType } from "@/lib/cms-link";
 
-export function MobileNav({
+export default function MobileNav({
 	navItems,
 	phone,
 }: {

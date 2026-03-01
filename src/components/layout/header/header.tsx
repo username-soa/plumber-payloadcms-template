@@ -11,17 +11,14 @@ import type { CMSLinkType } from "@/lib/cms-link";
 
 // Dynamically import MobileNav to defer loading the motion library
 // The mobile nav uses motion/react for menu icon animations
-const MobileNav = dynamic(
-	() => import("./mobile-nav").then((mod) => mod.MobileNav),
-	{
-		ssr: false,
-		loading: () => (
-			<div className="lg:hidden">
-				<div className="w-[48px] h-[48px] rounded-full bg-primary animate-pulse" />
-			</div>
-		),
-	},
-);
+const MobileNav = dynamic(() => import("./mobile-nav"), {
+	ssr: false,
+	loading: () => (
+		<div className="lg:hidden">
+			<div className="w-[48px] h-[48px] rounded-full bg-primary animate-pulse" />
+		</div>
+	),
+});
 
 const HEADER_Z_INDEX = 60;
 const TRANSITION_DURATION = 300;
@@ -42,12 +39,14 @@ export function Header({ navItems, phone }: HeaderProps) {
 				"transition-transform",
 				isVisible ? "translate-y-0" : "-translate-y-full",
 			)}
-			style={{
-				top: "var(--announcement-bar-height, 0px)",
-				"--header-height": "var(--h-header)", // We will define this in CSS or just use the class
-				zIndex: HEADER_Z_INDEX,
-				transitionDuration: `${TRANSITION_DURATION}ms`,
-			} as React.CSSProperties}
+			style={
+				{
+					top: "var(--announcement-bar-height, 0px)",
+					"--header-height": "var(--h-header)", // We will define this in CSS or just use the class
+					zIndex: HEADER_Z_INDEX,
+					transitionDuration: `${TRANSITION_DURATION}ms`,
+				} as React.CSSProperties
+			}
 		>
 			<Logo />
 			<DesktopNav navItems={navItems} />

@@ -32,6 +32,7 @@ export const metadata: Metadata = {
 	description: "Professional Plumbing Template",
 };
 
+import { Suspense } from "react";
 import { getCommonGlobals } from "@/lib/payload/getGlobals";
 
 export default async function RootLayout({
@@ -39,24 +40,27 @@ export default async function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const [headerData, footerData, companyInfo, announcementBarData] = await getCommonGlobals();
+	const [headerData, footerData, companyInfo, announcementBarData] =
+		await getCommonGlobals();
 
 	return (
 		<html lang="en" suppressHydrationWarning>
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${bebas.variable} antialiased min-h-screen flex flex-col`}
 			>
-				<NuqsAdapter>
-					<LayoutBody
-						headerData={headerData}
-						footerData={footerData}
-						companyInfo={companyInfo}
-						announcementBarData={announcementBarData}
-					>
-						{children}
-					</LayoutBody>
-					<Toaster />
-				</NuqsAdapter>
+				<Suspense fallback={null}>
+					<NuqsAdapter>
+						<LayoutBody
+							headerData={headerData}
+							footerData={footerData}
+							companyInfo={companyInfo}
+							announcementBarData={announcementBarData}
+						>
+							{children}
+						</LayoutBody>
+						<Toaster />
+					</NuqsAdapter>
+				</Suspense>
 			</body>
 		</html>
 	);

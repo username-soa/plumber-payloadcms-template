@@ -66,8 +66,39 @@ export function FormRenderer({
 	// Generate schema based on form fields
 	const schema = useMemo(() => generateFormSchema(form.fields), [form.fields]);
 
+	// Generate default values to prevent hydration errors with Radix UI components
+	const defaultValues = useMemo(() => {
+		const values: Record<string, any> = {};
+		if (!form.fields) return values;
+
+		form.fields.forEach((field, index) => {
+			if (field.blockType === "message") return;
+			const name = "name" in field ? field.name : `field_${index}`;
+
+			switch (field.blockType) {
+				case "checkbox":
+					values[name] = false;
+					break;
+				case "checkboxGroup":
+					values[name] = [];
+					break;
+				case "number":
+					values[name] = undefined;
+					break;
+				case "file":
+					values[name] = undefined;
+					break;
+				default:
+					values[name] = "";
+					break;
+			}
+		});
+		return values;
+	}, [form.fields]);
+
 	const methods = useForm<Record<string, any>>({
 		resolver: zodResolver(schema as any),
+		defaultValues,
 	});
 
 	const onSubmit = (data: Record<string, unknown>) => {
