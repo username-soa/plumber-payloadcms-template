@@ -1,6 +1,6 @@
 "use client";
 
-import dynamic from "next/dynamic";
+import ThemeSwitcher from "@/components/layout/theme-switcher";
 import { Header } from "@/components/layout/header";
 import { THEME_CONFIG } from "@/lib/theme-config";
 import { Footer } from "@/components/layout/footer";
@@ -13,13 +13,6 @@ import type {
 } from "@/payload-types";
 
 import type { CMSLinkType } from "@/lib/cms-link";
-
-// Dynamically import ThemeSwitcher to defer loading the motion library
-// The theme switcher uses motion/react for drag animations which is heavy
-const ThemeSwitcher = dynamic(
-	() => import("@/components/layout/theme-switcher"),
-	{ ssr: false },
-);
 
 type HeaderLinkItem = {
 	id?: string | null;
@@ -51,7 +44,7 @@ export function LayoutBody({
 		</>
 	);
 
-	return process.env.NODE_ENV === "development" ? (
+	return (
 		<ThemeProvider
 			attribute="data-theme"
 			defaultTheme={THEME_CONFIG.defaultTheme}
@@ -60,7 +53,5 @@ export function LayoutBody({
 		>
 			{content}
 		</ThemeProvider>
-	) : (
-		content
 	);
 }

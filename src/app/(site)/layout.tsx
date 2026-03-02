@@ -32,7 +32,7 @@ export const metadata: Metadata = {
 	description: "Professional Plumbing Template",
 };
 
-import { Suspense } from "react";
+// import { Suspense } from "react";
 import { getCommonGlobals } from "@/lib/payload/getGlobals";
 
 export default async function RootLayout({
@@ -48,19 +48,17 @@ export default async function RootLayout({
 			<body
 				className={`${geistSans.variable} ${geistMono.variable} ${poppins.variable} ${bebas.variable} antialiased min-h-screen flex flex-col`}
 			>
-				<Suspense fallback={null}>
-					<NuqsAdapter>
-						<LayoutBody
-							headerData={headerData}
-							footerData={footerData}
-							companyInfo={companyInfo}
-							announcementBarData={announcementBarData}
-						>
-							{children}
-						</LayoutBody>
-						<Toaster />
-					</NuqsAdapter>
-				</Suspense>
+				<NuqsAdapter>
+					<LayoutBody
+						headerData={headerData}
+						footerData={footerData}
+						companyInfo={companyInfo}
+						announcementBarData={announcementBarData}
+					>
+						{children}
+					</LayoutBody>
+					<Toaster />
+				</NuqsAdapter>
 			</body>
 		</html>
 	);
